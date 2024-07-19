@@ -2,6 +2,7 @@
 import "rsuite/dist/rsuite.min.css";
 import { SessionProvider } from "next-auth/react";
 import SideNav from "../components/SideNav.jsx";
+import HeadSide from "../components/HeadSide.jsx";
 import React, { useEffect } from "react";
 import { MODULES } from "../lib/modules.jsx";
 
@@ -33,10 +34,11 @@ export default function RootLayout({ children }) {
           onSelect={setActiveKey}
           expanded={expanded}
           onExpand={setExpand}
-          appearance="inverse"
+          appearance="subtle"
           modules={selectedModule || MODULES}
         />
-        <div className="flex-grow p-6 md:overflow-y-auto md:p-12">
+        <div className="flex-col flex-grow px-24 md:overflow-y-auto ">
+          <HeadSide />
           {children}
         </div>
       </div>

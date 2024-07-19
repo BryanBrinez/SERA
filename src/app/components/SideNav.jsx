@@ -1,59 +1,46 @@
 import { Sidenav, Nav } from 'rsuite';
-import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
-import GroupIcon from '@rsuite/icons/legacy/Group';
 import MagicIcon from '@rsuite/icons/legacy/Magic';
-import GearCircleIcon from '@rsuite/icons/legacy/GearCircle';
+import { useRouter } from "next/navigation";
 
-
-const panelStyles = {
-    padding: '15px 20px',
-    color: '#aaa',
-    background: 'transparent',
-};
-
-const headerStyles = {
-    padding: 20,
-    fontSize: 16,
-    background: 'transparent',
-    color: ' #fff'
-};
 const styles = {
     backgroundColor: '#880909',
-}
-
-const menuStyles = { 
-    background: 'transparent',
+    color: 'white',
+    transition: 'width 0.5s ease-in-out', // Smooth and linear transition for expanding/collapsing
 };
 
-export default function SideNav({ modules, appearance, openKeys, expanded, onOpenChange, onExpand, ...navProps}) {
+export default function SideNav({ modules, appearance, openKeys, expanded, onOpenChange, onExpand}) {
+    const router = useRouter();
     return (
         <Sidenav
             appearance={appearance}
             expanded={expanded}
             openKeys={openKeys}
             onOpenChange={onOpenChange}
-            className='max-w-60'
+            className='max-w-60 shadow-2xl'
             style={styles}
         >
             <Sidenav.Header>
-                <div className='w-full flex justify-center items-center py-16 bg-[#880909]'>
-                <img src="./logo.png" alt="logo" className='w-1/3   ' />
+                <div className='w-full flex justify-center items-center pt-10 pb-10' style={{ backgroundColor: '#880909' }}>
+                    <img src="./logo.png" alt="logo" className='w-14' />
                 </div>
-                
             </Sidenav.Header>
-            <Sidenav.Body>
-                <Nav {...navProps}>
-
-                    {modules.map((module) => (
-                        <Nav.Item style={menuStyles} key={module.key} eventKey={module.key} icon={<MagicIcon />}>
+            <Sidenav.Body >
+                <Nav >
+                    {modules.map((module, index) => (
+                        <Nav.Item 
+                            className='nav-item' 
+                            key={index} 
+                            eventKey={index.toString()} 
+                            icon={<MagicIcon />}
+                            style={styles}
+                            onClick={() => router.push(module.routePath)}
+                        >
                             {module.routeName}
                         </Nav.Item>
-                    ))
-                    }
+                    ))}
                 </Nav>
             </Sidenav.Body>
-            <Sidenav.Toggle style={menuStyles} onToggle={onExpand} />
+            <Sidenav.Toggle style={{ background: 'transparent', color: 'white' }} onToggle={onExpand} />
         </Sidenav>
-
     );
 }

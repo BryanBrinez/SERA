@@ -4,11 +4,11 @@ export const MODULES = [
       Rol: "admin",
       Routes: [
         { routeName: "home", routePath: "/home", icon: "home" },
-        { routeName: "usuarios", routePath: "/usuarios", icon: "user" },
-        { routeName: "programas", routePath: "/programas", icon: "program" },
-        { routeName: "cursos", routePath: "/cursos", icon: "cursos" },
-        { routeName: "resultados", routePath: "/resultadosaprendizaje", icon: "result" },
-        { routeName: "configuracion", routePath: "/configuracion", icon: "settings" },
+        { routeName: "usuarios", routePath: "/home", icon: "user" },
+        { routeName: "programas", routePath: "/home/programas", icon: "program" },
+        { routeName: "cursos", routePath: "/home", icon: "cursos" },
+        { routeName: "resultados", routePath: "/home", icon: "result" },
+        { routeName: "configuracion", routePath: "/home", icon: "settings" },
       ],
     },
     {
