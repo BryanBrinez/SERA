@@ -12,9 +12,11 @@
     "@rsuite/icons": "^1.0.3",
     "firebase": "^10.12.3",
     "next": "14.2.5",
+    "next-auth": "^4.24.7",
     "react": "^18",
     "react-dom": "^18",
-    "rsuite": "^5.66.0"
+    "rsuite": "^5.66.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "eslint": "^8",
