@@ -22,7 +22,7 @@ export default function Login() {
       password: password,
       redirect: false,
     });
-    if (res?.ok) return router.push("/home");
+    if (res?.ok) return router.push("/home/area-personal");
     if (res?.error) return setError(res.error);
     
   };

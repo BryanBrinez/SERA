@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function programas() {
+export default function Programas() {
   return (
     <div>programas</div>
   )
