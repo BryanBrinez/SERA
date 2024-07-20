@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@firebase/firestore": "^4.6.4",
     "@rsuite/icons": "^1.0.3",
     "firebase": "^10.12.3",
     "next": "14.2.5",

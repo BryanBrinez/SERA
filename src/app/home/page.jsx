@@ -3,8 +3,8 @@ import React from "react";
 import { signOut, useSession } from "next-auth/react";
 
 export default function Prueba() {
-    const { data: session } = useSession();
-    console.log(session, "la sesion")
+    //const { data: session } = useSession();
+    //console.log(session, "la sesion")
   return (
     <div>
       <p className="max-w-64 text-21xl">
