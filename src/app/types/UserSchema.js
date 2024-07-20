@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 // Define el esquema para el tipo de dato "Usuario"
-const UsuarioSchema = z.object({
+const UserSchema = z.object({
 
   nombre: z.string()
     .min(1, { message: "El nombre es obligatorio." })
@@ -32,4 +32,4 @@ const UsuarioSchema = z.object({
     .regex(/^\d+$/, { message: "El teléfono debe contener solo números." }),
 });
 
-export { UsuarioSchema };
+export { UserSchema };
