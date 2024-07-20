@@ -35,6 +35,7 @@ export default function HeadSide() {
 
     return (
         <header className='flex justify-between items-center w-full h-24 pt-16 pb-16'>
+            
             <section>
                 <p className='text-base text-black'>
                     <span className='text-[#A90B0B] font-bold'>HORA: </span>

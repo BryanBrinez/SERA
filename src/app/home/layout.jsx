@@ -3,14 +3,14 @@ import "rsuite/dist/rsuite.min.css";
 import { SessionProvider } from "next-auth/react";
 import SideNav from "../components/SideNav.jsx";
 import HeadSide from "../components/HeadSide.jsx";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { MODULES } from "../lib/modules.jsx";
 
 export default function RootLayout({ children }) {
-  const [activeKey, setActiveKey] = React.useState('1');
-  const [openKeys, setOpenKeys] = React.useState(['3', '4']);
-  const [expanded, setExpand] = React.useState(true);
-  const [selectedModule, setSelectedModule] = React.useState(null);
+  const [activeKey, setActiveKey] = useState('1');
+  const [openKeys, setOpenKeys] = useState(['3', '4']);
+  const [expanded, setExpand] = useState(true);
+  const [selectedModule, setSelectedModule] = useState(null);
 
   const rol = "admin";
 
@@ -24,6 +24,10 @@ export default function RootLayout({ children }) {
     }
   }, [rol]);
 
+  const handleExpand = () => {
+    setExpand(!expanded);
+  };
+
   return (
     <SessionProvider>
       <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
@@ -33,11 +37,11 @@ export default function RootLayout({ children }) {
           onOpenChange={setOpenKeys}
           onSelect={setActiveKey}
           expanded={expanded}
-          onExpand={setExpand}
+          onExpand={handleExpand}
           appearance="subtle"
           modules={selectedModule || MODULES}
         />
-        <div className="flex-col flex-grow px-24 md:overflow-y-auto ">
+        <div className="flex-col flex-grow px-24 md:overflow-y-auto">
           <HeadSide />
           {children}
         </div>

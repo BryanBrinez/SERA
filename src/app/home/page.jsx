@@ -7,6 +7,9 @@ export default function Prueba() {
     console.log(session, "la sesion")
   return (
     <div>
+      <p className="max-w-64 text-21xl">
+        !Hola Kevin! Aquí está tu área personal.
+      </p>
       <button
         className={
           "flex items-center text-red-500 font-light  hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 rounded-sm text-base"
