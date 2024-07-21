@@ -2,14 +2,14 @@ import { NextResponse } from "next/server";
 import { auth, db } from "../../firebase/config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
-import { UsuarioSchema } from "../../../types/UserSchema";
+import { UserSchema } from "../../../types/UserSchema";
 
 export async function POST(request) {
   const userData = await request.json();
 
   try {
     // Validar los datos del usuario usando el esquema de Zod
-    UsuarioSchema.parse(userData);
+    UserSchema.parse(userData);
 
     // Crear usuario en Firebase Auth
     const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
