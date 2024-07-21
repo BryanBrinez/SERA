@@ -1,6 +1,6 @@
 export const usuarios = [
     {
-        "codigo": 1,
+        "codigo": 201718910,
         "primerNombre": "Juan",
         "segundoNombre": "Carlos",
         "primerApellido": "Pérez",
@@ -12,7 +12,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 2,
+        "codigo": 201718911,
         "primerNombre": "María",
         "segundoNombre": "Luisa",
         "primerApellido": "Rodríguez",
@@ -24,7 +24,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 3,
+        "codigo": 201718912,
         "primerNombre": "Pedro",
         "segundoNombre": "José",
         "primerApellido": "Martínez",
@@ -36,7 +36,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 4,
+        "codigo": 201718913,
         "primerNombre": "Ana",
         "segundoNombre": "María",
         "primerApellido": "Sánchez",
@@ -48,7 +48,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 5,
+        "codigo": 201718914,
         "primerNombre": "Luis",
         "segundoNombre": "Miguel",
         "primerApellido": "Gómez",
@@ -60,7 +60,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 6,
+        "codigo": 201718915,
         "primerNombre": "Laura",
         "segundoNombre": "Isabel",
         "primerApellido": "Torres",
@@ -72,7 +72,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 7,
+        "codigo": 201718916,
         "primerNombre": "Carlos",
         "segundoNombre": "Andrés",
         "primerApellido": "Romero",
@@ -84,7 +84,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 8,
+        "codigo": 201718917,
         "primerNombre": "Marta",
         "segundoNombre": "Lucía",
         "primerApellido": "Rojas",
@@ -96,7 +96,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 9,
+        "codigo": 201718918,
         "primerNombre": "Fernando",
         "segundoNombre": "Alberto",
         "primerApellido": "Jiménez",
@@ -108,7 +108,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 10,
+        "codigo": 201718919,
         "primerNombre": "Lucía",
         "segundoNombre": "Gabriela",
         "primerApellido": "Ruiz",
@@ -120,7 +120,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 11,
+        "codigo": 201718920,
         "primerNombre": "Ricardo",
         "segundoNombre": "Antonio",
         "primerApellido": "Moreno",
@@ -132,7 +132,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 12,
+        "codigo": 201718921,
         "primerNombre": "Paula",
         "segundoNombre": "Andrea",
         "primerApellido": "Ortiz",
@@ -144,7 +144,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 13,
+        "codigo": 201718922,
         "primerNombre": "David",
         "segundoNombre": "Alejandro",
         "primerApellido": "Castro",
@@ -156,7 +156,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 14,
+        "codigo": 201718923,
         "primerNombre": "Andrea",
         "segundoNombre": "Mariana",
         "primerApellido": "Vega",
@@ -168,7 +168,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 15,
+        "codigo": 201718924,
         "primerNombre": "José",
         "segundoNombre": "Luis",
         "primerApellido": "Herrera",
@@ -180,7 +180,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 16,
+        "codigo": 201718925,
         "primerNombre": "Claudia",
         "segundoNombre": "Patricia",
         "primerApellido": "Mora",
@@ -192,7 +192,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 17,
+        "codigo": 201718926,
         "primerNombre": "Francisco",
         "segundoNombre": "Javier",
         "primerApellido": "López",
@@ -204,7 +204,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 18,
+        "codigo": 201718927,
         "primerNombre": "Isabel",
         "segundoNombre": "Cristina",
         "primerApellido": "Navarro",
@@ -216,7 +216,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 19,
+        "codigo": 201718928,
         "primerNombre": "Raúl",
         "segundoNombre": "Fernando",
         "primerApellido": "Pérez",
@@ -228,7 +228,7 @@ export const usuarios = [
         "estado": "activo"
     },
     {
-        "codigo": 20,
+        "codigo": 201718929,
         "primerNombre": "Elena",
         "segundoNombre": "Sofía",
         "primerApellido": "González",
