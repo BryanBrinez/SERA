@@ -12,27 +12,28 @@ export async function POST(request) {
     UserSchema.parse(userData);
 
     // Crear usuario en Firebase Auth
-    const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
+    const userCredential = await createUserWithEmailAndPassword(auth, userData.correo, userData.password);
     const user = userCredential.user;
 
     // Guardar los datos adicionales en Firestore
-    
     await setDoc(doc(db, 'users', user.uid), {
-      
-      nombre: userData.nombre,
-      apellido: userData.apellido,
-      email: userData.email,
-      programa_asignado: userData.programa_asignado,
-      tipo_identificacion: userData.tipo_identificacion,
-      numero_identificacion: userData.numero_identificacion,
       codigo: userData.codigo,
+      cedula: userData.cedula,
+      primerNombre: userData.primerNombre,
+      segundoNombre: userData.segundoNombre,
+      primerApellido: userData.primerApellido,
+      segundoApellido: userData.segundoApellido,
+      celular: userData.celular,
+      correo: userData.correo,
       rol: userData.rol,
-      sede: userData.sede,
-      tel: userData.tel,
+      estado: userData.estado,
+      programa_asignado: userData.programa_asignado || '', // campo opcional
+      sede: userData.sede || '' // campo opcional
     });
 
-    return NextResponse.json({ uid: user.uid, email: user.email });
+    return NextResponse.json({ uid: user.uid, correo: user.correo });
   } catch (error) {
+    console.error("Error:", error); // Registrar errores en la consola
     if (error.errors) {
       // Errores de validación de Zod
       return NextResponse.json({ message: error.errors }, { status: 400 });

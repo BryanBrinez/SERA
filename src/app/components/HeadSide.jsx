@@ -34,16 +34,16 @@ export default function HeadSide() {
     }, []);
 
     return (
-        <header className='flex justify-between items-center w-full h-24 pt-16 pb-16'>
+        <header className='flex justify-between items-center w-full h-24 pt-16 pb-16 '>
             
             <section>
                 <p className='text-base text-black'>
                     <span className='text-[#A90B0B] font-bold'>HORA: </span>
-                    <time dateTime={new Date().toISOString()} className='text-lg'>{currentTime}</time>
+                    <time className='text-lg'>{currentTime}</time>
                 </p>
                 <p className='text-base text-black'>
                     <span className='text-[#A90B0B] font-bold'>FECHA: </span>
-                    <time dateTime={new Date().toISOString()} className='text-lg'>{currentDate}</time>
+                    <time className='text-lg'>{currentDate}</time>
                 </p>
             </section>
 
@@ -53,7 +53,7 @@ export default function HeadSide() {
                     <p className='text-lg'>Profesor</p>
                 </div>
                 <Avatar 
-                    size="xl"
+                    size="lg"
                     color="red"
                     bordered
                     circle
