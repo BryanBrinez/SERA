@@ -135,7 +135,7 @@ export default function TableUsers({ userData }) {
 
   return (
     <div>
-      {data.length === -1 ? (
+      {data.length === 0 ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '500px' }}>
           <Loader size="lg" />
         </div>
