@@ -11,9 +11,10 @@ export default function HeadSide() {
   const [data, setData] = useState(null);  // Cambiado a null para inicializar sin datos
 
   const fetchUser = async () => {
+    
     try {
       const response = await fetch(
-        `${process.env.PUBLIC_URL}api/user/${session?.user.id}`
+        `${process.env.NEXT_PUBLIC_URL}/api/user/${session?.user.id}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -27,7 +28,7 @@ export default function HeadSide() {
 
   useEffect(() => {
     if (session?.user.id) fetchUser();
-
+    
     const updateDateTime = () => {
       const now = new Date();
       const optionsDate = {

@@ -45,7 +45,7 @@ const updateUser = async (userId, userData) => {
     // Crear una copia de userData sin el campo status
     const { status, ...dataToUpdate } = userData;
     
-    const response = await fetch(`${process.env.PUBLIC_URL}api/user/${userId}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}api/user/${userId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
