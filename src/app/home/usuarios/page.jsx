@@ -32,6 +32,7 @@ export default function Usuarios() {
   };
 
   useEffect(() => {
+    console.log("hizo el fetch")
     fetchUsers();
   }, []);
 
