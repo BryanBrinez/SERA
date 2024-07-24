@@ -36,15 +36,18 @@ export default function Usuarios() {
   };
 
   useEffect(() => {
-    console.log("hizo el fetch")
+    console.log(users, "la users fetc")
     fetchUsers();
   }, []);
 
   const handleOpenModal = () => {
+    console.log(users, "la users ahdn")
+    
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
+    fetchUsers();
     setIsModalOpen(false);
   };
 
