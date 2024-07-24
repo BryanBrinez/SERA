@@ -12,14 +12,18 @@ export default function Usuarios() {
 
   //Función para obtener los usuarios de la API y guardarlos en el estado users
   const fetchUsers = async () => {
+    console.log("antes")
     try {
       
       const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
+      
       const data = await response.json();
+      console.log(data, "la data")
       setUsers(data);
+      console.log(users, "la users")
     } catch (error) {
       console.error('Error fetching users:', error);
       toaster.push(
