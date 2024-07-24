@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Table, Pagination, Button, Loader } from 'rsuite';
+import { Table, Pagination, Loader, Notification, useToaster } from 'rsuite';
+import { IoSave, IoPencil } from "react-icons/io5";
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -29,47 +30,38 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
 // Componente ActionCell para los botones de editar/guardar
 const ActionCell = ({ rowData, onClick, ...props }) => (
   <Cell {...props} style={styles.cell}>
-    <Button
-      style={styles.button}
-      appearance="link"
-      onClick={() => onClick(rowData.id)}
+    <div
+      style={styles.iconContainer}
+      onClick={() => onClick(rowData)}
     >
-      {rowData.status === 'EDIT' ? 'Guardar' : 'Editar'}
-    </Button>
+      {rowData.status === 'EDIT' ? <IoSave style={styles.icon} /> : <IoPencil style={styles.icon} />}
+    </div>
   </Cell>
 );
 
-// Estilos en un objeto para una mejor organización
-const styles = {
-  cell: {
-    padding: '6px',
-    display: 'flex',
-    alignItems: 'center',
-    height: '100%',
-    overflow: 'visible',
-  },
-  input: {
-    width: '100%',
-    boxSizing: 'border-box',
-    border: 'none',
-    padding: '6px',
-    fontSize: 'inherit',
-    height: '100%',
-  },
-  span: {
-    display: 'inline-block',
-    height: '100%',
-    lineHeight: '1.5',
-    padding: '6px',
-  },
-  button: {
-    padding: '6px',
-    fontSize: 'inherit',
-    border: 'none',
-    background: 'none',
-    color: '#880a09',
-    cursor: 'pointer',
-  },
+// Función para realizar la llamada PUT al endpoint
+const updateUser = async (userId, userData) => {
+  try {
+    // Crear una copia de userData sin el campo status
+    const { status, ...dataToUpdate } = userData;
+    
+    const response = await fetch(`http://localhost:3000/api/user/${userId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dataToUpdate),
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al actualizar el usuario');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error al actualizar el usuario:', error);
+    return null;
+  }
 };
 
 // Componente principal
@@ -77,6 +69,7 @@ export default function TableUsers({ userData }) {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [data, setData] = useState(userData);
+  const toaster = useToaster();
 
   useEffect(() => {
     setData(userData);
@@ -92,13 +85,40 @@ export default function TableUsers({ userData }) {
   }, []);
 
   // Maneja el cambio de estado de edición
-  const handleEditState = useCallback(id => {
-    setData(prevData =>
-      prevData.map(item =>
-        item.id === id ? { ...item, status: item.status === 'EDIT' ? null : 'EDIT' } : item
-      )
-    );
-  }, []);
+  const handleEditState = useCallback(async (rowData) => {
+    if (rowData.status === 'EDIT') {
+      const updatedUser = data.find(item => item.id === rowData.id);
+      const result = await updateUser(rowData.id, updatedUser);
+  
+      if (result) {
+        toaster.push(
+          <Notification type="success" header="Éxito" closable>
+            Usuario actualizado correctamente
+          </Notification>, 
+          { placement: 'topEnd', duration: 3000 }
+        );
+        // Restablecer el estado de edición
+        setData(prevData =>
+          prevData.map(item =>
+            item.id === rowData.id ? { ...item, status: null } : item
+          )
+        );
+      } else {
+        toaster.push(
+          <Notification type="error" header="Error" closable>
+            No se pudo actualizar el usuario
+          </Notification>, 
+          { placement: 'topEnd', duration: 3000 }
+        );
+      }
+    } else {
+      setData(prevData =>
+        prevData.map(item =>
+          item.id === rowData.id ? { ...item, status: 'EDIT' } : item
+        )
+      );
+    }
+  }, [data, toaster]);
 
   // Calcula los datos a mostrar en la tabla según la paginación
   const paginatedData = useMemo(() => data.slice((page - 1) * limit, page * limit), [data, page, limit]);
@@ -200,3 +220,41 @@ export default function TableUsers({ userData }) {
     </div>
   );
 }
+
+// Estilos en un objeto para una mejor organización
+const styles = {
+  cell: {
+    padding: '6px',
+    display: 'flex',
+    alignItems: 'center',
+    height: '100%',
+    overflow: 'visible',
+  },
+  input: {
+    width: '100%',
+    boxSizing: 'border-box',
+    border: 'none',
+    padding: '6px',
+    fontSize: 'inherit',
+    height: '100%',
+  },
+  span: {
+    display: 'inline-block',
+    height: '100%',
+    lineHeight: '1.5',
+    padding: '6px',
+  },
+  iconContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '30px',
+    height: '30px',
+    backgroundColor: '#f0f0f0',
+    borderRadius: '4px',
+    cursor: 'pointer',
+  },
+  icon: {
+    fontSize: '18px',
+  },
+};
