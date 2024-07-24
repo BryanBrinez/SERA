@@ -37,6 +37,7 @@ const UserSchema = z.object({
   sede: z.array(z.string())
     .max(50, { message: "La sede no puede tener más de 50 caracteres." })
     .optional(),
+    
 });
 
 export { UserSchema };
