@@ -15,9 +15,9 @@ export default function RootLayout({ children }) {
   const rol = "admin";
 
   useEffect(() => {
-    const module = MODULES.find(module => module.Rol === rol);
-    if (module) {
-      const routes = module.Routes;
+    const modul = MODULES.find(module => module.Rol === rol);
+    if (modul) {
+      const routes = modul.Routes;
       setSelectedModule(routes);
     } else {
       console.log('No module found for role:', rol);
