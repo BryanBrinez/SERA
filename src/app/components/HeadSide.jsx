@@ -28,7 +28,7 @@ export default function HeadSide() {
 
   useEffect(() => {
     if (session?.user.id) fetchUser();
-    congole.log("fetch 2")
+    console.log("fetch 2")
     
     const updateDateTime = () => {
       const now = new Date();
