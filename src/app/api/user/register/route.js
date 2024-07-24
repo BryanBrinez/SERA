@@ -3,6 +3,16 @@ import { auth, db } from "../../firebase/config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import { UserSchema } from "../../../types/UserSchema";
+import nodemailer from 'nodemailer';
+
+// Configuración de Nodemailer
+const transporter = nodemailer.createTransport({
+  service: 'hotmail', // Puedes usar cualquier servicio de correo
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
 
 export async function POST(request) {
   const userData = await request.json();
@@ -30,6 +40,16 @@ export async function POST(request) {
       programa_asignado: userData.programa_asignado || [], // campo opcional como array
       sede: userData.sede || [] // campo opcional como array
     });
+
+    // Enviar correo de bienvenida
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: userData.correo,
+      subject: 'Cuenta creada con éxito',
+      text: `Hola ${userData.primerNombre},\n\nTu cuenta ha sido creada exitosamente. \n\nCorreo: ${userData.correo}\nContraseña: ${userData.password}\n\nGracias por registrarte.\n\nSaludos, \nEl equipo`
+    };
+
+    await transporter.sendMail(mailOptions);
 
     return NextResponse.json({ uid: user.uid, correo: user.correo });
   } catch (error) {
