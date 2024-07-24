@@ -27,8 +27,8 @@ export async function POST(request) {
       correo: userData.correo,
       rol: userData.rol,
       estado: userData.estado,
-      programa_asignado: userData.programa_asignado || '', // campo opcional
-      sede: userData.sede || '' // campo opcional
+      programa_asignado: userData.programa_asignado || [], // campo opcional como array
+      sede: userData.sede || [] // campo opcional como array
     });
 
     return NextResponse.json({ uid: user.uid, correo: user.correo });

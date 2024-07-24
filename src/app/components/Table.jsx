@@ -121,7 +121,7 @@ export default function TableUsers({ userData }) {
         </div>
       ) : (
         <>
-          <Table height={500} data={paginatedData} rowtyle={getRowStyle}>
+          <Table height={500} data={paginatedData} rowStyle={getRowStyle}>
             {/* Columnas de la tabla */}
             <Column width={100} align="center" fixed fullText>
               <HeaderCell>Codigo</HeaderCell>

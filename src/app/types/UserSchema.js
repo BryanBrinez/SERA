@@ -31,10 +31,10 @@ const UserSchema = z.object({
     .min(1, { message: "El rol es obligatorio." }), 
   estado: z.string()
     .min(1, { message: "El estado es obligatorio." }),
-  programa_asignado: z.string()
+  programa_asignado: z.array(z.string())
     .max(50, { message: "El programa asignado no puede tener más de 50 caracteres." })
     .optional(),
-  sede: z.string()
+  sede: z.array(z.string())
     .max(50, { message: "La sede no puede tener más de 50 caracteres." })
     .optional(),
 });
