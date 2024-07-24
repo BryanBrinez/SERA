@@ -1,9 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 import { Modal, Button, Form, TagPicker, InputPicker, Notification } from 'rsuite';
-import { Input } from 'rsuite';
 
-const Textarea = React.forwardRef((props, ref) => <Input {...props} as="textarea" ref={ref} />);
+
 const rolData = ['Admin', 'Coordinador', 'Auxiliar', 'Profesor'].map(item => ({
     label: item,
     value: item
