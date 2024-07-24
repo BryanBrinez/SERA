@@ -14,7 +14,7 @@ export default function Usuarios() {
   const fetchUsers = async () => {
     try {
       
-      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}api/user`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
