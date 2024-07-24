@@ -13,7 +13,7 @@ export default function HeadSide() {
   const fetchUser = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/user/${session?.user.id}`
+        `${process.env.PUBLIC_URL}api/user/${session?.user.id}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");

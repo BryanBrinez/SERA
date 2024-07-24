@@ -13,7 +13,7 @@ export default function Usuarios() {
   //Función para obtener los usuarios de la API y guardarlos en el estado users
   const fetchUsers = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/user');
+      const response = await fetch(`${process.env.PUBLIC_URL}api/user`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -46,7 +46,7 @@ export default function Usuarios() {
   //para crear un nuevo usuario, con los datos ingresados en el formulario
   const handleConfirm = async (formValue) => {
     try {
-      const response = await fetch('http://localhost:3000/api/user/register', {
+      const response = await fetch(`${process.env.PUBLIC_URL}api/user/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
