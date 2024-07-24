@@ -33,7 +33,7 @@ export default function Usuarios() {
 
   useEffect(() => {
     fetchUsers();
-  }, [users]);
+  }, []);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
