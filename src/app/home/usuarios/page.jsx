@@ -15,7 +15,7 @@ export default function Usuarios() {
     console.log("antes")
     try {
       //const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user`);
-      const response = await fetch(`https://seraunivalle.vercel.app/api/user`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}api/user?_=${new Date().getTime()}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
