@@ -15,21 +15,10 @@ export default function Usuarios() {
   const fetchUsers = async () => {
     console.log("Fetching users...");
     try {
-<<<<<<< HEAD
       // Añadir un parámetro único para evitar problemas de caché
       const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/user`);
       const data = response.data;
       console.log("Fetched data:", data);
-=======
-      //const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user`);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}api/user?_=${new Date().getTime()}`);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      
-      const data = await response.json();
-      console.log(data, "la data")
->>>>>>> 779755941d5b84ab5a8f477fc82570a779c7505f
       setUsers(data);
     } catch (error) {
       console.error('Error fetching users:', error);
