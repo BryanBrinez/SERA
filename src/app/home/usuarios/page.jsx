@@ -4,26 +4,22 @@ import { UserModal } from '../../components/UserModal';
 import TableUsers from '../../components/Table';
 import { IconButton, ButtonToolbar, Notification, useToaster } from 'rsuite';
 import PlusIcon from '@rsuite/icons/Plus';
+import axios from 'axios';
 
 export default function Usuarios() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [users, setUsers] = useState([]);
   const toaster = useToaster();
-
+//const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user`);
   //Función para obtener los usuarios de la API y guardarlos en el estado users
   const fetchUsers = async () => {
-    console.log("antes")
+    console.log("Fetching users...");
     try {
-      //const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user`);
-      const response = await fetch(`https://seraunivalle.vercel.app/api/user`);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      
-      const data = await response.json();
-      console.log(data, "la data")
+      // Añadir un parámetro único para evitar problemas de caché
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/user`);
+      const data = response.data;
+      console.log("Fetched data:", data);
       setUsers(data);
-      console.log(users, "la users")
     } catch (error) {
       console.error('Error fetching users:', error);
       toaster.push(
