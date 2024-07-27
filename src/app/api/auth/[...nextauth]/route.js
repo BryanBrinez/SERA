@@ -1,8 +1,8 @@
-
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { auth } from "../../firebase/config";
+import { auth, db } from "../../firebase/config";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 const handler = NextAuth({
   providers: [
@@ -18,9 +18,21 @@ const handler = NextAuth({
 
           if (userCredential.user) {
             const token = await userCredential.user.getIdToken();
+            const userRef = doc(db, "users", userCredential.user.uid);
+            const userDoc = await getDoc(userRef);
+            const userData = userDoc.data();
+
+            
+            if (!userData || !userData.rol) {
+              throw new Error('User role not found');
+            }
+
+            console.log('User Data:', userData); 
+
             return {
               id: userCredential.user.uid,
-              email: userCredential.user.email,
+              email: userCredential.user.email, // Cambia 'correo' a 'email' si es el campo correcto
+              rol: userData.rol, // Obtén el rol desde Firestore
               token,
             };
           }
@@ -32,14 +44,18 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    jwt({ account, token, user, profile, session }) {
-      if (user) token.user = user;
-      //console.log(token);
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+        token.rol = user.rol; // Añade el rol al token
+      }
+      console.log('JWT Token:', token); // Depuración
       return token;
     },
-    session({ session, token }) {
+    async session({ session, token }) {
       session.user = token.user;
-      console.log(session)
+      session.user.rol = token.rol; // Añade el rol a la sesión
+      console.log('Session:', session); // Depuración
       return session;
     },
   },

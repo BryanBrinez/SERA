@@ -9,7 +9,7 @@ export async function GET() {
     const userSnapshot = await getDocs(usersCollection);
     const userList = userSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-    console.log("User list:", userList);
+    //console.log("User list:", userList);
     return new Response(JSON.stringify(userList), {
       headers: {
         'Cache-Control': 'no-store'

@@ -18,7 +18,7 @@ export default function Usuarios() {
       // Añadir un parámetro único para evitar problemas de caché
       const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/user`);
       const data = response.data;
-      console.log("Fetched data:", data);
+      //console.log("Fetched data:", data);
       setUsers(data);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -34,7 +34,7 @@ export default function Usuarios() {
   
 
   const handleOpenModal = () => {
-    console.log(users, "la users ahdn")
+    //console.log(users, "la users ahdn")
     
     setIsModalOpen(true);
   };
@@ -59,7 +59,6 @@ export default function Usuarios() {
         throw new Error('Network response was not ok');
       }
       const result = await response.json();
-
       // Volver a cargar todos los usuarios
       fetchUsers();
 
@@ -69,7 +68,6 @@ export default function Usuarios() {
         </Notification>,
         { placement: 'topEnd' }
       );
-
       handleCloseModal();
     } catch (error) {
       console.error('Error creating user:', error);
@@ -83,7 +81,7 @@ export default function Usuarios() {
     }
   };
   useEffect(() => {
-    console.log(users, "la users fetc")
+    //console.log(users, "la users fetc")
     fetchUsers();
   }, []);
 
@@ -103,29 +101,6 @@ export default function Usuarios() {
         </ButtonToolbar>
 
         <TableUsers userData={users} />
-      </div>
-      <div>
-        <h4>Lista de Usuarios</h4>
-        {users.length > 0 ? (
-          <ul>
-            {users.map(user => (
-              <li key={user.id}>
-                <div>
-                  <strong>ID:</strong> {user.id}
-                </div>
-                <div>
-                  <strong>Nombre:</strong> {user.cedula}
-                </div>
-                <div>
-                  <strong>Correo:</strong> {user.correo}
-                </div>
-                {/* Agrega más campos según sea necesario */}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No hay usuarios disponibles.</p>
-        )}
       </div>
       <UserModal open={isModalOpen} handleClose={handleCloseModal} onConfirm={handleConfirm} />
     </section>
