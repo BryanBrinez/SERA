@@ -1,13 +1,15 @@
 "use client"
 import React from "react";
+import { useSession } from "next-auth/react";
+
 
 export default function AreaPersonal() {
-    //const { data: session } = useSession();
-    //console.log(session, "la sesion")
+    const { data: session } = useSession();
+
   return (
     <div>
       <p className="max-w-64 text-21xl">
-        !Hola Kevin! Aquí está tu área personal.
+        !Hola {session?.user.primerNombre}! Aquí está tu área personal.
       </p>
       
     </div>

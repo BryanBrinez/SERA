@@ -13,6 +13,9 @@ export default withAuth(
     }
 
     const userId = token.user?.id;
+    const userRole = token.user?.rol;
+
+    console.log(userRole, "ESTE ES EL ROLLLLL")
 
     if (!userId) {
       console.log("User ID not found in token");
@@ -21,18 +24,18 @@ export default withAuth(
 
     try {
       // Llamar al endpoint para obtener los datos del usuario
-      const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user/${userId}`);
-      const data = await res.json();
+      //const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user/${userId}`);
+      //const data = await res.json();
 
-      if (res.status !== 200) {
+      /*if (res.status !== 200) {
         console.log("Error fetching user role. Status code:", res.status);
         return NextResponse.redirect(new URL('/unauthorized', req.url));
-      }
+      }*/
 
-      const userRoles = data.rol; // Asegúrate de que esto es un array
+      const userRoles = userRole; // Asegúrate de que esto es un array
       if (!userRoles || !Array.isArray(userRoles)) {
         console.log("User roles not found or not an array");
-        return NextResponse.redirect(new URL('/unauthorized', req.url));
+        return NextResponse.redirect(new URL('/home', req.url));
       }
 
       // Verificar acceso general a la ruta /home
@@ -42,7 +45,9 @@ export default withAuth(
         // Si está en /home o subrutas, verifica el rol para subrutas específicas
         const protectedRoutes = {
           "/home/usuarios": ["Admin"],
-          "/home": ["Admin", "Coordinador", "Auxiliar", "Profesor"], // Incluye el nuevo rol
+          "/home": ["Admin", "Coordinador", "Auxiliar", "Profesor"],
+         
+           // Incluye el nuevo rol
         };
 
         let isAuthorized = false;
@@ -62,7 +67,7 @@ export default withAuth(
           return NextResponse.next();
         } else {
           console.log("User is not authorized");
-          return NextResponse.redirect(new URL('/unauthorized', req.url));
+          return NextResponse.redirect(new URL('/home', req.url));
         }
       }
 

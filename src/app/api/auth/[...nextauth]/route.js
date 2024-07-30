@@ -27,12 +27,13 @@ const handler = NextAuth({
               throw new Error('User role not found');
             }
 
-            console.log('User Data:', userData); 
+            console.log('User Data:', userData.primerNombre); 
 
             return {
               id: userCredential.user.uid,
-              email: userCredential.user.email, // Cambia 'correo' a 'email' si es el campo correcto
-              rol: userData.rol, // Obtén el rol desde Firestore
+              email: userCredential.user.email,
+              rol: userData.rol, 
+              primerNombre: userData.primerNombre, 
               token,
             };
           }
@@ -47,14 +48,16 @@ const handler = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.user = user;
-        token.rol = user.rol; // Añade el rol al token
+        token.rol = user.rol; 
+        token.primerNombre = user.primerNombre; 
       }
       console.log('JWT Token:', token); // Depuración
       return token;
     },
     async session({ session, token }) {
       session.user = token.user;
-      session.user.rol = token.rol; // Añade el rol a la sesión
+      session.user.rol = token.rol;
+      session.user.primerNombre = token.primerNombre;
       console.log('Session:', session); // Depuración
       return session;
     },
@@ -62,7 +65,7 @@ const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/login",
-  },
+  }
 });
 
 export { handler as GET, handler as POST };

@@ -1,7 +1,7 @@
 // modules.jsx
 export const MODULES = [
     {
-      Rol: "admin",
+      Rol: "Admin",
       Routes: [
         { routeName: "Area personal", routePath: "/home/area-personal", icon: "home" },
         { routeName: "Usuarios", routePath: "/home/usuarios", icon: "user" },
@@ -13,9 +13,9 @@ export const MODULES = [
       ],
     },
     {
-      Rol: "coordinador",
+      Rol: "Coordinador",
       Routes: [
-        { routeName: "Area personal", routePath: "/home", icon: "home" },
+        { routeName: "Area personal", routePath: "/home/area-personal", icon: "home" },
         { routeName: "Programas", routePath: "/home/programas", icon: "program" },
         { routeName: "Cursos", routePath: "/home", icon: "curso" },
         { routeName: "Resultados Ap", routePath: "/home", icon: "result" },
@@ -24,9 +24,9 @@ export const MODULES = [
       ],
     },
     {
-      Rol: "auxiliar",
+      Rol: "Auxiliar",
       Routes: [
-        { routeName: "Area personal", routePath: "/home", icon: "home" },
+        { routeName: "Area personal", routePath: "/home/area-personal", icon: "home" },
         { routeName: "Programas", routePath: "/home/programas", icon: "program" },
         { routeName: "Cursos", routePath: "/home", icon: "curso" },
         { routeName: "Resultados Ap", routePath: "/home", icon: "result" },
@@ -35,9 +35,9 @@ export const MODULES = [
       ],
     },
     {
-      Rol: "profesor",
+      Rol: "Profesor",
       Routes: [
-        { routeName: "Area personal", routePath: "/home", icon: "home" },
+        { routeName: "Area personal", routePath: "/home/area-personal", icon: "home" },
         { routeName: "Cursos", routePath: "/home", icon: "curso" },
         { routeName: "Centro de ayuda", routePath: "/ayuda", icon: "help" },
         { routeName: "Configuracion", routePath: "/home", icon: "settings" },
