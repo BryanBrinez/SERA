@@ -1,16 +1,86 @@
 'use client';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Table, Pagination, Loader, Notification, useToaster } from 'rsuite';
-import { IoSave, IoPencil } from "react-icons/io5";
+import { Table, Pagination, Loader, Notification, useToaster, SelectPicker, TagPicker } from 'rsuite';
+import { IoSave, IoPencil, IoClose } from "react-icons/io5";
+import { COLOR } from 'rsuite/esm/internals/constants';
 
 const { Column, HeaderCell, Cell } = Table;
 
 // Componente EditableCell para celdas editables
 const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
   const editing = rowData.status === 'EDIT';
-  const handleChange = (event) => {
-    onChange(rowData.id, dataKey, event.target.value);
+  const handleChange = (value) => {
+    onChange(rowData.id, dataKey, value);
   };
+
+  if (editing) {
+    if (dataKey === 'estado') {
+      return (
+        <Cell {...props} style={styles.cell}>
+          <SelectPicker
+            data={[
+              { label: 'Activo', value: 'Activo' },
+              { label: 'Inactivo', value: 'Inactivo' },
+            ]}
+            searchable={false}
+            style={{ width: '100%', overflow: 'hidden' }}
+            placeholder="Estado"
+            value={rowData[dataKey]}  // Corregido: usa `value` en lugar de `defaultValue`
+            onChange={handleChange}
+          />
+        </Cell>
+      );
+    } else if (dataKey === 'programa_asignado') {
+      return (
+        <Cell {...props} style={styles.cell}>
+          <TagPicker
+            data={[
+              { label: 'Ingeniería de Sistemas', value: 'Ingeniería de Sistemas' },
+              { label: 'Ingeniería en Alimentos', value: 'Ingeniería en Alimentos' },
+              { label: 'Contaduría Pública', value: 'Contaduría Pública' },
+              { label: 'Administración de Empresas', value: 'Administración de Empresas' },
+              { label: 'Dietetica y Nutrición', value: 'Dietetica y Nutrición' },
+            ]}
+            style={{ width: '100%', overflow: 'hidden' }}
+            placeholder="Programas"
+            value={rowData[dataKey]}  // Corregido: usa `value` en lugar de `defaultValue`
+            onChange={handleChange}
+          />
+        </Cell>
+      );
+    } else if (dataKey === 'sede') {
+      return (
+        <Cell {...props} style={styles.cell}>
+          <TagPicker
+            data={[
+              { label: 'Tuluá', value: 'Tuluá' },
+            ]}
+            style={{ width: '100%' ,overflow: 'hidden' }}
+            placeholder="Sedes"
+            value={rowData[dataKey]}  // Corregido: usa `value` en lugar de `defaultValue`
+            onChange={handleChange}
+          />
+        </Cell>
+      );
+    } else if (dataKey === 'rol') {
+      return (
+        <Cell {...props} style={styles.cell}>
+          <TagPicker
+            data={[
+              { label: 'Admin', value: 'Admin' },
+              { label: 'Coordinador', value: 'Coordinador' },
+              { label: 'Auxiliar', value: 'Auxiliar' },
+              { label: 'Profesor', value: 'Profesor' },
+            ]}
+            style={{ width: '100%', overflow: 'hidden' }}
+            placeholder="Roles"
+            value={rowData[dataKey]}  // Corregido: usa `value` en lugar de `defaultValue`
+            onChange={handleChange}
+          />
+        </Cell>
+      );
+    }
+  }
 
   return (
     <Cell {...props} style={styles.cell}>
@@ -18,23 +88,27 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
         <input
           style={styles.input}
           defaultValue={rowData[dataKey]}
-          onChange={handleChange}
+          onChange={(e) => handleChange(e.target.value)}
         />
       ) : (
-        <span style={styles.span}>{rowData[dataKey]}</span>
+        <span style={styles.span}>{Array.isArray(rowData[dataKey]) ? rowData[dataKey].join(', ') : rowData[dataKey]}</span>
       )}
     </Cell>
   );
 };
 
-// Componente ActionCell para los botones de editar/guardar
-const ActionCell = ({ rowData, onClick, ...props }) => (
+// Componente ActionCell para los botones de editar/guardar y cancelar
+const ActionCell = ({ rowData, onClick, onCancel, ...props }) => (
   <Cell {...props} style={styles.cell}>
-    <div
-      style={styles.iconContainer}
-      onClick={() => onClick(rowData)}
-    >
-      {rowData.status === 'EDIT' ? <IoSave style={styles.icon} /> : <IoPencil style={styles.icon} />}
+    <div style={styles.iconContainer}>
+      {rowData.status === 'EDIT' ? (
+        <>
+          <IoSave style={styles.iconSave} onClick={() => onClick(rowData)} />
+          <IoClose style={styles.iconCancel} onClick={() => onCancel(rowData)} />
+        </>
+      ) : (
+        <IoPencil style={styles.iconEdit} onClick={() => onClick(rowData)} />
+      )}
     </div>
   </Cell>
 );
@@ -120,6 +194,15 @@ export default function TableUsers({ userData }) {
     }
   }, [data, toaster]);
 
+  // Maneja la cancelación del estado de edición
+  const handleCancelEdit = useCallback((rowData) => {
+    setData(prevData =>
+      prevData.map(item =>
+        item.id === rowData.id ? { ...item, status: null } : item
+      )
+    );
+  }, []);
+
   // Calcula los datos a mostrar en la tabla según la paginación
   const paginatedData = useMemo(() => data.slice((page - 1) * limit, page * limit), [data, page, limit]);
 
@@ -141,63 +224,63 @@ export default function TableUsers({ userData }) {
         </div>
       ) : (
         <>
-          <Table height={500} data={paginatedData} rowStyle={getRowStyle}>
+          <Table height={550} data={paginatedData} rowStyle={getRowStyle}>
             {/* Columnas de la tabla */}
-            <Column width={100} align="center" fixed fullText>
+            <Column width={90} fullText>
               <HeaderCell>Codigo</HeaderCell>
               <EditableCell dataKey="codigo" onChange={handleChange} />
             </Column>
-            <Column width={80} fullText>
-              <HeaderCell>Primer Nombre</HeaderCell>
+            <Column width={90} fullText>
+              <HeaderCell>Nombre 1</HeaderCell>
               <EditableCell dataKey="primerNombre" onChange={handleChange} />
             </Column>
-            <Column width={100} fullText>
-              <HeaderCell>Segundo Nombre</HeaderCell>
+            <Column width={90} fullText>
+              <HeaderCell>Nombre 2</HeaderCell>
               <EditableCell dataKey="segundoNombre" onChange={handleChange} />
             </Column>
-            <Column width={100} fullText>
-              <HeaderCell>Primer Apellido</HeaderCell>
+            <Column width={90} fullText>
+              <HeaderCell>Apellido 1</HeaderCell>
               <EditableCell dataKey="primerApellido" onChange={handleChange} />
             </Column>
-            <Column width={100} fullText>
-              <HeaderCell>Segundo Apellido</HeaderCell>
+            <Column width={90} fullText>
+              <HeaderCell>Apellido 2</HeaderCell>
               <EditableCell dataKey="segundoApellido" onChange={handleChange} />
             </Column>
             <Column width={100} fullText>
-              <HeaderCell>Cedula</HeaderCell>
+              <HeaderCell>Cédula</HeaderCell>
               <EditableCell dataKey="cedula" onChange={handleChange} />
             </Column>
-            <Column width={100} flexGrow={2} fullText>
+            <Column width={300} fullText>
               <HeaderCell>Correo</HeaderCell>
               <EditableCell dataKey="correo" onChange={handleChange} />
             </Column>
-            <Column width={100} fullText>
+            <Column width={130} fullText>
               <HeaderCell>Celular</HeaderCell>
               <EditableCell dataKey="celular" onChange={handleChange} />
             </Column>
-            <Column width={60} fullText>
+            <Column width={100} fullText>
               <HeaderCell>Sede</HeaderCell>
               <EditableCell dataKey="sede" onChange={handleChange} />
             </Column>
-            <Column width={100} fullText>
+            <Column width={200} fullText>
               <HeaderCell>Programa</HeaderCell>
               <EditableCell dataKey="programa_asignado" onChange={handleChange} />
             </Column>
-            <Column width={100} fullText>
+            <Column width={200} fullText>
               <HeaderCell>Rol</HeaderCell>
               <EditableCell dataKey="rol" onChange={handleChange} />
             </Column>
-            <Column width={100} fullText>
+            <Column width={90} fullText>
               <HeaderCell>Estado</HeaderCell>
               <EditableCell dataKey="estado" onChange={handleChange} />
             </Column>
-            <Column width={100} fullText>
+            <Column align="center" width={100} fullText>
               <HeaderCell>Acciones</HeaderCell>
-              <ActionCell onClick={handleEditState} />
+              <ActionCell onClick={handleEditState} onCancel={handleCancelEdit} />
             </Column>
           </Table>
           <div style={{ padding: 20 }}>
-            <Pagination
+            {/* <Pagination
               prev
               next
               first
@@ -213,7 +296,7 @@ export default function TableUsers({ userData }) {
               activePage={page}
               onChangePage={setPage}
               onChangeLimit={handleChangeLimit}
-            />
+            /> */}
           </div>
         </>
       )}
@@ -246,15 +329,49 @@ const styles = {
   },
   iconContainer: {
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
-    width: '30px',
-    height: '30px',
-    backgroundColor: '#f0f0f0',
-    borderRadius: '4px',
-    cursor: 'pointer',
+    width: '60px', // Ajuste del ancho para acomodar ambos iconos
+    justifyContent: 'space-between',
+    padding: '4px',
   },
   icon: {
     fontSize: '18px',
+    background: '#f0f0f0',
+    width: '25px',
+    color: 'red',
+    height: '25px',
+    padding: '4px',
+    borderRadius: '5px',
+    cursor: 'pointer',
+  },
+  iconEdit: {
+    fontSize: '18px',
+    background: '#f7bc04',
+    width: '25px',
+    color: 'black',
+    height: '25px',
+    padding: '4px',
+    borderRadius: '3px',
+    cursor: 'pointer',
+  },
+  iconSave: {
+    fontSize: '18px',
+    background: '#00610a',
+    width: '25px',
+    color: 'white',
+    height: '25px',
+    padding: '4px',
+    borderRadius: '3px',
+    cursor: 'pointer',
+  },
+  iconCancel: {
+    fontSize: '18px',
+    background: '#880a09',
+    width: '25px',
+    color: 'white',
+    height: '25px',
+    padding: '4px',
+    borderRadius: '3px',
+    cursor: 'pointer',
   },
 };

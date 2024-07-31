@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
           onExpand={handleExpand}
           appearance="subtle"        
         />
-        <div className="flex-col flex-grow px-24 md:overflow-y-auto">
+        <div className="flex-col flex-grow px-6 md:px-14 md:pt-5 md:overflow-y-auto">
           <HeadSide />
           {children}
         </div>

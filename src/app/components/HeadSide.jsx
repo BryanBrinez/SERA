@@ -57,12 +57,12 @@ export default function HeadSide() {
 
   return (
     <header className="flex justify-between items-center w-full h-24 pt-16 pb-16 ">
-      <section>
-        <p className="text-base text-black">
+      <section className="flex flex-col">
+        <p className="text-base text-black p-0">
           <span className="text-[#A90B0B] font-bold">HORA: </span>
           <time className="text-lg">{currentTime}</time>
         </p>
-        <p className="text-base text-black">
+        <p className="text-base text-black m-0">
           <span className="text-[#A90B0B] font-bold">FECHA: </span>
           <time className="text-lg">{currentDate}</time>
         </p>
@@ -72,10 +72,10 @@ export default function HeadSide() {
         {data ? (
           <>
             <div className="text-base text-black text-right">
-              <p className="text-lg font-semibold">
+              <p className="text-lg font-semibold m-0">
                 {data.primerNombre + " " + data.primerApellido}
               </p>
-              <p className="text-lg">{data.rol}</p>
+              <p className="text-lg m-0">{data.rol}</p>
             </div>
             <Avatar
               size="lg"
