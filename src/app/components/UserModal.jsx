@@ -68,11 +68,12 @@ export const UserModal = ({ open, handleClose, onConfirm }) => {
     };
 
     return (
-        <Modal open={open} onClose={handleClose} >
+        <Modal open={open} onClose={handleClose} style={{  display:'flex', flexDirection: 'center' , alignItems: 'center'}} >
+        
             <Modal.Header >
                 <Modal.Title>Añadir usuario</Modal.Title>
             </Modal.Header>
-            <Modal.Body className='flex-grow'>
+            <Modal.Body className='flex-grow w-[600px]'>
                 <Form fluid onChange={setFormValue} formValue={formValue}>
                     <div className='flex gap-2'>
                         <Form.Group className='w-1/2' controlId="codigo">
@@ -136,11 +137,12 @@ export const UserModal = ({ open, handleClose, onConfirm }) => {
                         </Form.Group>
                     </div>
                 </Form>
-                {error && <Notification type="error" header="Error">{error}</Notification>}
+               
                 <Button className='w-full' onClick={handleSubmit} appearance="primary" loading={loading}>
                     Confirmar
                 </Button>
             </Modal.Body>
+            
         </Modal>
     );
 };

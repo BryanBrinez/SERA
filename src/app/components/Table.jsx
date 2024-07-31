@@ -1,8 +1,7 @@
 'use client';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Table, Pagination, Loader, Notification, useToaster, SelectPicker, TagPicker } from 'rsuite';
+import { Table, Loader, Notification,Pagination, useToaster, SelectPicker, TagPicker, Input } from 'rsuite';
 import { IoSave, IoPencil, IoClose } from "react-icons/io5";
-import { COLOR } from 'rsuite/esm/internals/constants';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -25,7 +24,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
             searchable={false}
             style={{ width: '100%', overflow: 'hidden' }}
             placeholder="Estado"
-            value={rowData[dataKey]}  // Corregido: usa `value` en lugar de `defaultValue`
+            value={rowData[dataKey]}
             onChange={handleChange}
           />
         </Cell>
@@ -43,7 +42,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
             ]}
             style={{ width: '100%', overflow: 'hidden' }}
             placeholder="Programas"
-            value={rowData[dataKey]}  // Corregido: usa `value` en lugar de `defaultValue`
+            value={rowData[dataKey]}
             onChange={handleChange}
           />
         </Cell>
@@ -55,9 +54,9 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
             data={[
               { label: 'Tuluá', value: 'Tuluá' },
             ]}
-            style={{ width: '100%' ,overflow: 'hidden' }}
+            style={{ width: '100%', overflow: 'hidden' }}
             placeholder="Sedes"
-            value={rowData[dataKey]}  // Corregido: usa `value` en lugar de `defaultValue`
+            value={rowData[dataKey]}
             onChange={handleChange}
           />
         </Cell>
@@ -74,7 +73,7 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
             ]}
             style={{ width: '100%', overflow: 'hidden' }}
             placeholder="Roles"
-            value={rowData[dataKey]}  // Corregido: usa `value` en lugar de `defaultValue`
+            value={rowData[dataKey]}
             onChange={handleChange}
           />
         </Cell>
@@ -116,7 +115,6 @@ const ActionCell = ({ rowData, onClick, onCancel, ...props }) => (
 // Función para realizar la llamada PUT al endpoint
 const updateUser = async (userId, userData) => {
   try {
-    // Crear una copia de userData sin el campo status
     const { status, ...dataToUpdate } = userData;
     
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}api/user/${userId}`, {
@@ -139,7 +137,7 @@ const updateUser = async (userId, userData) => {
 };
 
 // Componente principal
-export default function TableUsers({ userData }) {
+export default function TableUsers({ userData, searchText }) {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [data, setData] = useState(userData);
@@ -149,7 +147,6 @@ export default function TableUsers({ userData }) {
     setData(userData);
   }, [userData]);
 
-  // Maneja el cambio en los datos de una celda
   const handleChange = useCallback((id, key, value) => {
     setData(prevData =>
       prevData.map(item =>
@@ -158,20 +155,18 @@ export default function TableUsers({ userData }) {
     );
   }, []);
 
-  // Maneja el cambio de estado de edición
   const handleEditState = useCallback(async (rowData) => {
     if (rowData.status === 'EDIT') {
       const updatedUser = data.find(item => item.id === rowData.id);
       const result = await updateUser(rowData.id, updatedUser);
-  
+
       if (result) {
         toaster.push(
           <Notification type="success" header="Éxito" closable>
             Usuario actualizado correctamente
-          </Notification>, 
+          </Notification>,
           { placement: 'topEnd', duration: 3000 }
         );
-        // Restablecer el estado de edición
         setData(prevData =>
           prevData.map(item =>
             item.id === rowData.id ? { ...item, status: null } : item
@@ -181,7 +176,7 @@ export default function TableUsers({ userData }) {
         toaster.push(
           <Notification type="error" header="Error" closable>
             No se pudo actualizar el usuario
-          </Notification>, 
+          </Notification>,
           { placement: 'topEnd', duration: 3000 }
         );
       }
@@ -194,7 +189,6 @@ export default function TableUsers({ userData }) {
     }
   }, [data, toaster]);
 
-  // Maneja la cancelación del estado de edición
   const handleCancelEdit = useCallback((rowData) => {
     setData(prevData =>
       prevData.map(item =>
@@ -203,15 +197,22 @@ export default function TableUsers({ userData }) {
     );
   }, []);
 
-  // Calcula los datos a mostrar en la tabla según la paginación
-  const paginatedData = useMemo(() => data.slice((page - 1) * limit, page * limit), [data, page, limit]);
+  const filteredData = useMemo(() => {
+    if (!searchText) return data;
+    return data.filter(item =>
+      Object.values(item).some(value =>
+        typeof value === 'string' && value.toLowerCase().includes(searchText.toLowerCase())
+      )
+    );
+  }, [data, searchText]);
+
+  const paginatedData = useMemo(() => filteredData.slice((page - 1) * limit, page * limit), [filteredData, page, limit]);
 
   const handleChangeLimit = useCallback((dataKey) => {
     setPage(1);
     setLimit(dataKey);
   }, []);
 
-  // Función para aplicar estilos a la fila basada en el estado de edición
   const getRowStyle = useCallback((rowData) => {
     return rowData.status === 'EDIT' ? { boxShadow: 'rgba(136, 10, 9, 0.3) 0px 0px 0px 3px' } : {};
   }, []);
@@ -280,7 +281,7 @@ export default function TableUsers({ userData }) {
             </Column>
           </Table>
           <div style={{ padding: 20 }}>
-            {/* <Pagination
+             <Pagination
               prev
               next
               first
@@ -290,13 +291,13 @@ export default function TableUsers({ userData }) {
               maxButtons={5}
               size="xs"
               layout={['total', '-', 'limit', '|', 'pager', 'skip']}
-              total={data.length}
+              total={filteredData.length}
               limitOptions={[10, 30, 50]}
               limit={limit}
               activePage={page}
               onChangePage={setPage}
               onChangeLimit={handleChangeLimit}
-            /> */}
+            /> 
           </div>
         </>
       )}

@@ -1,7 +1,7 @@
 import { Sidenav, Nav } from 'rsuite';
 import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import { IoHomeSharp, IoPeopleSharp, IoLayersSharp, IoExtensionPuzzle, IoSchool, IoShapesSharp, IoSettings, IoLogOutSharp, IoHelpCircleSharp, IoSad } from "react-icons/io5";
+import { IoHomeSharp, IoPeopleSharp, IoLayersSharp, IoSchool, IoShapesSharp, IoSettings, IoLogOutSharp, IoSad } from "react-icons/io5";
 import { MODULES } from "../lib/modules.jsx";
 import { useEffect, useState } from "react";
 
@@ -19,6 +19,10 @@ export default function SideNav({ modules, appearance, openKeys, expanded, onOpe
   const router = useRouter();
   const [selectedModule, setSelectedModule] = useState([]);
   const { data: session, status } = useSession();
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  // Obtén la ruta actual
+  const currentPath = router.asPath;
 
   useEffect(() => {
     if (status === "authenticated" && session?.user?.rol) {
@@ -33,6 +37,9 @@ export default function SideNav({ modules, appearance, openKeys, expanded, onOpe
       }
     }
   }, [session, status]);
+
+  // Verifica si la ruta actual coincide con la ruta del módulo
+  const isActive = (routePath) => currentPath === routePath;
 
   return (
     <Sidenav
@@ -52,12 +59,19 @@ export default function SideNav({ modules, appearance, openKeys, expanded, onOpe
         <Nav>
           {selectedModule.map((module, index) => {
             const Icon = iconMap[module.icon];
+            const isActiveItem = isActive(module.routePath); // Verifica si el ítem es el activo
+            const isHovered = hoveredIndex === index; // Verifica si el ítem está en hover
+
+            console.log(`Index: ${index}, Active: ${isActiveItem}, Hovered: ${isHovered}`); // Debugging
+
             return (
               <Nav.Item
                 key={index}
                 eventKey={index.toString()}
-                style={itemStyle}
+                style={itemStyle(isHovered, isActiveItem)} // Aplica estilo de hover o activo
                 onClick={() => router.push(module.routePath)}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
               >
                 {Icon && <Icon />}
                 <span>{module.routeName}</span>
@@ -66,12 +80,14 @@ export default function SideNav({ modules, appearance, openKeys, expanded, onOpe
           })}
         </Nav>
       </Sidenav.Body>
-      <Nav className='flex flex-grow items-end '>
+      <Nav className='flex flex-grow items-end'>
         <Nav.Item
           key="logout"
           eventKey="logout"
-          style={itemStyle}
+          style={itemStyle(hoveredIndex === 'logout', currentPath === '/logout')} // Aplica estilo de hover o activo
           onClick={signOut}
+          onMouseEnter={() => setHoveredIndex('logout')}
+          onMouseLeave={() => setHoveredIndex(null)}
         >
           <IoLogOutSharp />
           <span>Cerrar sesión</span>
@@ -87,10 +103,12 @@ const styles = {
   transition: 'width 0.5s ease-in-out',
 };
 
-const itemStyle = {
+const itemStyle = (isHovered, isActive) => ({
   color: 'white',
   cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
   gap: '15px',
-};
+  backgroundColor: isActive ? '#a00a0a' : (isHovered ? '#750a0a' : 'transparent'), // Cambia el color de fondo en hover o activo
+  transition: 'background-color 0.3s ease'
+});

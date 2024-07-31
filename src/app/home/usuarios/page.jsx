@@ -2,24 +2,21 @@
 import React, { useEffect, useState } from 'react';
 import { UserModal } from '../../components/UserModal';
 import TableUsers from '../../components/Table';
-import { IconButton, ButtonToolbar, Notification, useToaster } from 'rsuite';
+import { IconButton, ButtonToolbar, Notification, useToaster, Input } from 'rsuite';
 import PlusIcon from '@rsuite/icons/Plus';
 import axios from 'axios';
 
 export default function Usuarios() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [users, setUsers] = useState([]);
+  const [searchText, setSearchText] = useState('');
   const toaster = useToaster();
-//const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user`);
-  //Función para obtener los usuarios de la API y guardarlos en el estado users
+
   const fetchUsers = async () => {
     console.log("Fetching users...");
     try {
-      // Añadir un parámetro único para evitar problemas de caché
       const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/user`);
-      const data = response.data;
-      //console.log("Fetched data:", data);
-      setUsers(data);
+      setUsers(response.data);
     } catch (error) {
       console.error('Error fetching users:', error);
       toaster.push(
@@ -31,11 +28,7 @@ export default function Usuarios() {
     }
   };
 
-  
-
   const handleOpenModal = () => {
-    //console.log(users, "la users ahdn")
-    
     setIsModalOpen(true);
   };
 
@@ -44,22 +37,15 @@ export default function Usuarios() {
     setIsModalOpen(false);
   };
 
-  //Cuando se confirma el formulario del modal realiza la petición POST
-  //para crear un nuevo usuario, con los datos ingresados en el formulario
   const handleConfirm = async (formValue) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_URL}api/user/register`, {
-        method: 'POST',
+      console.log('Submitting formValue:', formValue);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_URL}/api/user/register`, formValue, {
         headers: {
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formValue)
+        }
       });
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const result = await response.json();
-      // Volver a cargar todos los usuarios
+      console.log('Response from server:', response);
       fetchUsers();
 
       toaster.push(
@@ -70,7 +56,7 @@ export default function Usuarios() {
       );
       handleCloseModal();
     } catch (error) {
-      console.error('Error creating user:', error);
+      console.error('Error creating user:', error.response ? error.response.data : error.message);
 
       toaster.push(
         <Notification type="error" header="Error" closable>
@@ -80,29 +66,30 @@ export default function Usuarios() {
       );
     }
   };
+
   useEffect(() => {
-    //console.log(users, "la users fetc")
     fetchUsers();
   }, []);
 
   return (
-    <section className='flex flex-col'>
+    <div>
       <h3>Gestión de usuarios</h3>
-
-      <div className='flex flex-col gap-5 py-16'>
-        <ButtonToolbar className='flex justify-end'>
-          <IconButton 
-            className='shadow' 
-            icon={<PlusIcon />}
-            onClick={handleOpenModal}
-          >
+      <div className='pt-14 pb-5 flex justify-end gap-3'>
+        <ButtonToolbar>
+          <IconButton className='shadow' icon={<PlusIcon />} onClick={handleOpenModal}>
             Añadir
           </IconButton>
         </ButtonToolbar>
-
-        <TableUsers userData={users} />
+        <Input
+          placeholder="Buscar..."
+          value={searchText}
+          onChange={(value) => setSearchText(value)}
+          style={{ width: 300 }}
+        />
       </div>
+
+      <TableUsers userData={users} searchText={searchText} />
       <UserModal open={isModalOpen} handleClose={handleCloseModal} onConfirm={handleConfirm} />
-    </section>
+    </div>
   );
 }
