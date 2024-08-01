@@ -3,9 +3,19 @@ import { NextResponse } from "next/server";
 import { db } from "../../firebase/config";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { UserSchema } from "../../../types/UserSchema";
+import { authOptions } from "../../auth/[...nextauth]/route";
+import { getServerSession } from "next-auth/next";
 
 export async function GET(request, { params }) {
   const { uid } = params;
+
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    console.log("MANDA EL ERROR")
+    return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
+  }
+
+
 
   try {
     const userRef = doc(db, "users", uid);

@@ -4,7 +4,7 @@ import { auth, db } from "../../firebase/config";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 
-const handler = NextAuth({
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -66,6 +66,8 @@ const handler = NextAuth({
   pages: {
     signIn: "/login",
   }
-});
+}
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
