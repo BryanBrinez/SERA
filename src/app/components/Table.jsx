@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Table, Loader, Notification,Pagination, useToaster, SelectPicker, TagPicker, Input } from 'rsuite';
+import { Table, Loader, Notification, useToaster, SelectPicker, TagPicker, Input } from 'rsuite';
 import { IoSave, IoPencil, IoClose } from "react-icons/io5";
 
 const { Column, HeaderCell, Cell } = Table;
@@ -138,8 +138,6 @@ const updateUser = async (userId, userData) => {
 
 // Componente principal
 export default function TableUsers({ userData, searchText }) {
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(1);
   const [data, setData] = useState(userData);
   const toaster = useToaster();
 
@@ -206,13 +204,6 @@ export default function TableUsers({ userData, searchText }) {
     );
   }, [data, searchText]);
 
-  const paginatedData = useMemo(() => filteredData.slice((page - 1) * limit, page * limit), [filteredData, page, limit]);
-
-  const handleChangeLimit = useCallback((dataKey) => {
-    setPage(1);
-    setLimit(dataKey);
-  }, []);
-
   const getRowStyle = useCallback((rowData) => {
     return rowData.status === 'EDIT' ? { boxShadow: 'rgba(136, 10, 9, 0.3) 0px 0px 0px 3px' } : {};
   }, []);
@@ -225,80 +216,72 @@ export default function TableUsers({ userData, searchText }) {
         </div>
       ) : (
         <>
-          <Table height={550} data={paginatedData} rowStyle={getRowStyle}>
+          <Table
+            wordWrap
+            height={600}  // Ajusta el alto fijo de la tabla
+            data={filteredData}  // Usa los datos filtrados
+            rowStyle={getRowStyle}
+            bordered
+            cellBordered
+            rowHeight={34}
+            affixHorizontalScrollbar
+            hover
+          >
             {/* Columnas de la tabla */}
-            <Column width={90} fullText>
+            <Column width={90}>
               <HeaderCell>Codigo</HeaderCell>
               <EditableCell dataKey="codigo" onChange={handleChange} />
             </Column>
-            <Column width={90} fullText>
+            <Column width={90}>
               <HeaderCell>Nombre 1</HeaderCell>
               <EditableCell dataKey="primerNombre" onChange={handleChange} />
             </Column>
-            <Column width={90} fullText>
+            <Column width={110}>
               <HeaderCell>Nombre 2</HeaderCell>
               <EditableCell dataKey="segundoNombre" onChange={handleChange} />
             </Column>
-            <Column width={90} fullText>
+            <Column width={90}>
               <HeaderCell>Apellido 1</HeaderCell>
               <EditableCell dataKey="primerApellido" onChange={handleChange} />
             </Column>
-            <Column width={90} fullText>
+            <Column width={90} >
               <HeaderCell>Apellido 2</HeaderCell>
               <EditableCell dataKey="segundoApellido" onChange={handleChange} />
             </Column>
-            <Column width={100} fullText>
+            <Column width={120}>
               <HeaderCell>Cédula</HeaderCell>
               <EditableCell dataKey="cedula" onChange={handleChange} />
             </Column>
-            <Column width={300} fullText>
+            <Column width={300}>
               <HeaderCell>Correo</HeaderCell>
               <EditableCell dataKey="correo" onChange={handleChange} />
             </Column>
-            <Column width={130} fullText>
+            <Column width={130}>
               <HeaderCell>Celular</HeaderCell>
               <EditableCell dataKey="celular" onChange={handleChange} />
             </Column>
-            <Column width={100} fullText>
+            <Column width={100}>
               <HeaderCell>Sede</HeaderCell>
               <EditableCell dataKey="sede" onChange={handleChange} />
             </Column>
-            <Column width={200} fullText>
+            <Column width={300}>
               <HeaderCell>Programa</HeaderCell>
-              <EditableCell dataKey="programa_asignado" onChange={handleChange} />
+              <EditableCell  dataKey="programa_asignado" onChange={handleChange} />
             </Column>
-            <Column width={200} fullText>
+            <Column width={200}>
               <HeaderCell>Rol</HeaderCell>
               <EditableCell dataKey="rol" onChange={handleChange} />
             </Column>
-            <Column width={90} fullText>
+            <Column width={90}>
               <HeaderCell>Estado</HeaderCell>
               <EditableCell dataKey="estado" onChange={handleChange} />
             </Column>
-            <Column align="center" width={100} fullText>
+            <Column width={100} >
               <HeaderCell>Acciones</HeaderCell>
               <ActionCell onClick={handleEditState} onCancel={handleCancelEdit} />
             </Column>
           </Table>
-          <div style={{ padding: 20 }}>
-             <Pagination
-              prev
-              next
-              first
-              last
-              ellipsis
-              boundaryLinks
-              maxButtons={5}
-              size="xs"
-              layout={['total', '-', 'limit', '|', 'pager', 'skip']}
-              total={filteredData.length}
-              limitOptions={[10, 30, 50]}
-              limit={limit}
-              activePage={page}
-              onChangePage={setPage}
-              onChangeLimit={handleChangeLimit}
-            /> 
-          </div>
+          {/* Comentado por no usar paginación */}
         </>
       )}
     </div>

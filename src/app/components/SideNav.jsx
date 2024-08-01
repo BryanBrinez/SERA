@@ -61,9 +61,6 @@ export default function SideNav({ modules, appearance, openKeys, expanded, onOpe
             const Icon = iconMap[module.icon];
             const isActiveItem = isActive(module.routePath); // Verifica si el ítem es el activo
             const isHovered = hoveredIndex === index; // Verifica si el ítem está en hover
-
-            console.log(`Index: ${index}, Active: ${isActiveItem}, Hovered: ${isHovered}`); // Debugging
-
             return (
               <Nav.Item
                 key={index}
@@ -100,7 +97,7 @@ export default function SideNav({ modules, appearance, openKeys, expanded, onOpe
 const styles = {
   backgroundColor: '#880909',
   color: 'white',
-  transition: 'width 0.5s ease-in-out',
+  transition: 'width 0.1s ease-in-out',
 };
 
 const itemStyle = (isHovered, isActive) => ({
@@ -110,5 +107,5 @@ const itemStyle = (isHovered, isActive) => ({
   alignItems: 'center',
   gap: '15px',
   backgroundColor: isActive ? '#a00a0a' : (isHovered ? '#750a0a' : 'transparent'), // Cambia el color de fondo en hover o activo
-  transition: 'background-color 0.3s ease'
+  transition: 'background-color 0.1s ease'
 });
