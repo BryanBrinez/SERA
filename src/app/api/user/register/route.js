@@ -5,7 +5,7 @@ import { setDoc, doc } from "firebase/firestore";
 import { UserSchema } from "../../../types/UserSchema";
 import nodemailer from "nodemailer";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../auth/[...nextauth]/route"; // Ajusta la ruta según tu configuración
+import { authOptions } from "../../auth/[...nextauth]/route" // Ajusta la ruta según tu configuración
 
 // Configuración de Nodemailer
 const transporter = nodemailer.createTransport({
