@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Table, Loader, Notification, useToaster, SelectPicker, TagPicker, Input } from 'rsuite';
 import { IoSave, IoPencil, IoClose } from "react-icons/io5";
+import axios from 'axios';
 
 const { Column, HeaderCell, Cell } = Table;
 
@@ -48,21 +49,28 @@ const updateProgram = async (programId, programData) => {
   try {
     const { status, ...dataToUpdate } = programData;
     
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}api/program/${programId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(dataToUpdate),
-    });
+    const response = await axios.put(
+      `${process.env.NEXT_PUBLIC_URL}api/program/${programId}`,
+      dataToUpdate,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
-    if (!response.ok) {
-      throw new Error('Error al actualizar el prorgram');
-    }
-
-    return await response.json();
+    return response.data;
   } catch (error) {
-    console.error('Error al actualizar el program:', error);
+    if (error.response) {
+      // El servidor respondió con un estado fuera del rango 2xx
+      console.error('Error de respuesta del servidor:', error.response.data);
+    } else if (error.request) {
+      // La solicitud fue hecha pero no hubo respuesta
+      console.error('Error de solicitud sin respuesta:', error.request);
+    } else {
+      // Algo sucedió al configurar la solicitud
+      console.error('Error en la configuración de la solicitud:', error.message);
+    }
     return null;
   }
 };
