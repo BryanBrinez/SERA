@@ -1,0 +1,311 @@
+[
+    {
+      "codigo_programa": "PROG654321",
+      "creditos": 3,
+      "Profesor": "USER654321",
+      "estado": "Inactivo",
+      "nombre_curso": "Matemáticas Discretas",
+      "habilitable": "No",
+      "intensidad_horaria": 32,
+      "codigo": "CUR67890",
+      "validable": "Si",
+      "prerrequisitos": [
+        "CUR12345"
+      ],
+      "jornada": "Nocturna",
+      "grupo": "51"
+    },
+    {
+      "codigo_programa": "PROG111222",
+      "creditos": 2,
+      "Profesor": "USER111222",
+      "estado": "Activo",
+      "nombre_curso": "Fundamentos de Física",
+      "habilitable": "Si",
+      "intensidad_horaria": 24,
+      "codigo": "CUR11223",
+      "validable": "No",
+      "prerrequisitos": [
+        "CUR67890",
+        "CUR33344"
+      ],
+      "jornada": "Diurna",
+      "grupo": "52"
+    },
+    {
+      "codigo_programa": "PROG334455",
+      "creditos": 5,
+      "Profesor": "USER334455",
+      "estado": "Activo",
+      "nombre_curso": "Bases de Datos",
+      "habilitable": "Si",
+      "intensidad_horaria": 60,
+      "codigo": "CUR44556",
+      "validable": "Si",
+      "prerrequisitos": [
+        "CUR22334"
+      ],
+      "jornada": "Nocturna",
+      "grupo": "50"
+    },
+    {
+      "codigo_programa": "PROG666777",
+      "creditos": 6,
+      "Profesor": "USER666777",
+      "estado": "Inactivo",
+      "nombre_curso": "Ingeniería de Software",
+      "habilitable": "No",
+      "intensidad_horaria": 72,
+      "codigo": "CUR55667",
+      "validable": "No",
+      "prerrequisitos": [
+        "CUR11223"
+      ],
+      "jornada": "Diurna",
+      "grupo": "51"
+    },
+    {
+      "codigo_programa": "PROG888999",
+      "creditos": 4,
+      "Profesor": "USER888999",
+      "estado": "Activo",
+      "nombre_curso": "Redes de Computadoras",
+      "habilitable": "Si",
+      "intensidad_horaria": 48,
+      "codigo": "CUR66778",
+      "validable": "Si",
+      "prerrequisitos": [
+        "CUR33445"
+      ],
+      "jornada": "Nocturna",
+      "grupo": "52"
+    },
+    {
+      "codigo_programa": "PROG101010",
+      "creditos": 3,
+      "Profesor": "USER101010",
+      "estado": "Activo",
+      "nombre_curso": "Estructuras de Datos",
+      "habilitable": "No",
+      "intensidad_horaria": 36,
+      "codigo": "CUR77889",
+      "validable": "Si",
+      "prerrequisitos": [
+        "CUR55667",
+        "CUR66778"
+      ],
+      "jornada": "Diurna",
+      "grupo": "50"
+    },
+    {
+      "codigo_programa": "PROG222333",
+      "creditos": 5,
+      "Profesor": "USER222333",
+      "estado": "Inactivo",
+      "nombre_curso": "Sistemas Operativos",
+      "habilitable": "Si",
+      "intensidad_horaria": 50,
+      "codigo": "CUR88990",
+      "validable": "No",
+      "prerrequisitos": [
+        "CUR77889"
+      ],
+      "jornada": "Nocturna",
+      "grupo": "51"
+    },
+    {
+      "codigo_programa": "PROG333444",
+      "creditos": 2,
+      "Profesor": "USER333444",
+      "estado": "Activo",
+      "nombre_curso": "Algoritmos Avanzados",
+      "habilitable": "No",
+      "intensidad_horaria": 40,
+      "codigo": "CUR99001",
+      "validable": "Si",
+      "prerrequisitos": [
+        "CUR88990"
+      ],
+      "jornada": "Diurna",
+      "grupo": "52"
+    },
+    {
+      "codigo_programa": "PROG444555",
+      "creditos": 6,
+      "Profesor": "USER444555",
+      "estado": "Inactivo",
+      "nombre_curso": "Diseño de Compiladores",
+      "habilitable": "Si",
+      "intensidad_horaria": 66,
+      "codigo": "CUR00112",
+      "validable": "No",
+      "prerrequisitos": [
+        "CUR99001",
+        "CUR11223"
+      ],
+      "jornada": "Nocturna",
+      "grupo": "50"
+    },
+    {
+      "codigo_programa": "PROG555666",
+      "creditos": 3,
+      "Profesor": "USER555666",
+      "estado": "Activo",
+      "nombre_curso": "Arquitectura de Computadores",
+      "habilitable": "No",
+      "intensidad_horaria": 30,
+      "codigo": "CUR22334",
+      "validable": "Si",
+      "prerrequisitos": [
+        "CUR55667"
+      ],
+      "jornada": "Diurna",
+      "grupo": "51"
+    },
+    {
+      "codigo_programa": "PROG666777",
+      "creditos": 4,
+      "Profesor": "USER666777",
+      "estado": "Inactivo",
+      "nombre_curso": "Inteligencia Artificial",
+      "habilitable": "Si",
+      "intensidad_horaria": 40,
+      "codigo": "CUR33445",
+      "validable": "No",
+      "prerrequisitos": [
+        "CUR66778"
+      ],
+      "jornada": "Nocturna",
+      "grupo": "52"
+    },
+    {
+      "codigo_programa": "PROG777888",
+      "creditos": 5,
+      "Profesor": "USER777888",
+      "estado": "Activo",
+      "nombre_curso": "Ingeniería de Control",
+      "habilitable": "No",
+      "intensidad_horaria": 54,
+      "codigo": "CUR44556",
+      "validable": "Si",
+      "prerrequisitos": [
+        "CUR33445",
+        "CUR22334"
+      ],
+      "jornada": "Diurna",
+      "grupo": "50"
+    },
+    {
+      "codigo_programa": "PROG888999",
+      "creditos": 3,
+      "Profesor": "USER888999",
+      "estado": "Inactivo",
+      "nombre_curso": "Análisis Numérico",
+      "habilitable": "Si",
+      "intensidad_horaria": 36,
+      "codigo": "CUR55667",
+      "validable": "No",
+      "prerrequisitos": [
+        "CUR11223"
+      ],
+      "jornada": "Nocturna",
+      "grupo": "51"
+    },
+    {
+      "codigo_programa": "PROG999000",
+      "creditos": 4,
+      "Profesor": "USER999000",
+      "estado": "Activo",
+      "nombre_curso": "Programación Concurrente",
+      "habilitable": "No",
+      "intensidad_horaria": 48,
+      "codigo": "CUR66778",
+      "validable": "Si",
+      "prerrequisitos": [
+        "CUR77889"
+      ],
+      "jornada": "Diurna",
+      "grupo": "52"
+    },
+    {
+      "codigo_programa": "PROG010101",
+      "creditos": 5,
+      "Profesor": "USER010101",
+      "estado": "Inactivo",
+      "nombre_curso": "Robótica",
+      "habilitable": "Si",
+      "intensidad_horaria": 56,
+      "codigo": "CUR88990",
+      "validable": "No",
+      "prerrequisitos": [
+        "CUR00112"
+      ],
+      "jornada": "Nocturna",
+      "grupo": "50"
+    },
+    {
+      "codigo_programa": "PROG121212",
+      "creditos": 3,
+      "Profesor": "USER121212",
+      "estado": "Activo",
+      "nombre_curso": "Automatización Industrial",
+      "habilitable": "No",
+      "intensidad_horaria": 32,
+      "codigo": "CUR22334",
+      "validable": "Si",
+      "prerrequisitos": [
+        "CUR44556"
+      ],
+      "jornada": "Diurna",
+      "grupo": "51"
+    },
+    {
+      "codigo_programa": "PROG232323",
+      "creditos": 4,
+      "Profesor": "USER232323",
+      "estado": "Inactivo",
+      "nombre_curso": "Microcontroladores",
+      "habilitable": "Si",
+      "intensidad_horaria": 40,
+      "codigo": "CUR33445",
+      "validable": "No",
+      "prerrequisitos": [
+        "CUR66778"
+      ],
+      "jornada": "Nocturna",
+      "grupo": "52"
+    },
+    {
+      "codigo_programa": "PROG343434",
+      "creditos": 5,
+      "Profesor": "USER343434",
+      "estado": "Activo",
+      "nombre_curso": "Sistemas Embebidos",
+      "habilitable": "No",
+      "intensidad_horaria": 50,
+      "codigo": "CUR55667",
+      "validable": "Si",
+      "prerrequisitos": [
+        "CUR22334"
+      ],
+      "jornada": "Diurna",
+      "grupo": "50"
+    },
+    {
+      "codigo_programa": "PROG454545",
+      "creditos": 6,
+      "Profesor": "USER454545",
+      "estado": "Inactivo",
+      "nombre_curso": "Análisis de Señales",
+      "habilitable": "Si",
+      "intensidad_horaria": 64,
+      "codigo": "CUR66778",
+      "validable": "No",
+      "prerrequisitos": [
+        "CUR11223"
+      ],
+      "jornada": "Nocturna",
+      "grupo": "51"
+    }
+  ]
+  

@@ -45,6 +45,8 @@ export default withAuth(
         // Si está en /home o subrutas, verifica el rol para subrutas específicas
         const protectedRoutes = {
           "/home/usuarios": ["Admin"],
+          "/home/programas": ["Admin", "Coordinador", "Auxiliar"],
+          "/home/cursos": ["Admin", "Coordinador", "Auxiliar", "Profesor"],
           "/home": ["Admin", "Coordinador", "Auxiliar", "Profesor"],
          
            // Incluye el nuevo rol

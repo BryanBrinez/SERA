@@ -2,85 +2,16 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Table, Loader, Notification, useToaster, SelectPicker, TagPicker, Input } from 'rsuite';
 import { IoSave, IoPencil, IoClose } from "react-icons/io5";
-import { useRouter } from "next/navigation";
+import axios from 'axios';
 
 const { Column, HeaderCell, Cell } = Table;
 
 // Componente EditableCell para celdas editables
-const EditableCell = ({ rowData, dataKey, onChange, onClick, ...props }) => {
+const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
   const editing = rowData.status === 'EDIT';
   const handleChange = (value) => {
     onChange(rowData.id, dataKey, value);
   };
-
-  if (editing) {
-    if (dataKey === 'estado') {
-      return (
-        <Cell {...props} style={styles.cell}>
-          <SelectPicker
-            data={[
-              { label: 'Activo', value: 'Activo' },
-              { label: 'Inactivo', value: 'Inactivo' },
-            ]}
-            searchable={false}
-            style={{ width: '100%', overflow: 'hidden' }}
-            placeholder="Estado"
-            value={rowData[dataKey]}
-            onChange={handleChange}
-          />
-        </Cell>
-      );
-    } else if (dataKey === 'programa_asignado') {
-      return (
-        <Cell {...props} style={styles.cell}>
-          <TagPicker
-            data={[
-              { label: 'Ingeniería de Sistemas', value: 'Ingeniería de Sistemas' },
-              { label: 'Ingeniería en Alimentos', value: 'Ingeniería en Alimentos' },
-              { label: 'Contaduría Pública', value: 'Contaduría Pública' },
-              { label: 'Administración de Empresas', value: 'Administración de Empresas' },
-              { label: 'Dietetica y Nutrición', value: 'Dietetica y Nutrición' },
-            ]}
-            style={{ width: '100%', overflow: 'hidden' }}
-            placeholder="Programas"
-            value={rowData[dataKey]}
-            onChange={handleChange}
-          />
-        </Cell>
-      );
-    } else if (dataKey === 'sede') {
-      return (
-        <Cell {...props} style={styles.cell}>
-          <TagPicker
-            data={[
-              { label: 'Tuluá', value: 'Tuluá' },
-            ]}
-            style={{ width: '100%', overflow: 'hidden' }}
-            placeholder="Sedes"
-            value={rowData[dataKey]}
-            onChange={handleChange}
-          />
-        </Cell>
-      );
-    } else if (dataKey === 'rol') {
-      return (
-        <Cell {...props} style={styles.cell}>
-          <TagPicker
-            data={[
-              { label: 'Admin', value: 'Admin' },
-              { label: 'Coordinador', value: 'Coordinador' },
-              { label: 'Auxiliar', value: 'Auxiliar' },
-              { label: 'Profesor', value: 'Profesor' },
-            ]}
-            style={{ width: '100%', overflow: 'hidden' }}
-            placeholder="Roles"
-            value={rowData[dataKey]}
-            onChange={handleChange}
-          />
-        </Cell>
-      );
-    }
-  }
 
   return (
     <Cell {...props} style={styles.cell}>
@@ -91,12 +22,7 @@ const EditableCell = ({ rowData, dataKey, onChange, onClick, ...props }) => {
           onChange={(e) => handleChange(e.target.value)}
         />
       ) : (
-        <span
-          style={styles.span}
-          onClick={() => onClick(rowData)} // Pasa rowData a la función onClick
-        >
-          {Array.isArray(rowData[dataKey]) ? rowData[dataKey].join(', ') : rowData[dataKey]}
-        </span>
+        <span style={styles.span}>{Array.isArray(rowData[dataKey]) ? rowData[dataKey].join(', ') : rowData[dataKey]}</span>
       )}
     </Cell>
   );
@@ -119,38 +45,44 @@ const ActionCell = ({ rowData, onClick, onCancel, ...props }) => (
 );
 
 // Función para realizar la llamada PUT al endpoint
-const updateUser = async (userId, userData) => {
+const updateCourse = async (courseId, courseData) => {
   try {
-    const { status, ...dataToUpdate } = userData;
+    const { status, ...dataToUpdate } = courseData;
     
-    const response = await fetch(`${process.env.NEXT_PUBLIC_URL}api/user/${userId}?searchBy=uid`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(dataToUpdate),
-    });
+    const response = await axios.put(
+      `${process.env.NEXT_PUBLIC_URL}api/course/${courseId}`,
+      dataToUpdate,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
-    if (!response.ok) {
-      throw new Error('Error al actualizar el usuario');
-    }
-
-    return await response.json();
+    return response.data;
   } catch (error) {
-    console.error('Error al actualizar el usuario:', error);
+    if (error.response) {
+      // El servidor respondió con un estado fuera del rango 2xx
+      console.error('Error de respuesta del servidor:', error.response.data);
+    } else if (error.request) {
+      // La solicitud fue hecha pero no hubo respuesta
+      console.error('Error de solicitud sin respuesta:', error.request);
+    } else {
+      // Algo sucedió al configurar la solicitud
+      console.error('Error en la configuración de la solicitud:', error.message);
+    }
     return null;
   }
 };
 
 // Componente principal
-export default function TableUsers({ userData, searchText }) {
-  const [data, setData] = useState(userData);
+export default function TableCourse({ courseData, searchText }) {
+  const [data, setData] = useState(courseData);
   const toaster = useToaster();
-  const router = useRouter();
 
   useEffect(() => {
-    setData(userData);
-  }, [userData]);
+    setData(courseData);
+  }, [courseData]);
 
   const handleChange = useCallback((id, key, value) => {
     setData(prevData =>
@@ -160,23 +92,15 @@ export default function TableUsers({ userData, searchText }) {
     );
   }, []);
 
-  const openUser = (id) => {
-    if (id) {
-      router.push(`/home/usuarios/${id}`);
-    } else {
-      console.error("ID del usuario es undefined.");
-    }
-  };
-
   const handleEditState = useCallback(async (rowData) => {
     if (rowData.status === 'EDIT') {
-      const updatedUser = data.find(item => item.id === rowData.id);
-      const result = await updateUser(rowData.id, updatedUser);
+      const updatedCourse = data.find(item => item.id === rowData.id);
+      const result = await updateCourse(rowData.id, updatedCourse);
 
       if (result) {
         toaster.push(
           <Notification type="success" header="Éxito" closable>
-            Usuario actualizado correctamente
+            Curso actualizado correctamente
           </Notification>,
           { placement: 'topEnd', duration: 3000 }
         );
@@ -188,7 +112,7 @@ export default function TableUsers({ userData, searchText }) {
       } else {
         toaster.push(
           <Notification type="error" header="Error" closable>
-            No se pudo actualizar el usuario
+            No se pudo actualizar el curso
           </Notification>,
           { placement: 'topEnd', duration: 3000 }
         );
@@ -243,50 +167,46 @@ export default function TableUsers({ userData, searchText }) {
             hover
           >
             {/* Columnas de la tabla */}
-            {/* <Column width={90}>
+            <Column width={130} >
               <HeaderCell>Codigo</HeaderCell>
               <EditableCell dataKey="codigo" onChange={handleChange} />
-            </Column> */}
-            <Column width={120}>
-              <HeaderCell>Cédula</HeaderCell>
-              <EditableCell dataKey="cedula" onChange={handleChange} onClick={(rowData) => openUser(rowData.cedula)} />
             </Column>
-            <Column width={90}>
-              <HeaderCell>Nombre 1</HeaderCell>
-              <EditableCell dataKey="primerNombre" onChange={handleChange} />
+            <Column width={300} >
+              <HeaderCell>Nombre</HeaderCell>
+              <EditableCell dataKey="nombre_curso" onChange={handleChange} />
             </Column>
-            <Column width={110}>
-              <HeaderCell>Nombre 2</HeaderCell>
-              <EditableCell dataKey="segundoNombre" onChange={handleChange} />
-            </Column>
-            <Column width={90}>
-              <HeaderCell>Apellido 1</HeaderCell>
-              <EditableCell dataKey="primerApellido" onChange={handleChange} />
-            </Column>
-            <Column width={90} >
-              <HeaderCell>Apellido 2</HeaderCell>
-              <EditableCell dataKey="segundoApellido" onChange={handleChange} />
-            </Column>
-            
-            <Column width={300}>
-              <HeaderCell>Correo</HeaderCell>
-              <EditableCell dataKey="correo" onChange={handleChange} />
-            </Column>
-            <Column width={130}>
-              <HeaderCell>Celular</HeaderCell>
-              <EditableCell dataKey="celular" onChange={handleChange} />
+            <Column width={80}>
+              <HeaderCell>Grupo</HeaderCell>
+              <EditableCell dataKey="grupo" onChange={handleChange} />
             </Column>
             <Column width={100}>
-              <HeaderCell>Sede</HeaderCell>
-              <EditableCell dataKey="sede" onChange={handleChange} />
-            </Column>
-            <Column width={300}>
-              <HeaderCell>Programa</HeaderCell>
-              <EditableCell  dataKey="programa_asignado" onChange={handleChange} />
+              <HeaderCell>Jornada</HeaderCell>
+              <EditableCell dataKey="jornada" onChange={handleChange} />
             </Column>
             <Column width={200}>
-              <HeaderCell>Rol</HeaderCell>
-              <EditableCell dataKey="rol" onChange={handleChange} />
+              <HeaderCell>Programa</HeaderCell>
+              <EditableCell dataKey="codigo_programa" onChange={handleChange} />
+            </Column>
+            
+            <Column width={80}>
+              <HeaderCell>Creditos</HeaderCell>
+              <EditableCell dataKey="creditos" onChange={handleChange} />
+            </Column>
+            <Column width={90} >
+              <HeaderCell>Intensidad</HeaderCell>
+              <EditableCell dataKey="intensidad_horaria" onChange={handleChange} />
+            </Column>
+            <Column width={90} >
+              <HeaderCell>Validable</HeaderCell>
+              <EditableCell dataKey="validable" onChange={handleChange} />
+            </Column>
+            <Column width={100} >
+              <HeaderCell>Habilitable</HeaderCell>
+              <EditableCell dataKey="habilitable" onChange={handleChange} />
+            </Column>
+            <Column width={150} >
+              <HeaderCell>Prerrequisitos</HeaderCell>
+              <EditableCell dataKey="prerrequisitos" onChange={handleChange} />
             </Column>
             <Column width={90}>
               <HeaderCell>Estado</HeaderCell>
@@ -297,7 +217,6 @@ export default function TableUsers({ userData, searchText }) {
               <ActionCell onClick={handleEditState} onCancel={handleCancelEdit} />
             </Column>
           </Table>
-          {/* Comentado por no usar paginación */}
         </>
       )}
     </div>

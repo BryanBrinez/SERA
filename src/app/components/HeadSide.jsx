@@ -18,7 +18,7 @@ export default function HeadSide() {
   const fetchUser = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_URL}/api/user/${session?.user.id}`
+        `${process.env.NEXT_PUBLIC_URL}/api/user/${session?.user.id}?searchBy=uid`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -109,7 +109,7 @@ export default function HeadSide() {
                 <p className="text-lg font-semibold m-0">
                   {data.primerNombre + " " + data.primerApellido}
                 </p>
-                <p className="text-lg m-0">{data.rol}</p>
+                <p className="text-lg m-0">{data.rol.join(' - ')}</p>
               </div>
               <Avatar
                 size="lg"

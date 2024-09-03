@@ -11,10 +11,10 @@ export async function POST(request) {
   // Obtener la sesión del usuario
   const session = await getServerSession(authOptions);
 
-  // Verificar si el usuario tiene el rol de Admin
-  if (!session || !session.user || !session.user.rol.includes("Admin")) {
-    return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }
+  // Verificar si el usuario tiene el rol de Admin (descomentado si se necesita)
+  // if (!session || !session.user || !session.user.rol.includes("Admin")) {
+  //   return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
+  // }
 
   try {
     // Validar los datos del curso usando el esquema de Zod
@@ -24,19 +24,23 @@ export async function POST(request) {
     const cursoRef = await addDoc(collection(db, "courses"), {
       codigo: cursoData.codigo,
       nombre_curso: cursoData.nombre_curso,
-      Status: cursoData.Status,
+      estado: cursoData.estado, // Asegúrate de usar el nombre correcto del campo
       Profesor: cursoData.Profesor,
-      ID_programa: cursoData.ID_programa,
+      codigo_programa: cursoData.codigo_programa,
       creditos: cursoData.creditos,
       intensidad_horaria: cursoData.intensidad_horaria,
       habilitable: cursoData.habilitable,
       validable: cursoData.validable,
-      prerrequisitos: cursoData.prerrequisitos
+      prerrequisitos: cursoData.prerrequisitos,
+      grupo: cursoData.grupo,
+      jornada: cursoData.jornada,
+
     });
 
     return NextResponse.json({ message: "Curso creado con éxito", id: cursoRef.id });
   } catch (error) {
     console.error("Error:", error); // Registrar errores en la consola
+
     if (error.errors) {
       // Errores de validación de Zod
       return NextResponse.json({ message: error.errors }, { status: 400 });
