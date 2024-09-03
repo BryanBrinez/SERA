@@ -90,7 +90,7 @@ export default function HeadSide() {
 
   return (
     <>
-      <header className="flex justify-between items-center w-full h-24 pt-16 pb-16">
+      <header className="flex justify-between items-center w-full h-24 pt-16 pb-16 fixed">
         <section className="flex flex-col">
           <p className="text-base text-black p-0">
             <span className="text-[#A90B0B] font-bold">HORA: </span>
