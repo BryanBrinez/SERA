@@ -41,7 +41,7 @@ export async function POST(request) {
 
     return NextResponse.json({ message: "Programa creado con éxito", id: programaRef.id });
   } catch (error) {
-    console.error("Error:", error); // Registrar errores en la consola
+    
     if (error.errors) {
       // Errores de validación de Zod
       return NextResponse.json({ message: error.errors }, { status: 400 });

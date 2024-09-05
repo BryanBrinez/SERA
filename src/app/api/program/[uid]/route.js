@@ -8,30 +8,33 @@ import { getServerSession } from "next-auth/next";
 export async function GET(request, { params }) {
   const { uid } = params;
 
-  // Obtener la sesión del usuario
+  if (!uid) {
+    return NextResponse.json({ message: "ID de programa inválido" }, { status: 400 });
+  }
+
   const session = await getServerSession(authOptions);
   if (!session) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
   }
 
   try {
-    const programaRef = doc(db, "programas", uid);
+    const programaRef = doc(db, "programs", uid);
     const programaDoc = await getDoc(programaRef);
 
     if (!programaDoc.exists()) {
-      return new Response(
-        JSON.stringify({ message: "Programa no encontrado" }),
-        { status: 404 }
-      );
+      return new Response(JSON.stringify({ message: "Programa no encontrado" }), {
+        status: 404,
+      });
     }
 
     return new Response(JSON.stringify(programaDoc.data()));
   } catch (error) {
-    return new Response(JSON.stringify({ message: error.message }), {
-      status: 400,
+    return new Response(JSON.stringify({ message: "Error al obtener el programa", detalle: error.message }), {
+      status: 500,
     });
   }
 }
+
 
 export async function PUT(request, { params }) {
   const { uid } = params;

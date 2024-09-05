@@ -7,14 +7,22 @@ import { getServerSession } from "next-auth/next";
 export async function GET() {
   const session = await getServerSession(authOptions);
 
- if (!session || !session.user || !session.user.rol.includes("Admin")) {
-    console.log("MANDA EL ERROR")
+ /*if (!session || !session.user || !session.user.rol.includes("Admin")) {
+    
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }
+  }*/
   
   try {
     const programCollection = collection(db, "programs");
     const programSnapshot = await getDocs(programCollection);
+    if (programSnapshot.empty) {
+      return new Response(JSON.stringify({ message: "No se encontraron programas" }), {
+        status: 404,
+        headers: {
+          'Cache-Control': 'no-store'
+        }
+      });
+    }
     const programList = programSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
     //console.log("User list:", userList);
@@ -24,7 +32,7 @@ export async function GET() {
       }
     });
   } catch (error) {
-    console.error('Error fetching users from Firestore:', error);
+    
     return new Response(JSON.stringify({ message: error.message }), {
       status: 400,
       headers: {

@@ -39,8 +39,6 @@ export async function POST(request) {
 
     return NextResponse.json({ message: "Curso creado con éxito", id: cursoRef.id });
   } catch (error) {
-    console.error("Error:", error); // Registrar errores en la consola
-
     if (error.errors) {
       // Errores de validación de Zod
       return NextResponse.json({ message: error.errors }, { status: 400 });
