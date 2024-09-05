@@ -33,9 +33,7 @@ export async function GET() {
       }
     });
   } catch (error) {
-
-
-    return new Response(JSON.stringify({ message: errorMessage }), {
+    return new Response(JSON.stringify({ message: error.message }), {
       status: 400,
       headers: {
         'Cache-Control': 'no-store'
