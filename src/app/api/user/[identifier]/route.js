@@ -4,6 +4,8 @@ import { collection, doc, getDoc, query, where, getDocs, updateDoc } from "fireb
 import { UserSchema } from "../../../types/UserSchema";
 import { authOptions } from "../../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
+import { getAuth } from 'firebase-admin/auth'; 
+import admin from "../../firebase/configAdmin";
 
 export async function GET(request, { params }) {
   const { identifier } = params; // Obtiene el identificador de la ruta dinámica
@@ -63,13 +65,15 @@ export async function PUT(request, { params }) {
     UpdateUserSchema.parse(updateData);
 
     if (searchBy === "uid") {
-      // Actualizar por UID
       const userRef = doc(db, "users", identifier);
       await updateDoc(userRef, updateData);
 
+      if (updateData.correo) {
+        await updateUserEmail(identifier, updateData.correo); // Usa el UID del identificador
+      }
+
       return new Response(JSON.stringify({ message: "Usuario actualizado correctamente" }));
     } else {
-      // Actualizar por cédula
       const userCollection = collection(db, "users");
       const q = query(userCollection, where("cedula", "==", identifier));
       const querySnapshot = await getDocs(q);
@@ -89,5 +93,14 @@ export async function PUT(request, { params }) {
     } else {
       return new Response(JSON.stringify({ message: error.message }), { status: 400 });
     }
+  }
+}
+
+async function updateUserEmail(uid, newEmail) {
+  try {
+    await admin.auth().updateUser(uid, { email: newEmail });
+    console.log(`Correo actualizado a ${newEmail} para el usuario con UID ${uid}`);
+  } catch (error) {
+    console.error("Error al actualizar el correo electrónico:", error);
   }
 }
