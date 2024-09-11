@@ -1,8 +1,8 @@
 "use client";
 import "rsuite/dist/rsuite.min.css";
 import { SessionProvider } from "next-auth/react";
-import SideNav from "../components/SideNav.jsx";
-import HeadSide from "../components/HeadSide.jsx";
+import SideNav from "../components/navbar/SideNav.jsx";
+import HeadSide from "../components/head/HeadSide.jsx";
 import React, { useEffect, useState } from "react";
 
 

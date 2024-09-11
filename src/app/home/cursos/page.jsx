@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import TableCourses from '../../components/TableCourses';
+import TableCourses from '../../components/table/TableCourses';
 import { IconButton, ButtonToolbar, Notification, useToaster, Input } from 'rsuite';
 import PlusIcon from '@rsuite/icons/Plus';
 import axios from 'axios';

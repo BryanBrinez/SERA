@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button, Input, Checkbox, Notification, useToaster } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
-import PasswordInput from "../atoms/PasswordInput";
+import PasswordInput from "../atoms/input/PasswordInput";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 

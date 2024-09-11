@@ -1,20 +1,21 @@
 'use client';
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Table, Loader, Notification, useToaster, SelectPicker, TagPicker, Input } from 'rsuite';
+import { Table, Loader, Notification, useToaster } from 'rsuite';
 import { IoSave, IoPencil, IoClose } from "react-icons/io5";
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const { Column, HeaderCell, Cell } = Table;
 
 // Componente EditableCell para celdas editables
-const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
+const EditableCell = ({ rowData, dataKey, onChange, onClick, ...props }) => {
   const editing = rowData.status === 'EDIT';
   const handleChange = (value) => {
     onChange(rowData.id, dataKey, value);
   };
 
   return (
-    <Cell {...props} style={styles.cell}>
+    <Cell {...props} style={styles.cell} onClick={() => onClick(rowData)}>
       {editing ? (
         <input
           style={styles.input}
@@ -22,7 +23,9 @@ const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
           onChange={(e) => handleChange(e.target.value)}
         />
       ) : (
-        <span style={styles.span}>{Array.isArray(rowData[dataKey]) ? rowData[dataKey].join(', ') : rowData[dataKey]}</span>
+        <span style={styles.span}>
+          {Array.isArray(rowData[dataKey]) ? rowData[dataKey].join(', ') : rowData[dataKey]}
+        </span>
       )}
     </Cell>
   );
@@ -79,6 +82,7 @@ const updateProgram = async (programId, programData) => {
 export default function TablePrograms({ programData, searchText }) {
   const [data, setData] = useState(programData);
   const toaster = useToaster();
+  const router = useRouter(); // Asegúrate de importar y usar useRouter
 
   useEffect(() => {
     setData(programData);
@@ -91,6 +95,16 @@ export default function TablePrograms({ programData, searchText }) {
       )
     );
   }, []);
+
+  const openProgram = (rowData) => {
+    const { id } = rowData;
+    if (id) {
+      router.push(`/home/programas/${id}`);
+      console.log(id);
+    } else {
+      console.error("ID del programa es undefined.");
+    }
+  };
 
   const handleEditState = useCallback(async (rowData) => {
     if (rowData.status === 'EDIT') {
@@ -169,7 +183,11 @@ export default function TablePrograms({ programData, searchText }) {
             {/* Columnas de la tabla */}
             <Column width={200}>
               <HeaderCell>Programa</HeaderCell>
-              <EditableCell dataKey="nombre_programa" onChange={handleChange} />
+              <EditableCell
+                dataKey="nombre_programa"
+                onChange={handleChange}
+                onClick={openProgram}  // Pasar la función openProgram directamente
+              />
             </Column>
             <Column width={200}>
               <HeaderCell>Facultad</HeaderCell>
@@ -183,23 +201,23 @@ export default function TablePrograms({ programData, searchText }) {
               <HeaderCell>Jornada</HeaderCell>
               <EditableCell dataKey="jornada" onChange={handleChange} />
             </Column>
-            <Column width={150} >
+            <Column width={150}>
               <HeaderCell>Modalidad</HeaderCell>
               <EditableCell dataKey="modalidad" onChange={handleChange} />
             </Column>
-            <Column width={150} >
+            <Column width={150}>
               <HeaderCell>Creditos</HeaderCell>
               <EditableCell dataKey="creditos" onChange={handleChange} />
             </Column>
-            <Column width={150} >
+            <Column width={150}>
               <HeaderCell>Semestres</HeaderCell>
               <EditableCell dataKey="duracion" onChange={handleChange} />
             </Column>
-            <Column width={150} >
-              <HeaderCell>Periciocidad</HeaderCell>
+            <Column width={150}>
+              <HeaderCell>Periodicidad</HeaderCell>
               <EditableCell dataKey="periodicidad_de_admisiones" onChange={handleChange} />
             </Column>
-            <Column width={150} >
+            <Column width={150}>
               <HeaderCell>Fecha creación</HeaderCell>
               <EditableCell dataKey="fecha_dec_creacion" onChange={handleChange} />
             </Column>
@@ -211,7 +229,7 @@ export default function TablePrograms({ programData, searchText }) {
               <HeaderCell>Estado</HeaderCell>
               <EditableCell dataKey="estado" onChange={handleChange} />
             </Column>
-            <Column width={100} >
+            <Column width={100}>
               <HeaderCell>Acciones</HeaderCell>
               <ActionCell onClick={handleEditState} onCancel={handleCancelEdit} />
             </Column>
@@ -251,16 +269,6 @@ const styles = {
     width: '60px', // Ajuste del ancho para acomodar ambos iconos
     justifyContent: 'space-between',
     padding: '4px',
-  },
-  icon: {
-    fontSize: '18px',
-    background: '#f0f0f0',
-    width: '25px',
-    color: 'red',
-    height: '25px',
-    padding: '4px',
-    borderRadius: '5px',
-    cursor: 'pointer',
   },
   iconEdit: {
     fontSize: '18px',

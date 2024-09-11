@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import NavbarUserOptions from '@/app/components/NavbarUserOptions';
+import NavbarUserOptions from '@/app/components/navbar/NavbarUserOptions';
 import axios from 'axios';
 import { Notification, useToaster } from 'rsuite';
 import { AvatarGroup, Avatar } from 'rsuite';

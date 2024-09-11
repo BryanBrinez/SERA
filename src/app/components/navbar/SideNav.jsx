@@ -2,7 +2,7 @@ import { Sidenav, Nav } from 'rsuite';
 import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { IoHomeSharp, IoPeopleSharp, IoLayersSharp, IoSchool, IoShapesSharp, IoSettings, IoLogOutSharp, IoSad } from "react-icons/io5";
-import { MODULES } from "../lib/modules.jsx";
+import { MODULES } from "../../lib/modules.jsx";
 import { useEffect, useState } from "react";
 
 const iconMap = {
