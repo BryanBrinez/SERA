@@ -4,32 +4,32 @@ import NavbarUserOptions from '@/app/components/navbar/NavbarUserOptions';
 import axios from 'axios';
 import { Notification, useToaster } from 'rsuite';
 
-
 export default function Page() {
     const toaster = useToaster();
-    const [programID, setProgramID] = useState(null); // Estado para almacenar la cédula
-    const [program, setProgram] = useState(null); // Estado para los usuarios
+    const [programID, setProgramID] = useState(null);
+    const [program, setProgram] = useState(null);
     const [user, setUser] = useState(null);
-    // Función para extraer la cédula de la URL
+
+    // Función para extraer el ID del programa de la URL
     const extractProgramIDFromUrl = () => {
-        if (typeof window !== 'undefined') { // Verifica que estás en el lado del cliente
-            const currentPath = window.location.pathname; // Obtiene la ruta completa del navegador
-            const pathSegments = currentPath.split('/'); // Divide la ruta en partes
-            const programValue = pathSegments[pathSegments.length - 1]; // Toma la última parte que debería ser la cédula
-            setProgramID(programValue); // Almacena la cédula en el estado
+        if (typeof window !== 'undefined') {
+            const currentPath = window.location.pathname;
+            const pathSegments = currentPath.split('/');
+            const programValue = pathSegments[pathSegments.length - 1];
+            setProgramID(programValue);
         }
     };
 
-    
-
+    // Función para obtener datos del programa
     const fetchProgram = async (id) => {
-        console.log("Fetching users...");
         try {
             const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/program/${id}?searchBy=cedula`);
             setProgram(response.data);
-            fetchUser(response.data.ID_coordinador)
+
+            // Llamar a fetchUser una vez que los datos del programa estén disponibles
+            fetchUser(response.data.ID_coordinador);
         } catch (error) {
-            console.error('Error fetching users:', error);
+            console.error('Error fetching program:', error);
             toaster.push(
                 <Notification type="error" header="Error" closable>
                     No se pudo cargar el programa. Inténtelo de nuevo más tarde.
@@ -39,35 +39,50 @@ export default function Page() {
         }
     };
 
+    // Función para obtener datos del usuario (coordinador)
     const fetchUser = async (id) => {
-        console.log("Fetching users...");
         try {
             const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/user/${id}?searchBy=uid`);
-            setUser(response.data);
+            
+            if (response.data) {
+                setUser(response.data);
+            } else {
+                // Si el usuario no se encuentra, establecer valor de "No registrado"
+                setUser({
+                    primerNombre: 'No',
+                    segundoNombre: '',
+                    primerApellido: 'registrado',
+                    segundoApellido: '',
+                    cedula: ''
+                });
+            }
         } catch (error) {
-            console.error('Error fetching users:', error);
-            toaster.push(
-                <Notification type="error" header="Error" closable>
-                    No se pudieron cargar los usuarios. Inténtelo de nuevo más tarde.
-                </Notification>,
-                { placement: 'topEnd' }
-            );
+            console.error('Error fetching user:', error);
+    
+            // Si hay un error al buscar el usuario, establecer valor de "No registrado"
+            setUser({
+                primerNombre: '',
+                segundoNombre: '',
+                primerApellido: '',
+                segundoApellido: '',
+                cedula: ''
+            });
         }
     };
 
     useEffect(() => {
-        extractProgramIDFromUrl(); // Extrae la cédula cuando el componente se monta
+        extractProgramIDFromUrl();
     }, []);
 
     useEffect(() => {
         if (programID) {
-            fetchProgram(programID); // Realiza la llamada de API si la cédula está disponible
+            fetchProgram(programID);
         }
     }, [programID]);
 
     return (
         <section className='h-full'>
-            {program ? (
+            {program && user ? (
                 <div className='flex-col p-4'>
                     <h3 className='mb-2'>{program.nombre_programa}</h3>
 
@@ -115,9 +130,6 @@ export default function Page() {
                     </div>
                     <NavbarUserOptions />
                 </div>
-
-
-
             ) : (
                 <p>Cargando programa...</p>
             )}
