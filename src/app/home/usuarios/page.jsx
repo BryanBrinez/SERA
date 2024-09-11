@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { UserModal } from '../../components/UserModal';
+import { UserModal } from '../../components/modal/UserModal';
 import TableUsers from '../../components/Table';
 import { IconButton, ButtonToolbar, Notification, useToaster, Input } from 'rsuite';
 import PlusIcon from '@rsuite/icons/Plus';

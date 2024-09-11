@@ -59,6 +59,7 @@ const updateCourse = async (courseId, courseData) => {
       }
     );
 
+    console.log(dataToUpdate)
     return response.data;
   } catch (error) {
     if (error.response) {
@@ -211,6 +212,10 @@ export default function TableCourse({ courseData, searchText }) {
             <Column width={90}>
               <HeaderCell>Estado</HeaderCell>
               <EditableCell dataKey="estado" onChange={handleChange} />
+            </Column>
+            <Column width={150}>
+              <HeaderCell>Profesor</HeaderCell>
+              <EditableCell dataKey="Profesor" onChange={handleChange} />
             </Column>
             <Column width={100} >
               <HeaderCell>Acciones</HeaderCell>

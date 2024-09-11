@@ -8,7 +8,7 @@ export const ProgramSchema = z.object({
   periodicidad_de_admisiones: z.string(),
   modalidad: z.string(),
   jornada: z.string(),
-  creditos: z.string(),
+  creditos: z.number(),
   registro_ICFES: z.string(),
   registro_SNIES: z.string(),
   resolucion_MEN: z.string(),
