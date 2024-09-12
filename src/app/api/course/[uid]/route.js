@@ -10,9 +10,9 @@ export async function GET(request, { params }) {
 
   // Obtener la sesión del usuario
   const session = await getServerSession(authOptions);
- /* if (!session) {
+  if (!session) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }*/
+  }
 
   try {
     const courseRef = doc(db, "courses", uid);
@@ -39,9 +39,9 @@ export async function PUT(request, { params }) {
 
   // Obtener la sesión del usuario
   const session = await getServerSession(authOptions);
-  /*if (!session || !session.user || !session.user.rol.includes("Admin")) {
+  if (!session || !session.user || !session.user.rol.includes("Admin")) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }*/
+  }
 
   try {
     // Validar los datos del programa usando el esquema parcial de Zod
