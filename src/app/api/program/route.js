@@ -7,10 +7,10 @@ import { getServerSession } from "next-auth/next";
 export async function GET() {
   const session = await getServerSession(authOptions);
 
- /*if (!session || !session.user || !session.user.rol.includes("Admin")) {
+ if (!session || !session.user || !session.user.rol.includes("Admin")) {
     
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }*/
+  }
   
   try {
     const programCollection = collection(db, "programs");
