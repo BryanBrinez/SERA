@@ -78,7 +78,7 @@ export const ProgramModal = ({ open, handleClose, onConfirm }) => {
                     <div className='flex gap-2'>
                         <Form.Group className='w-2/3' controlId="nombre_programa">
                             <Form.ControlLabel>Nombre programa*</Form.ControlLabel>
-                            <Form.Control name="nombre_programa" type="number" />
+                            <Form.Control name="nombre_programa"/>
                         </Form.Group>
                         <Form.Group className='w-1/3' controlId="codigo">
                             <Form.ControlLabel>Codigo*</Form.ControlLabel>
