@@ -228,7 +228,7 @@ export default function TableCourse({ courseData, searchText }) {
               <HeaderCell>Profesor</HeaderCell>
               <EditableCell dataKey="Profesor" onChange={handleChange} />
             </Column>
-            <Column width={100} resizable>
+            <Column width={100} resizable fixed="right">
               <HeaderCell>Acciones</HeaderCell>
               <ActionCell onClick={handleEditState} onCancel={handleCancelEdit} />
             </Column>

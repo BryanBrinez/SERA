@@ -292,7 +292,7 @@ export default function TableUsers({ userData, searchText }) {
               <HeaderCell>Estado</HeaderCell>
               <EditableCell dataKey="estado" onChange={handleChange} />
             </Column>
-            <Column width={100} resizable >
+            <Column width={100} resizable fixed="right">
               <HeaderCell>Acciones</HeaderCell>
               <ActionCell onClick={handleEditState} onCancel={handleCancelEdit} />
             </Column>
