@@ -2,19 +2,20 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Table, Loader, Notification, useToaster, SelectPicker, TagPicker, Input } from 'rsuite';
 import { IoSave, IoPencil, IoClose } from "react-icons/io5";
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 const { Column, HeaderCell, Cell } = Table;
 
 // Componente EditableCell para celdas editables
-const EditableCell = ({ rowData, dataKey, onChange, ...props }) => {
+const EditableCell = ({ rowData, dataKey, onChange, onClick, ...props }) => {
   const editing = rowData.status === 'EDIT';
   const handleChange = (value) => {
     onChange(rowData.id, dataKey, value);
   };
 
   return (
-    <Cell {...props} style={styles.cell}>
+    <Cell {...props} style={styles.cell}onClick={() => onClick(rowData)}>
       {editing ? (
         <input
           style={styles.input}
@@ -80,6 +81,7 @@ const updateCourse = async (courseId, courseData) => {
 export default function TableCourse({ courseData, searchText }) {
   const [data, setData] = useState(courseData);
   const toaster = useToaster();
+  const router = useRouter();
 
   useEffect(() => {
     setData(courseData);
@@ -92,6 +94,15 @@ export default function TableCourse({ courseData, searchText }) {
       )
     );
   }, []);
+
+  const openCourse = (rowData) => {
+    const { id } = rowData;
+    if (id) {
+      router.push(`/home/cursos/${id}`);
+    } else {
+      console.error("ID del curso es undefined.");
+    }
+  };
 
   const handleEditState = useCallback(async (rowData) => {
     if (rowData.status === 'EDIT') {
@@ -168,56 +179,56 @@ export default function TableCourse({ courseData, searchText }) {
             hover
           >
             {/* Columnas de la tabla */}
-            <Column width={130} >
+            <Column width={130} resizable>
               <HeaderCell>Codigo</HeaderCell>
-              <EditableCell dataKey="codigo" onChange={handleChange} />
+              <EditableCell dataKey="codigo" onChange={handleChange} onClick={openCourse}/>
             </Column>
-            <Column width={300} >
+            <Column width={300} resizable>
               <HeaderCell>Nombre</HeaderCell>
               <EditableCell dataKey="nombre_curso" onChange={handleChange} />
             </Column>
-            <Column width={80}>
+            <Column width={80} resizable>
               <HeaderCell>Grupo</HeaderCell>
               <EditableCell dataKey="grupo" onChange={handleChange} />
             </Column>
-            <Column width={100}>
+            <Column width={100} resizable>
               <HeaderCell>Jornada</HeaderCell>
               <EditableCell dataKey="jornada" onChange={handleChange} />
             </Column>
-            <Column width={200}>
+            <Column width={200} resizable>
               <HeaderCell>Programa</HeaderCell>
               <EditableCell dataKey="codigo_programa" onChange={handleChange} />
             </Column>
             
-            <Column width={80}>
+            <Column width={80} resizable>
               <HeaderCell>Creditos</HeaderCell>
               <EditableCell dataKey="creditos" onChange={handleChange} />
             </Column>
-            <Column width={90} >
+            <Column width={90} resizable>
               <HeaderCell>Intensidad</HeaderCell>
               <EditableCell dataKey="intensidad_horaria" onChange={handleChange} />
             </Column>
-            <Column width={90} >
+            <Column width={90} resizable>
               <HeaderCell>Validable</HeaderCell>
               <EditableCell dataKey="validable" onChange={handleChange} />
             </Column>
-            <Column width={100} >
+            <Column width={100} resizable>
               <HeaderCell>Habilitable</HeaderCell>
               <EditableCell dataKey="habilitable" onChange={handleChange} />
             </Column>
-            <Column width={150} >
+            <Column width={150} resizable>
               <HeaderCell>Prerrequisitos</HeaderCell>
               <EditableCell dataKey="prerrequisitos" onChange={handleChange} />
             </Column>
-            <Column width={90}>
+            <Column width={90} resizable>
               <HeaderCell>Estado</HeaderCell>
               <EditableCell dataKey="estado" onChange={handleChange} />
             </Column>
-            <Column width={150}>
+            <Column width={150} resizable>
               <HeaderCell>Profesor</HeaderCell>
               <EditableCell dataKey="Profesor" onChange={handleChange} />
             </Column>
-            <Column width={100} >
+            <Column width={100} resizable>
               <HeaderCell>Acciones</HeaderCell>
               <ActionCell onClick={handleEditState} onCancel={handleCancelEdit} />
             </Column>
@@ -235,7 +246,8 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     height: '100%',
-    overflow: 'visible',
+    cursor: 'pointer',
+    
   },
   input: {
     width: '100%',

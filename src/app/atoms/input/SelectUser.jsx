@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SelectPicker } from 'rsuite';
 import axios from 'axios';
 
-const SelectUser = ({ onChange }) => {
+const SelectUser = ({ onChange, rol }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,13 +16,29 @@ const SelectUser = ({ onChange }) => {
           },
         });
 
-        // Filtrar usuarios con rol de 'Coordinador'
-        const coordinators = response.data.filter(user => 
-          Array.isArray(user.rol) && user.rol.includes('Coordinador')
-        );
+        let filteredUsers = [];
+
+        // Filtrar usuarios según el rol
+        if (rol === 'Coordinador') {
+          filteredUsers = response.data.filter(user => 
+            Array.isArray(user.rol) && user.rol.includes('Coordinador')
+          );
+        } else if (rol === 'Profesor') {
+          filteredUsers = response.data.filter(user => 
+            Array.isArray(user.rol) && user.rol.includes('Profesor')
+          );
+        } else if (rol === 'Auxiliar') {
+          filteredUsers = response.data.filter(user => 
+            Array.isArray(user.rol) && user.rol.includes('Auxiliar')
+          );
+        } else if (rol === 'Admin') {
+          filteredUsers = response.data.filter(user => 
+            Array.isArray(user.rol) && user.rol.includes('Admin')
+          );
+        }
 
         // Formatear los datos para el SelectPicker
-        const formattedData = coordinators.map(item => {
+        const formattedData = filteredUsers.map(item => {
           const fullName = [
             item.primerNombre || '',
             item.segundoNombre || '',
@@ -30,7 +46,7 @@ const SelectUser = ({ onChange }) => {
             item.segundoApellido || '',
           ]
             .filter(Boolean)
-            .join(' '); // Combinar partes del nombre que existen
+            .join(' '); // Combinar partes del nombre que existan
 
           return { label: fullName, value: item.cedula }; // Usar cedula como 'value'
         });
@@ -45,7 +61,7 @@ const SelectUser = ({ onChange }) => {
     };
 
     fetchUsers();
-  }, []);
+  }, [rol]); 
 
   return (
     <SelectPicker

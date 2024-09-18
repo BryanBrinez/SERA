@@ -181,55 +181,58 @@ export default function TablePrograms({ programData, searchText }) {
             hover
           >
             {/* Columnas de la tabla */}
-            <Column width={200}>
+            <Column width={80} resizable>
+              <HeaderCell>Codigo</HeaderCell>
+              <EditableCell dataKey="codigo" onChange={handleChange} onClick={openProgram}/>
+            </Column>
+            <Column width={200} resizable>
               <HeaderCell>Programa</HeaderCell>
               <EditableCell
                 dataKey="nombre_programa"
                 onChange={handleChange}
-                onClick={openProgram}  // Pasar la función openProgram directamente
               />
             </Column>
-            <Column width={200}>
+            <Column width={200} resizable>
               <HeaderCell>Facultad</HeaderCell>
               <EditableCell dataKey="facultad" onChange={handleChange} />
             </Column>
-            <Column width={110}>
+            <Column width={110} resizable>
               <HeaderCell>Sede</HeaderCell>
               <EditableCell dataKey="sede" onChange={handleChange} />
             </Column>
-            <Column width={90}>
+            <Column width={90} resizable>
               <HeaderCell>Jornada</HeaderCell>
               <EditableCell dataKey="jornada" onChange={handleChange} />
             </Column>
-            <Column width={150}>
+            <Column width={150} resizable>
               <HeaderCell>Modalidad</HeaderCell>
               <EditableCell dataKey="modalidad" onChange={handleChange} />
             </Column>
-            <Column width={150}>
+            <Column width={150} resizable>
               <HeaderCell>Creditos</HeaderCell>
               <EditableCell dataKey="creditos" onChange={handleChange} />
             </Column>
-            <Column width={150}>
+            <Column width={150} resizable>
               <HeaderCell>Semestres</HeaderCell>
               <EditableCell dataKey="duracion" onChange={handleChange} />
             </Column>
-            <Column width={150}>
+            <Column width={150} resizable>
               <HeaderCell>Periodicidad</HeaderCell>
               <EditableCell dataKey="periodicidad_de_admisiones" onChange={handleChange} />
             </Column>
-            <Column width={150}>
+            <Column width={150} resizable>
               <HeaderCell>Fecha creación</HeaderCell>
               <EditableCell dataKey="fecha_dec_creacion" onChange={handleChange} />
             </Column>
-            <Column width={300}>
+            <Column width={300} resizable>
               <HeaderCell>Correo</HeaderCell>
               <EditableCell dataKey="email" onChange={handleChange} />
             </Column>
-            <Column width={90}>
+            <Column width={90} resizable>
               <HeaderCell>Estado</HeaderCell>
               <EditableCell dataKey="estado" onChange={handleChange} />
             </Column>
-            <Column width={100}>
+            <Column width={100} resizable>
               <HeaderCell>Acciones</HeaderCell>
               <ActionCell onClick={handleEditState} onCancel={handleCancelEdit} />
             </Column>
@@ -248,6 +251,7 @@ const styles = {
     alignItems: 'center',
     height: '100%',
     overflow: 'visible',
+    cursor: 'pointer',
   },
   input: {
     width: '100%',

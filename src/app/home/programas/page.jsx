@@ -5,6 +5,7 @@ import TablePrograms from '../../components/table/TablePrograms';
 import { IconButton, ButtonToolbar, Notification, useToaster, Input } from 'rsuite';
 import PlusIcon from '@rsuite/icons/Plus';
 import axios from 'axios';
+
 export default function Programs() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [programs, setPrograms] = useState([]);

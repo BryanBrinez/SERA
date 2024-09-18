@@ -232,14 +232,14 @@ export default function TableUsers({ userData, searchText }) {
       ) : (
         <>
           <Table
-            wordWrap
+            wordWrap={'keep-all'}
             height={600}  // Ajusta el alto fijo de la tabla
             data={filteredData}  // Usa los datos filtrados
             rowStyle={getRowStyle}
             bordered
             cellBordered
             rowHeight={34}
-            affixHorizontalScrollbar
+            fillHeight
             hover
           >
             {/* Columnas de la tabla */}
@@ -247,52 +247,52 @@ export default function TableUsers({ userData, searchText }) {
               <HeaderCell>Codigo</HeaderCell>
               <EditableCell dataKey="codigo" onChange={handleChange} />
             </Column> */}
-            <Column width={120}>
+            <Column width={120} resizable>
               <HeaderCell>Cédula</HeaderCell>
               <EditableCell dataKey="cedula" onChange={handleChange} onClick={(rowData) => openUser(rowData.cedula)} />
             </Column>
-            <Column width={90}>
+            <Column width={90} resizable>
               <HeaderCell>Nombre 1</HeaderCell>
               <EditableCell dataKey="primerNombre" onChange={handleChange} />
             </Column>
-            <Column width={110}>
+            <Column width={110} resizable>
               <HeaderCell>Nombre 2</HeaderCell>
               <EditableCell dataKey="segundoNombre" onChange={handleChange} />
             </Column>
-            <Column width={90}>
+            <Column width={90} resizable>
               <HeaderCell>Apellido 1</HeaderCell>
               <EditableCell dataKey="primerApellido" onChange={handleChange} />
             </Column>
-            <Column width={90} >
+            <Column width={90} resizable>
               <HeaderCell>Apellido 2</HeaderCell>
               <EditableCell dataKey="segundoApellido" onChange={handleChange} />
             </Column>
             
-            <Column width={300}>
+            <Column width={300} resizable>
               <HeaderCell>Correo</HeaderCell>
               <EditableCell dataKey="correo" onChange={handleChange} />
             </Column>
-            <Column width={130}>
+            <Column width={130} resizable>
               <HeaderCell>Celular</HeaderCell>
               <EditableCell dataKey="celular" onChange={handleChange} />
             </Column>
-            <Column width={100}>
+            <Column width={140} resizable>
               <HeaderCell>Sede</HeaderCell>
               <EditableCell dataKey="sede" onChange={handleChange} />
             </Column>
-            <Column width={300}>
+            <Column width={300} resizable>
               <HeaderCell>Programa</HeaderCell>
               <EditableCell  dataKey="programa_asignado" onChange={handleChange} />
             </Column>
-            <Column width={200}>
+            <Column width={200} resizable>
               <HeaderCell>Rol</HeaderCell>
               <EditableCell dataKey="rol" onChange={handleChange} />
             </Column>
-            <Column width={90}>
+            <Column width={90} resizable>
               <HeaderCell>Estado</HeaderCell>
               <EditableCell dataKey="estado" onChange={handleChange} />
             </Column>
-            <Column width={100} >
+            <Column width={100} resizable >
               <HeaderCell>Acciones</HeaderCell>
               <ActionCell onClick={handleEditState} onCancel={handleCancelEdit} />
             </Column>

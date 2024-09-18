@@ -84,8 +84,7 @@ export default function Page() {
         <section className='h-full'>
             {program && user ? (
                 <div className='flex-col p-4'>
-                    <h3 className='mb-2'>{program.nombre_programa}</h3>
-
+                    <h3 className='mb-2'>{program.nombre_programa} - {program.codigo}</h3>
                     <div className='mb-2'>
                         <strong>Facultad:</strong> {program.facultad}
                     </div>

@@ -76,16 +76,21 @@ export const ProgramModal = ({ open, handleClose, onConfirm }) => {
             <Modal.Body className='flex-grow w-[600px]'>
                 <Form fluid onChange={setFormValue} formValue={formValue}>
                     <div className='flex gap-2'>
-                        <Form.Group className='w-1/2' controlId="nombre_programa">
+                        <Form.Group className='w-2/3' controlId="nombre_programa">
                             <Form.ControlLabel>Nombre programa*</Form.ControlLabel>
-                            <Form.Control name="nombre_programa" />
+                            <Form.Control name="nombre_programa" type="number" />
                         </Form.Group>
-                        <Form.Group className='w-1/2' controlId="facultad">
+                        <Form.Group className='w-1/3' controlId="codigo">
+                            <Form.ControlLabel>Codigo*</Form.ControlLabel>
+                            <Form.Control name="codigo" />
+                        </Form.Group>
+                        
+                    </div>
+                    <div className='flex gap-2'>
+                    <Form.Group className='w-1/2' controlId="facultad">
                             <Form.ControlLabel>Facultad *</Form.ControlLabel>
                             <Form.Control name="facultad" />
                         </Form.Group>
-                    </div>
-                    <div className='flex gap-2'>
                         <Form.Group className='w-1/2' controlId="sede">
                             <Form.ControlLabel>Sede *</Form.ControlLabel>
                             <Form.Control name="sede" />
@@ -133,7 +138,7 @@ export const ProgramModal = ({ open, handleClose, onConfirm }) => {
                             <Form.Control name="resolucion_MEN" />
                         </Form.Group>
                     </div>
-                    <Form.Group className='w-1/3' controlId="resolucion_del_PENSUM">
+                    <Form.Group controlId="resolucion_del_PENSUM">
                         <Form.ControlLabel>Resolución del PENSUM *</Form.ControlLabel>
                         <Form.Control name="resolucion_del_PENSUM" />
                     </Form.Group>
@@ -144,7 +149,7 @@ export const ProgramModal = ({ open, handleClose, onConfirm }) => {
                     </Form.Group>
                     <Form.Group controlId="ID_coordinador">
                         <Form.ControlLabel>Coordinador *</Form.ControlLabel>
-                        <SelectUser onChange={handleCoordinadorChange} />
+                        <SelectUser onChange={handleCoordinadorChange} rol='Coordinador' />
                     </Form.Group>
                 </Form>
                 <br />

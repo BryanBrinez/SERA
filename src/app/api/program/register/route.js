@@ -24,6 +24,7 @@ export async function POST(request) {
     const programaRef = await addDoc(collection(db, "programs"), {
       ID_coordinador: programaData.ID_coordinador,
       nombre_programa: programaData.nombre_programa,
+      codigo: programaData.codigo,
       facultad: programaData.facultad,
       duracion: programaData.duracion,
       periodicidad_de_admisiones: programaData.periodicidad_de_admisiones,
