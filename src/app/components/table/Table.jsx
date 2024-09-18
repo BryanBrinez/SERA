@@ -312,6 +312,7 @@ const styles = {
     alignItems: 'center',
     height: '100%',
     overflow: 'visible',
+    cursor: 'pointer',
   },
   input: {
     width: '100%',
