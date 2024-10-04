@@ -1,5 +1,8 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import { ResultApModal } from '../../components/modal/ResultApModal';
+import { IndicatorModal } from '../../components/modal/IndicatorModal';
+
 import { IconButton, ButtonToolbar, Notification, useToaster, Input, Panel, Placeholder, Accordion } from 'rsuite';
 import PlusIcon from '@rsuite/icons/Plus';
 import GridIcon from '@rsuite/icons/Grid';
@@ -7,6 +10,7 @@ import axios from 'axios';
 
 export default function Results() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen2, setIsModalOpen2] = useState(false);
     const [results, setResults] = useState([]);
     const [indicators, setIndicators] = useState([]);
     const [searchText, setSearchText] = useState('');
@@ -88,11 +92,55 @@ export default function Results() {
     const handleOpenModal = () => {
         setIsModalOpen(true);
     };
+    
 
     const handleCloseModal = () => {
         fetchResults();
         setIsModalOpen(false);
     };
+
+    const handleOpenModal2 = () => {
+        setIsModalOpen2(true);
+    };
+    const handleCloseModal2 = () => {
+        fetchResults();
+        setIsModalOpen2(false);
+    };
+
+    const handleConfirm = async (formValue) => {
+        // try {
+        //   console.log('Submitting formValue:', formValue);
+        //   const response = await axios.post(`${process.env.NEXT_PUBLIC_URL}/api/user/register`, formValue, {
+        //     headers: {
+        //       'Content-Type': 'application/json'
+        //     }
+        //   });
+        //   console.log('Response from server:', response);
+        //   fetchUsers();
+    
+        //   toaster.push(
+        //     <Notification type="success" header="Usuario creado" closable>
+        //       El usuario ha sido creado con éxito.
+        //     </Notification>,
+        //     { placement: 'topEnd' }
+        //   );
+        //   handleCloseModal();
+        // } catch (error) {
+        //   console.error('Error creating user:', error.response ? error.response.data : error.message);
+    
+        //   toaster.push(
+        //     <Notification type="error" header="Error" closable>
+        //       Hubo un problema al crear el usuario. Por favor, inténtelo de nuevo.
+        //     </Notification>,
+        //     { placement: 'topEnd' }
+        //   );
+        // }
+        console.log('yes');
+      };
+
+      const handleConfirm2 = async (formValue) => {
+        console.log('yes');
+      };
 
     return (
         <div className='pb-5'>
@@ -134,7 +182,7 @@ export default function Results() {
                                 <div className='flex justify-between items-center py-3'>
                                     <p className='font-bold text-base'>Indicadores de logro</p>
                                     <ButtonToolbar>
-                                        <IconButton className='shadow' icon={<PlusIcon />} onClick={handleOpenModal}>
+                                        <IconButton className='shadow' icon={<PlusIcon />} onClick={handleOpenModal2}>
                                             Añadir
                                         </IconButton>
                                     </ButtonToolbar>
@@ -160,6 +208,10 @@ export default function Results() {
                 }
 
             </div>
+
+            <ResultApModal open={isModalOpen} handleClose={handleCloseModal} onConfirm={handleConfirm} />
+            <IndicatorModal open={isModalOpen2} handleClose={handleCloseModal2} onConfirm={handleConfirm2} />
+
 
         </div>
     )

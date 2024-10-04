@@ -153,10 +153,17 @@ export const ProgramModal = ({ open, handleClose, onConfirm }) => {
                     </Form.Group>
                 </Form>
                 <br />
-                <Button className='w-full' onClick={handleSubmit} appearance="primary" loading={loading}>
+                <Button style={styles} className='w-full' onClick={handleSubmit} appearance="primary" loading={loading}>
                     Confirmar
                 </Button>
             </Modal.Body>
         </Modal>
     );
+};
+
+const styles = {
+    backgroundColor: '#c62120',
+    color: 'white',
+    transition: 'width 0.1s ease-in-out',
+    fontWeight: 'bold',
 };

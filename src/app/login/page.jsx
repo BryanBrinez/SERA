@@ -13,9 +13,11 @@ export default function Login() {
   const [error, setError] = useState(false);
   const toaster = useToaster();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const res = await signIn("credentials", {
       email: email,
@@ -43,10 +45,12 @@ export default function Login() {
             <PasswordInput value={password} onChange={setPassword} />
           </div>
           <Button
+            style={styles}
             type="submit"
             color="red"
             appearance="primary"
             className="w-full"
+            loading={loading}
           >
             Iniciar Sesión
           </Button>
@@ -77,3 +81,11 @@ export default function Login() {
     </main>
   );
 }
+
+
+const styles = {
+  backgroundColor: '#c62120',
+  color: 'white',
+  transition: 'width 0.1s ease-in-out',
+  fontWeight: 'bold',
+};
