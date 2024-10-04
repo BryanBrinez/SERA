@@ -42,26 +42,50 @@ export async function GET() {
 
 
 export async function POST(request) {
-    const indicadorData = await request.json();
-    const session = await getServerSession(authOptions);
-  
-    if (!session || !session.user || !session.user.rol.includes("Admin")) {
-      return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-    }
-  
-    try {
-      // Validar los datos usando el esquema de Zod
-      IndicadorLogroSchema.parse(indicadorData);
-  
-      // Crear el indicador de logro en Firestore
-      const indicadorRef = await addDoc(collection(db, "indicadoresLogro"), indicadorData);
-  
-      return NextResponse.json({ message: "Indicador de logro creado con éxito", id: indicadorRef.id });
-    } catch (error) {
-      if (error.errors) {
-        return NextResponse.json({ message: error.errors }, { status: 400 });
-      } else {
-        return NextResponse.json({ message: error.message }, { status: 400 });
+  const indicadorData = await request.json();
+  const session = await getServerSession(authOptions);
+
+ /* if (!session || !session.user || !session.user.rol.includes("Admin")) {
+    return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
+  }*/
+
+  try {
+    // Si es un array, procesar múltiples indicadores de logro
+    if (Array.isArray(indicadorData)) {
+      const results = [];
+
+      // Iterar y crear cada indicador de logro
+      for (const indicador of indicadorData) {
+        // Validar cada indicador usando Zod
+        IndicadorLogroSchema.parse(indicador);
+
+        // Crear el indicador en Firestore
+        const indicadorRef = await addDoc(collection(db, "indicadoresLogro"), indicador);
+
+        // Agregar el resultado al array
+        results.push({ message: "Indicador de logro creado con éxito", id: indicadorRef.id });
       }
+
+      // Devolver la respuesta con los resultados
+      return NextResponse.json(results);
+    } else {
+      // Si es un solo objeto, crear un único indicador de logro
+      // Validar el indicador usando Zod
+      IndicadorLogroSchema.parse(indicadorData);
+
+      // Crear el indicador en Firestore
+      const indicadorRef = await addDoc(collection(db, "indicadoresLogro"), indicadorData);
+
+      // Devolver la respuesta para el único indicador
+      return NextResponse.json({ message: "Indicador de logro creado con éxito", id: indicadorRef.id });
+    }
+  } catch (error) {
+    if (error.errors) {
+      // Manejar errores de validación de Zod
+      return NextResponse.json({ message: error.errors }, { status: 400 });
+    } else {
+      // Manejar otros errores
+      return NextResponse.json({ message: error.message }, { status: 400 });
     }
   }
+}

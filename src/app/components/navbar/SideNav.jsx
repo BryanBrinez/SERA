@@ -28,10 +28,18 @@ export default function SideNav({ modules, appearance, openKeys, expanded, onOpe
     if (status === "authenticated" && session?.user?.rol) {
       // Encuentra los módulos que coincidan con cualquiera de los roles
       const modul = MODULES.filter(module => session.user.rol.includes(module.Rol));
+      
       if (modul.length > 0) {
         // Combina las rutas de todos los módulos encontrados
         const routes = modul.reduce((acc, curr) => acc.concat(curr.Routes), []);
-        setSelectedModule(routes);
+  
+        // Elimina rutas duplicadas basadas en el routePath usando un Set
+        const uniqueRoutes = routes.filter((route, index, self) => 
+          index === self.findIndex(r => r.routePath === route.routePath)
+        );
+  
+        setSelectedModule(uniqueRoutes);
+        console.log(uniqueRoutes);
       } else {
         console.log('No module found for roles:', session.user.rol);
       }
