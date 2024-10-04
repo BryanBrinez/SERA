@@ -42,26 +42,56 @@ export async function GET() {
 
 
 export async function POST(request) {
-    const resultadoData = await request.json();
-    const session = await getServerSession(authOptions);
-  
-    if (!session || !session.user || !session.user.rol.includes("Admin")) {
-      return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-    }
-  
-    try {
-      // Validar los datos usando el esquema de Zod
-      ResultadoAprendizajeSchema.parse(resultadoData);
-  
-      // Crear el resultado de aprendizaje en Firestore
-      const resultadoRef = await addDoc(collection(db, "resultadosAprendizaje"), resultadoData);
-  
-      return NextResponse.json({ message: "Resultado de aprendizaje creado con éxito", id: resultadoRef.id });
-    } catch (error) {
-      if (error.errors) {
-        return NextResponse.json({ message: error.errors }, { status: 400 });
-      } else {
-        return NextResponse.json({ message: error.message }, { status: 400 });
+  const resultadoData = await request.json();
+  const session = await getServerSession(authOptions);
+
+  /*if (!session || !session.user || !session.user.rol.includes("Admin")) {
+    return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
+  }*/
+
+  try {
+    // Si el cuerpo es un array, procesar múltiples resultados de aprendizaje
+    if (Array.isArray(resultadoData)) {
+      const results = [];
+
+      // Iterar y crear cada resultado de aprendizaje
+      for (const resultado of resultadoData) {
+        // Validar cada resultado de aprendizaje usando Zod
+        ResultadoAprendizajeSchema.parse(resultado);
+
+        // Crear el resultado en Firestore
+        const resultadoRef = await addDoc(collection(db, "resultadosAprendizaje"), resultado);
+
+        // Agregar el resultado al array
+        results.push({
+          message: "Resultado de aprendizaje creado con éxito",
+          id: resultadoRef.id,
+        });
       }
+
+      // Devolver la respuesta con los resultados
+      return NextResponse.json(results);
+    } else {
+      // Si es un solo objeto, crear un único resultado de aprendizaje
+      // Validar el resultado usando Zod
+      ResultadoAprendizajeSchema.parse(resultadoData);
+
+      // Crear el resultado en Firestore
+      const resultadoRef = await addDoc(collection(db, "resultadosAprendizaje"), resultadoData);
+
+      // Devolver la respuesta para el único resultado
+      return NextResponse.json({
+        message: "Resultado de aprendizaje creado con éxito",
+        id: resultadoRef.id,
+      });
+    }
+  } catch (error) {
+    if (error.errors) {
+      // Manejar errores de validación de Zod
+      return NextResponse.json({ message: error.errors }, { status: 400 });
+    } else {
+      // Manejar otros errores
+      return NextResponse.json({ message: error.message }, { status: 400 });
     }
   }
+}
