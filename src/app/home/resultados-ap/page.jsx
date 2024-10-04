@@ -144,7 +144,7 @@ export default function Results() {
                                 <Accordion className='text-sm bg-[#fbfbfb]' >
 
                                     {
-                                        indicators && indicators.filter(indicator => indicator.id_resultado_aprendizaje === result.codigo).map((indicator) => (
+                                        indicators && indicators.filter(indicator => indicator.codigo_resultado_aprendizaje === result.codigo).map((indicator) => (
                                             <Accordion.Panel header={indicator.nombre_indicador} key={indicator.id} className='font-light p-0 m-0'>
                                                 {/* <span> {indicator.codigo}</span> */}
                                                 <span>{indicator.descripcion}</span>
