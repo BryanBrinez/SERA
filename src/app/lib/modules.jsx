@@ -7,7 +7,7 @@ export const MODULES = [
         { routeName: "Usuarios", routePath: "/home/usuarios", icon: "user" },
         { routeName: "Programas", routePath: "/home/programas", icon: "program" },
         { routeName: "Cursos", routePath: "/home/cursos", icon: "curso" },
-        { routeName: "Resultados Ap", routePath: "/home", icon: "result" },
+        { routeName: "Resultados Ap", routePath: "/home/resultados-ap", icon: "result" },
         { routeName: "Centro de ayuda", routePath: "/ayuda", icon: "help" },
         { routeName: "Configuracion", routePath: "/home", icon: "settings" },
       ],
