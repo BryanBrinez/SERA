@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "../../firebase/config";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, query, where, getDocs, collection } from "firebase/firestore";
 import { ProgramSchema } from "../../../types/ProgramSchema";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../auth/[...nextauth]/route"; // Ajusta la ruta según tu configuración
@@ -12,13 +12,23 @@ export async function POST(request) {
   const session = await getServerSession(authOptions);
 
   // Verificar si el usuario tiene el rol de Admin
-  if (!session || !session.user || !session.user.rol.includes("Admin")) {
+  /*if (!session || !session.user || !session.user.rol.includes("Admin")) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }
+  }*/
 
   try {
     // Validar los datos del programa usando el esquema de Zod
     ProgramSchema.parse(programaData);
+
+
+    // Consulta por cédula
+    const programRef = collection(db, "programs");
+    const programQuery = query(programRef, where("codigo", "==", programaData.codigo));
+    const programSnapshot = await getDocs(programQuery);
+
+    if (!programSnapshot.empty) {
+      return NextResponse.json({ message: "El codigo ya está registrado." }, { status: 400 });
+    }
 
     // Crear programa en Firestore con ID automático
     const programaRef = await addDoc(collection(db, "programs"), {
