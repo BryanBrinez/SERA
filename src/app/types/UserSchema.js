@@ -4,7 +4,7 @@ import { z } from 'zod';
 const UserSchema = z.object({
   codigo: z.string()
     .min(1, { message: "El código es obligatorio." })
-    .max(10, { message: "El código no puede tener más de 10 caracteres." }),
+    .max(10, { message: "El código no puede tener más de 10 caracteres." }).optional(),
   cedula: z.string()
     .min(1, { message: "La cédula es obligatoria." })
     .max(20, { message: "La cédula no puede tener más de 20 caracteres." }),
@@ -26,7 +26,7 @@ const UserSchema = z.object({
     .regex(/^\d+$/, { message: "El celular debe contener solo números." }),
   correo: z.string().email({ message: "Debe ser un correo electrónico válido." }),
   password: z.string()
-    .min(6, { message: "La contraseña debe tener al menos 6 caracteres." }),
+    .min(6, { message: "La contraseña debe tener al menos 6 caracteres." }).optional(),
   rol: z.array(z.string())
     .min(1, { message: "El rol es obligatorio." }), 
   estado: z.string()

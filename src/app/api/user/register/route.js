@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth, db } from "../../firebase/config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, query, where, getDocs, collection } from "firebase/firestore";
 import { UserSchema } from "../../../types/UserSchema";
 import nodemailer from "nodemailer";
 import { getServerSession } from "next-auth/next";
@@ -24,20 +24,36 @@ export async function POST(request) {
 
   
 
-  if (!session || !session.user || !session.user.rol.includes("Admin")) {
+  /*if (!session || !session.user || !session.user.rol.includes("Admin")) {
     console.log("MANDA EL ERROR")
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }
+  }*/
 
   try {
     // Validar los datos del usuario usando el esquema de Zod
     UserSchema.parse(userData);
 
+
+
+   
+    // Consulta por cédula
+    const usersRef = collection(db, "users");
+    const cedulaQuery = query(usersRef, where("cedula", "==", userData.cedula));
+    const cedulaSnapshot = await getDocs(cedulaQuery);
+
+    if (!cedulaSnapshot.empty) {
+      return NextResponse.json({ message: "La cédula ya está registrada." }, { status: 400 });
+    }
+
+    // Asignar la cédula como contraseña
+    const password = userData.cedula; 
+
+
     // Crear usuario en Firebase Auth
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       userData.correo,
-      userData.password
+      password
     );
     const user = userCredential.user;
 
