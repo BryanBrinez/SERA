@@ -1,9 +1,27 @@
 import { NextResponse } from "next/server";
 import { db } from "../firebase/config";
-import { collection, getDocs, addDoc  } from "firebase/firestore";
+import { collection, getDocs, addDoc, query, orderBy, limit } from "firebase/firestore";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]/route";
+
 import { ResultadoAprendizajeSchema } from "../../types/ResultadoAprendizajeSchema ";
+
+// Función para generar un nuevo código
+const generateNewCode = async () => {
+  const resultadoCollection = collection(db, "resultadosAprendizaje");
+  const resultadoSnapshot = await getDocs(resultadoCollection);
+  const resultados = resultadoSnapshot.docs.map(doc => doc.data());
+  
+  // Extraer los códigos existentes y encontrar el último
+  const existingCodes = resultados.map(result => result.codigo);
+  const maxCode = existingCodes.reduce((max, code) => {
+    const num = parseInt(code.replace("RA", ""));
+    return num > max ? num : max;
+  }, 0);
+  
+  // Generar el nuevo código
+  return `RA${String(maxCode + 1).padStart(4, '0')}`;
+};
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -40,7 +58,6 @@ export async function GET() {
   }
 }
 
-
 export async function POST(request) {
   const resultadoData = await request.json();
   const session = await getServerSession(authOptions);
@@ -50,47 +67,32 @@ export async function POST(request) {
   }*/
 
   try {
-    // Si el cuerpo es un array, procesar múltiples resultados de aprendizaje
-    if (Array.isArray(resultadoData)) {
-      const results = [];
+    // Generar un nuevo código para el resultado de aprendizaje
+    const nuevoCodigo = await generateNewCode();
 
-      // Iterar y crear cada resultado de aprendizaje
-      for (const resultado of resultadoData) {
-        // Validar cada resultado de aprendizaje usando Zod
-        ResultadoAprendizajeSchema.parse(resultado);
+    // Crear el objeto de resultado de aprendizaje con el nuevo código
+    const resultadoConCodigo = {
+      ...resultadoData,
+      codigo: nuevoCodigo // Asignar el nuevo código generado
+    };
 
-        // Crear el resultado en Firestore
-        const resultadoRef = await addDoc(collection(db, "resultadosAprendizaje"), resultado);
+    // Validar el resultado usando Zod
+    ResultadoAprendizajeSchema.parse(resultadoConCodigo);
 
-        // Agregar el resultado al array
-        results.push({
-          message: "Resultado de aprendizaje creado con éxito",
-          id: resultadoRef.id,
-        });
-      }
+    // Crear el resultado en Firestore
+    const resultadoRef = await addDoc(collection(db, "resultadosAprendizaje"), resultadoConCodigo);
 
-      // Devolver la respuesta con los resultados
-      return NextResponse.json(results);
-    } else {
-      // Si es un solo objeto, crear un único resultado de aprendizaje
-      // Validar el resultado usando Zod
-      ResultadoAprendizajeSchema.parse(resultadoData);
+    // Devolver la respuesta
+    return NextResponse.json({
+      message: "Resultado de aprendizaje creado con éxito",
+      id: resultadoRef.id,
+      codigo: nuevoCodigo // Retornar el código generado
+    });
 
-      // Crear el resultado en Firestore
-      const resultadoRef = await addDoc(collection(db, "resultadosAprendizaje"), resultadoData);
-
-      // Devolver la respuesta para el único resultado
-      return NextResponse.json({
-        message: "Resultado de aprendizaje creado con éxito",
-        id: resultadoRef.id,
-      });
-    }
   } catch (error) {
     if (error.errors) {
-      // Manejar errores de validación de Zod
       return NextResponse.json({ message: error.errors }, { status: 400 });
     } else {
-      // Manejar otros errores
       return NextResponse.json({ message: error.message }, { status: 400 });
     }
   }
