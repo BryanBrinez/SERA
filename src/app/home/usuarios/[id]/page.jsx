@@ -4,6 +4,7 @@ import NavbarUserOptions from '@/app/components/navbar/NavbarUserOptions';
 import axios from 'axios';
 import { Notification, useToaster } from 'rsuite';
 import { AvatarGroup, Avatar } from 'rsuite';
+import CoursesByProfesor from '@/app/components/cards/CoursesByProfesor';
 
 export default function Page() {
     const toaster = useToaster();
@@ -82,6 +83,10 @@ export default function Page() {
                         </div>
                     </div>
                     <NavbarUserOptions />
+
+                    <div>
+                        <CoursesByProfesor profesorCode={user.cedula}/>
+                    </div>
 
                 </div>
 
