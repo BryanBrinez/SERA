@@ -45,9 +45,9 @@ export async function POST(request) {
   const indicadorData = await request.json();
   const session = await getServerSession(authOptions);
 
- /* if (!session || !session.user || !session.user.rol.includes("Admin")) {
+  if (!session || !session.user || !session.user.rol.includes("Admin")) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }*/
+  }
 
   try {
     // Si es un array, procesar múltiples indicadores de logro
