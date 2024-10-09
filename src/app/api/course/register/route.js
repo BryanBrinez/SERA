@@ -12,9 +12,9 @@ export async function POST(request) {
   const session = await getServerSession(authOptions);
 
   // Verificar si el usuario tiene el rol de Admin (descomentado si se necesita)
- /* if (!session || !session.user || !session.user.rol.includes("Admin")) {
+  if (!session || !session.user || !session.user.rol.includes("Admin")) {
      return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }*/
+  }
 
   try {
     // Validar los datos del curso usando el esquema de Zod
