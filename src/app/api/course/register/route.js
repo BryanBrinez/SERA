@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "../../firebase/config";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, query, where, getDocs, collection } from "firebase/firestore";
 import { CourseSchema } from "../../../types/CourseSchema";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../auth/[...nextauth]/route"; // Ajusta la ruta según tu configuración
@@ -12,13 +12,23 @@ export async function POST(request) {
   const session = await getServerSession(authOptions);
 
   // Verificar si el usuario tiene el rol de Admin (descomentado si se necesita)
-  if (!session || !session.user || !session.user.rol.includes("Admin")) {
+ /* if (!session || !session.user || !session.user.rol.includes("Admin")) {
      return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }
+  }*/
 
   try {
     // Validar los datos del curso usando el esquema de Zod
     CourseSchema.parse(cursoData);
+
+
+    // Consulta por cédula
+    const courseRef = collection(db, "courses");
+    const codigoQuery = query(courseRef, where("codigo", "==", cursoData.codigo));
+    const codigoSnapshot = await getDocs(codigoQuery);
+
+    if (!codigoSnapshot.empty) {
+      return NextResponse.json({ message: "El codigo ya está registrada." }, { status: 400 });
+    }
 
     // Crear curso en Firestore con ID automático
     const cursoRef = await addDoc(collection(db, "courses"), {

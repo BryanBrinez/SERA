@@ -24,10 +24,10 @@ export async function POST(request) {
 
   
 
-  /*if (!session || !session.user || !session.user.rol.includes("Admin")) {
+  if (!session || !session.user || !session.user.rol.includes("Admin")) {
     console.log("MANDA EL ERROR")
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }*/
+  }
 
   try {
     // Validar los datos del usuario usando el esquema de Zod
