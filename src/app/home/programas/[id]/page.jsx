@@ -133,16 +133,16 @@ export default function Page() {
                 // Skeleton mientras se cargan los datos
                 <div className='flex flex-col p-4'>
                     <div className='animate-pulse flex flex-col gap-3 rounded-lg'>
-                        <div className='h-8 bg-gray-300 rounded w-2/4'></div>
-                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
-                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
-                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
-                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
-                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
-                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
-                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
-                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
-                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
+                        <div className='h-8 bg-gray-200 rounded w-2/4'></div>
+                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
+                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
+                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
+                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
+                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
+                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
+                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
+                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
+                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
                     </div>
                 </div>
             )}

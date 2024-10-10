@@ -165,19 +165,19 @@ export default function TablePrograms({ programData, searchText }) {
     <div>
       {/* skeleton */}
       {data.length === 0 ? (
-        <div className='flex flex-col gap-1 bg-gray-100 border animate-pulse rounded-md h-[600px]'>
+        <div className='flex flex-col gap-1 bg-gray-200  animate-pulse rounded-md h-[600px]'>
           {Array(10).fill(0).map((_, idx) => (
             <div
               key={idx}
-              className="animate-pulse flex justify-between py-3 px-2 bg-gray-200 h-16 w-full border gap-1"
+              className="animate-pulse flex justify-between py-3 px-2 bg-gray-100 h-16 w-full border gap-1"
             >
 
-              <div className="bg-gray-300 h-8 w-1/6  rounded-sm"></div> 
-              <div className="bg-gray-300 h-8 w-1/6  rounded-sm"></div> 
-              <div className="bg-gray-300 h-8 w-1/6  rounded-sm"></div> 
-              <div className="bg-gray-300  h-8 w-1/6  rounded-sm"></div> 
-              <div className="bg-gray-300  h-8 w-1/6  rounded-sm"></div> 
-              <div className="bg-gray-300  h-8 w-1/6  rounded-sm"></div> 
+              <div className="bg-gray-200 h-8 w-1/6  rounded-sm"></div> 
+              <div className="bg-gray-200 h-8 w-1/6  rounded-sm"></div> 
+              <div className="bg-gray-200 h-8 w-1/6  rounded-sm"></div> 
+              <div className="bg-gray-200  h-8 w-1/6  rounded-sm"></div> 
+              <div className="bg-gray-200  h-8 w-1/6  rounded-sm"></div> 
+              <div className="bg-gray-200  h-8 w-1/6  rounded-sm"></div> 
 
 
             </div>

@@ -92,7 +92,7 @@ export default function Results() {
     const handleOpenModal = () => {
         setIsModalOpen(true);
     };
-    
+
 
     const handleCloseModal = () => {
         fetchResults();
@@ -117,7 +117,7 @@ export default function Results() {
         //   });
         //   console.log('Response from server:', response);
         //   fetchUsers();
-    
+
         //   toaster.push(
         //     <Notification type="success" header="Usuario creado" closable>
         //       El usuario ha sido creado con éxito.
@@ -127,7 +127,7 @@ export default function Results() {
         //   handleCloseModal();
         // } catch (error) {
         //   console.error('Error creating user:', error.response ? error.response.data : error.message);
-    
+
         //   toaster.push(
         //     <Notification type="error" header="Error" closable>
         //       Hubo un problema al crear el usuario. Por favor, inténtelo de nuevo.
@@ -136,11 +136,11 @@ export default function Results() {
         //   );
         // }
         console.log('yes');
-      };
+    };
 
-      const handleConfirm2 = async (formValue) => {
+    const handleConfirm2 = async (formValue) => {
         console.log('yes');
-      };
+    };
 
     return (
         <div className='pb-5'>
@@ -159,53 +159,65 @@ export default function Results() {
                 />
             </div>
             <div className='flex flex-col gap-3'>
+
                 {
-                    results?.length > 0 && results.map((result) => (
-                        <div key={result.id} className=''>
-                            <Panel
-                                header={(
-                                    <div className="flex items-center gap-2">
-                                        <div className="p-3 bg-gray-200 rounded-md ">
-                                            <GridIcon color='red' />
-                                        </div>
-                                        <div className='flex flex-col'>
-                                            <p>{result.nombre_resultado}</p>
-                                            <span className='font-light text-sm'>{result.descripcion}</span>
-                                        </div>
-
+                    results.length === 0 ? (
+                        // Muestra skeletons durante la carga
+                        Array(6).fill(0).map((_, idx) => (
+                            <div key={idx} className='border  bg-gray-100 rounded-md p-6 animate-pulse'>
+                                <div className="flex items-center gap-2">
+                                    <div className="p-3 bg-gray-200 rounded-md w-10 h-10 animate-pulse">
+                                        {/* Placeholder para el icono */}
                                     </div>
-                                )}
-                                collapsible
-                                bordered
-                            >
-
-                                <div className='flex justify-between items-center py-3'>
-                                    <p className='font-bold text-base'>Indicadores de logro</p>
-                                    <ButtonToolbar>
-                                        <IconButton className='shadow' icon={<PlusIcon />} onClick={handleOpenModal2}>
-                                            Añadir
-                                        </IconButton>
-                                    </ButtonToolbar>
-
+                                    <div className='flex flex-col w-full gap-2'>
+                                        <div className='bg-gray-200 h-4 w-1/2 animate-pulse'></div>
+                                        <div className='bg-gray-200 h-3 w-1/2 animate-pulse'></div> 
+                                    </div>
                                 </div>
+                            </div>
+                        ))
+                    ) : (
+                        results?.length > 0 && results.map((result) => (
+                            <div key={result.id} className=''>
+                                <Panel
+                                    header={(
+                                        <div className="flex items-center gap-2">
+                                            <div className="p-3 bg-gray-200 rounded-md ">
+                                                <GridIcon color='red' />
+                                            </div>
+                                            <div className='flex flex-col'>
+                                                <p>{result.nombre_resultado}</p>
+                                                <span className='font-light text-sm'>{result.descripcion}</span>
+                                            </div>
+                                        </div>
+                                    )}
+                                    collapsible
+                                    bordered
+                                >
+                                    <div className='flex justify-between items-center py-3'>
+                                        <p className='font-bold text-base'>Indicadores de logro</p>
+                                        <ButtonToolbar>
+                                            <IconButton className='shadow' icon={<PlusIcon />} onClick={handleOpenModal2}>
+                                                Añadir
+                                            </IconButton>
+                                        </ButtonToolbar>
+                                    </div>
 
-                                <Accordion className='text-sm bg-[#fbfbfb]' >
-
-                                    {
-                                        indicators && indicators.filter(indicator => indicator.codigo_resultado_aprendizaje === result.codigo).map((indicator) => (
-                                            <Accordion.Panel header={indicator.nombre_indicador} key={indicator.id} className='font-light p-0 m-0'>
-                                                {/* <span> {indicator.codigo}</span> */}
-                                                <span>{indicator.descripcion}</span>
-                                                
-                                            </Accordion.Panel>
-                                        ))
-                                    }
-                                </Accordion>
-
-                            </Panel>
-                        </div>
-                    ))
+                                    <Accordion className='text-sm bg-[#fbfbfb]'>
+                                        {
+                                            indicators && indicators.filter(indicator => indicator.codigo_resultado_aprendizaje === result.codigo).map((indicator) => (
+                                                <Accordion.Panel header={indicator.nombre_indicador} key={indicator.id} className='font-light p-0 m-0'>
+                                                    <span>{indicator.descripcion}</span>
+                                                </Accordion.Panel>
+                                            ))
+                                        }
+                                    </Accordion>
+                                </Panel>
+                            </div>
+                        ))
+                    )
                 }
+
 
             </div>
 

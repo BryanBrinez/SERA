@@ -32,16 +32,16 @@ export default function CoursesByProfesor({ profesorCode }) {
                     Array(6).fill(0).map((_, idx) => (
                         <div
                             key={idx}
-                            className="animate-pulse flex flex-col py-3 px-5 gap-3 bg-gray-200 rounded-lg min-w-[180px] border"
+                            className="animate-pulse flex flex-col py-3 px-5 gap-3 bg-gray-100 rounded-lg min-w-[180px]"
                         >
-                            <div className="h-6 bg-gray-300 animate-pulse rounded w-3/4"></div>
-                            <div className="h-4 bg-gray-300 animate-pulse rounded w-1/2"></div>
-                            <div className="h-4 bg-gray-300 animate-pulse rounded w-1/3"></div>
-                            <div className="h-10 bg-gray-300 animate-pulse rounded mt-4"></div>
+                            <div className="h-6 bg-gray-200 animate-pulse rounded w-3/4"></div>
+                            <div className="h-4 bg-gray-200 animate-pulse rounded w-1/2"></div>
+                            <div className="h-4 bg-gray-200 animate-pulse rounded w-1/3"></div>
+                            <div className="h-10 bg-gray-200 animate-pulse rounded mt-4"></div>
                         </div>
                     ))
                 ) : (
-                    // Muestra las tarjetas con datos reales una vez termine el skeleton
+                    // Muestra las tarjetas con datos reales una vez termine el skelet on
                     courses && courses.map((course) => (
                         <div
                             key={course.id}

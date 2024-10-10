@@ -83,20 +83,20 @@ export default function Page() {
             ) : (
                 <div className='flex-col'>
                     <div className='flex gap-3'>
-                        <div className="w-56 h-56 bg-gray-300 animate-pulse rounded-md"></div>
+                        <div className="w-56 h-56 bg-gray-200 animate-pulse rounded-md"></div>
 
                         <div className='w-full'>
                             <div className='flex items-center gap-3 pb-4'>
-                                <div className="w-48 h-6 bg-gray-300 animate-pulse rounded-md"></div>
-                                <div className="w-24 h-6 bg-gray-300 animate-pulse rounded-md"></div>
+                                <div className="w-48 h-6 bg-gray-200 animate-pulse rounded-md"></div>
+                                <div className="w-24 h-6 bg-gray-200 animate-pulse rounded-md"></div>
                             </div>
 
-                            <div className="w-52 h-5 bg-gray-300 animate-pulse rounded-md mb-2"></div>
-                            <div className="w-52 h-5 bg-gray-300 animate-pulse rounded-md mb-2"></div>
-                            <div className="w-52 h-5 bg-gray-300 animate-pulse rounded-md mb-2"></div>
-                            <div className="w-52 h-5 bg-gray-300 animate-pulse rounded-md mb-2"></div>
-                            <div className="w-52 h-5 bg-gray-300 animate-pulse rounded-md mb-2"></div>
-                            <div className="w-52 h-5 bg-gray-300 animate-pulse rounded-md mb-2"></div>
+                            <div className="w-52 h-5 bg-gray-200 animate-pulse rounded-md mb-2"></div>
+                            <div className="w-52 h-5 bg-gray-200 animate-pulse rounded-md mb-2"></div>
+                            <div className="w-52 h-5 bg-gray-200 animate-pulse rounded-md mb-2"></div>
+                            <div className="w-52 h-5 bg-gray-200 animate-pulse rounded-md mb-2"></div>
+                            <div className="w-52 h-5 bg-gray-200 animate-pulse rounded-md mb-2"></div>
+                            <div className="w-52 h-5 bg-gray-200 animate-pulse rounded-md mb-2"></div>
                         </div>
                     </div>
                 </div>

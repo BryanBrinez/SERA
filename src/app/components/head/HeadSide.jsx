@@ -125,12 +125,12 @@ export default function HeadSide() {
             <div className="flex gap-5 items-center">
               {/* Skeleton text */}
               <div className="text-base text-black text-right">
-                <div className="w-32 h-6 bg-gray-300 animate-pulse rounded-md mb-2"></div>
-                <div className="w-24 h-5 bg-gray-300 animate-pulse rounded-md"></div>
+                <div className="w-32 h-6 bg-gray-200 animate-pulse rounded-md mb-2"></div>
+                <div className="w-24 h-5 bg-gray-200 animate-pulse rounded-md"></div>
               </div>
 
               {/* Skeleton avatar */}
-              <div className="w-16 h-16 bg-gray-300 animate-pulse rounded-full"></div>
+              <div className="w-16 h-16 bg-gray-200 animate-pulse rounded-full"></div>
             </div>
           )}
         </section>
