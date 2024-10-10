@@ -133,7 +133,7 @@ export default function Page() {
             )}
             <NavbarCourseOptions active={active} setActive={setActive} />
             <div>
-                {active === 'notas' && <HandsontableSheet/>}
+                {active === 'notas' && course && <HandsontableSheet course={course.codigo} group={course.grupo}/>}
             </div>
         </section>
     );
