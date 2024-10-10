@@ -4,6 +4,8 @@ import NavbarCourseOptions from '@/app/components/navbar/NavbarCourseOptions';
 import axios from 'axios';
 import { Notification, useToaster, Accordion } from 'rsuite';
 import NotesSheet from '@/app/components/table/NotesSheet';
+import HandsontableSheet from '@/app/components/table/handsontableSheet';
+
 
 export default function Page() {
     const toaster = useToaster();
@@ -131,7 +133,7 @@ export default function Page() {
             )}
             <NavbarCourseOptions active={active} setActive={setActive} />
             <div>
-                {active === 'notas' && <NotesSheet/>}
+                {active === 'notas' && <HandsontableSheet/>}
             </div>
         </section>
     );
