@@ -127,11 +127,26 @@ export default function Page() {
                     <div className='mb-2'>
                         <strong>Email:</strong> {program.email}
                     </div>
-                    <NavbarUserOptions />
+                    
                 </div>
             ) : (
-                <p>Cargando programa...</p>
+                // Skeleton mientras se cargan los datos
+                <div className='flex flex-col p-4'>
+                    <div className='animate-pulse flex flex-col gap-3 rounded-lg'>
+                        <div className='h-8 bg-gray-300 rounded w-2/4'></div>
+                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
+                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
+                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
+                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
+                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
+                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
+                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
+                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
+                        <div className='h-6 bg-gray-300 rounded w-1/3'></div>
+                    </div>
+                </div>
             )}
+            <NavbarUserOptions />
         </section>
     );
 }

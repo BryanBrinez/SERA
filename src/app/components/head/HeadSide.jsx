@@ -121,12 +121,22 @@ export default function HeadSide() {
               />
             </>
           ) : (
-            <p>Cargando...</p>
+            // Skeleton loader
+            <div className="flex gap-5 items-center">
+              {/* Skeleton text */}
+              <div className="text-base text-black text-right">
+                <div className="w-32 h-6 bg-gray-300 animate-pulse rounded-md mb-2"></div>
+                <div className="w-24 h-5 bg-gray-300 animate-pulse rounded-md"></div>
+              </div>
+
+              {/* Skeleton avatar */}
+              <div className="w-16 h-16 bg-gray-300 animate-pulse rounded-full"></div>
+            </div>
           )}
         </section>
       </header>
       <div className="w-full mb-4 flex items-center h-4">
-        <Breadcrumb separator={<IoChevronForwardSharp />}  className="w-full mb-4 flex items-center">
+        <Breadcrumb separator={<IoChevronForwardSharp />} className="w-full mb-4 flex items-center">
           <Breadcrumb.Item href="/home">
             <IoHomeSharp />
           </Breadcrumb.Item>

@@ -15,7 +15,7 @@ const EditableCell = ({ rowData, dataKey, onChange, onClick, ...props }) => {
   };
 
   return (
-    <Cell {...props} style={styles.cell}onClick={() => onClick(rowData)}>
+    <Cell {...props} style={styles.cell} onClick={() => onClick(rowData)}>
       {editing ? (
         <input
           style={styles.input}
@@ -49,7 +49,7 @@ const ActionCell = ({ rowData, onClick, onCancel, ...props }) => (
 const updateCourse = async (courseId, courseData) => {
   try {
     const { status, ...dataToUpdate } = courseData;
-    
+
     const response = await axios.put(
       `${process.env.NEXT_PUBLIC_URL}api/course/${courseId}`,
       dataToUpdate,
@@ -161,9 +161,25 @@ export default function TableCourse({ courseData, searchText }) {
 
   return (
     <div>
+      {/* skeleton */}
       {data.length === 0 ? (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '500px' }}>
-          <Loader size="lg" />
+        <div className='flex flex-col gap-1 bg-gray-100 border animate-pulse rounded-md h-[600px]'>
+          {Array(10).fill(0).map((_, idx) => (
+            <div
+              key={idx}
+              className="animate-pulse flex justify-between py-3 px-2 bg-gray-200 h-16 w-full border gap-1"
+            >
+
+              <div className="bg-gray-300 h-8 w-1/6  rounded-sm"></div> 
+              <div className="bg-gray-300 h-8 w-1/6  rounded-sm"></div> 
+              <div className="bg-gray-300 h-8 w-1/6  rounded-sm"></div> 
+              <div className="bg-gray-300  h-8 w-1/6  rounded-sm"></div> 
+              <div className="bg-gray-300  h-8 w-1/6  rounded-sm"></div> 
+              <div className="bg-gray-300  h-8 w-1/6  rounded-sm"></div> 
+
+
+            </div>
+          ))}
         </div>
       ) : (
         <>
@@ -181,7 +197,7 @@ export default function TableCourse({ courseData, searchText }) {
             {/* Columnas de la tabla */}
             <Column width={130} resizable>
               <HeaderCell>Codigo</HeaderCell>
-              <EditableCell dataKey="codigo" onChange={handleChange} onClick={openCourse}/>
+              <EditableCell dataKey="codigo" onChange={handleChange} onClick={openCourse} />
             </Column>
             <Column width={300} resizable>
               <HeaderCell>Nombre</HeaderCell>
@@ -199,7 +215,7 @@ export default function TableCourse({ courseData, searchText }) {
               <HeaderCell>Programa</HeaderCell>
               <EditableCell dataKey="codigo_programa" onChange={handleChange} />
             </Column>
-            
+
             <Column width={80} resizable>
               <HeaderCell>Creditos</HeaderCell>
               <EditableCell dataKey="creditos" onChange={handleChange} />
@@ -247,7 +263,7 @@ const styles = {
     alignItems: 'center',
     height: '100%',
     cursor: 'pointer',
-    
+
   },
   input: {
     width: '100%',

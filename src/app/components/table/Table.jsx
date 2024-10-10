@@ -122,7 +122,7 @@ const ActionCell = ({ rowData, onClick, onCancel, ...props }) => (
 const updateUser = async (userId, userData) => {
   try {
     const { status, ...dataToUpdate } = userData;
-    
+
     const response = await fetch(`${process.env.NEXT_PUBLIC_URL}api/user/${userId}?searchBy=uid`, {
       method: 'PUT',
       headers: {
@@ -225,10 +225,25 @@ export default function TableUsers({ userData, searchText }) {
 
   return (
     <div>
+      {/* skeleton */}
       {data.length === 0 ? (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '500px' }}>
-          <Loader size="lg" />
-        </div>
+        <div className='flex flex-col gap-1 bg-gray-100 border animate-pulse rounded-md h-[600px]'>
+        {Array(10).fill(0).map((_, idx) => (
+          <div
+            key={idx}
+            className="animate-pulse flex justify-between py-3 px-2 bg-gray-200 h-16 w-full border gap-1"
+          >
+            <div className="bg-gray-300 h-8 w-1/6  rounded-sm"></div> 
+            <div className="bg-gray-300 h-8 w-1/6  rounded-sm"></div> 
+            <div className="bg-gray-300 h-8 w-1/6  rounded-sm"></div> 
+            <div className="bg-gray-300  h-8 w-1/6  rounded-sm"></div> 
+            <div className="bg-gray-300  h-8 w-1/6  rounded-sm"></div> 
+            <div className="bg-gray-300  h-8 w-1/6  rounded-sm"></div> 
+            
+            
+          </div>
+        ))}
+      </div>
       ) : (
         <>
           <Table
@@ -267,7 +282,7 @@ export default function TableUsers({ userData, searchText }) {
               <HeaderCell>Apellido 2</HeaderCell>
               <EditableCell dataKey="segundoApellido" onChange={handleChange} />
             </Column>
-            
+
             <Column width={300} resizable>
               <HeaderCell>Correo</HeaderCell>
               <EditableCell dataKey="correo" onChange={handleChange} />
@@ -282,7 +297,7 @@ export default function TableUsers({ userData, searchText }) {
             </Column>
             <Column width={300} resizable>
               <HeaderCell>Programa</HeaderCell>
-              <EditableCell  dataKey="programa_asignado" onChange={handleChange} />
+              <EditableCell dataKey="programa_asignado" onChange={handleChange} />
             </Column>
             <Column width={200} resizable>
               <HeaderCell>Rol</HeaderCell>

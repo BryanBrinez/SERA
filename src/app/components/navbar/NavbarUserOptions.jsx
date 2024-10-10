@@ -1,5 +1,6 @@
 import { Nav } from 'rsuite';
-import React , {useState}from 'react';
+import React, { useState } from 'react';
+
 const Navbar = ({ active, onSelect, ...props }) => {
   return (
     <Nav {...props} activeKey={active} onSelect={onSelect} style={{ marginBottom: 50 }}>
@@ -9,12 +10,10 @@ const Navbar = ({ active, onSelect, ...props }) => {
   );
 };
 
-export default function NavbarUserOptions(){
-  const [active, setActive] = useState('cursos');
-
+export default function NavbarUserOptions({ active, setActive }) {
   return (
     <div className='pt-10'>
-      <Navbar appearance="subtle" reversed active={active} onSelect={setActive}/>
+      <Navbar appearance="subtle" reversed active={active} onSelect={setActive} />
     </div>
   );
-};
+}
