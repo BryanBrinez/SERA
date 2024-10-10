@@ -1,8 +1,9 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import NavbarUserOptions from '@/app/components/navbar/NavbarUserOptions';
+import NavbarCourseOptions from '@/app/components/navbar/NavbarCourseOptions';
 import axios from 'axios';
-import { Notification, useToaster } from 'rsuite';
+import { Notification, useToaster, Accordion } from 'rsuite';
+import NotesSheet from '@/app/components/table/NotesSheet';
 
 export default function Page() {
     const toaster = useToaster();
@@ -10,7 +11,7 @@ export default function Page() {
     const [course, setCourse] = useState(null);
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true); // Estado para manejar la carga
-
+    const [active, setActive] = useState('notas');
     // Función para extraer el ID del curso de la URL
     const extractCourseIDFromUrl = () => {
         if (typeof window !== 'undefined') {
@@ -85,7 +86,7 @@ export default function Page() {
 
     return (
         <section className='h-full'>
-           
+
             {loading ? (
                 // Skeleton mientras se cargan los datos
                 <div className='flex flex-col p-4'>
@@ -103,28 +104,35 @@ export default function Page() {
                     </div>
                 </div>
             ) : (
-                <div className='flex-col p-4'>
+                <div className='flex-col'>
                     {course && user ? (
-                        <div className='course-info'>
-                            <h3 className='mb-2'>{course.nombre_curso}</h3>
-                            <p className='mb-2'><strong>Código:</strong> {course.codigo}</p>
-                            <p className='mb-2'><strong>Estado:</strong> {course.estado}</p>
-                            <p className='mb-2'><strong>Profesor:</strong> {course.Profesor}</p>
-                            <p className='mb-2'><strong>Programa:</strong> {course.codigo_programa}</p>
-                            <p className='mb-2'><strong>Créditos:</strong> {course.creditos}</p>
-                            <p className='mb-2'><strong>Grupo:</strong> {course.grupo}</p>
-                            <p className='mb-2'><strong>Jornada:</strong> {course.jornada}</p>
-                            <p className='mb-2'><strong>Intensidad Horaria:</strong> {course.intensidad_horaria} horas</p>
-                            <p className='mb-2'><strong>Habilitable:</strong> {course.habilitable}</p>
-                            <p className='mb-2'><strong>Validable:</strong> {course.validable}</p>
-                            <p className='mb-2'><strong>Prerrequisitos:</strong> {course.prerrequisitos.join(", ")}</p>
-                        </div>
+                        <Accordion bordered>
+                            <Accordion.Panel header= {course.nombre_curso}>
+                                <div className='course-info'>
+                                    <p className='mb-2'><strong>Código:</strong> {course.codigo}</p>
+                                    <p className='mb-2'><strong>Estado:</strong> {course.estado}</p>
+                                    <p className='mb-2'><strong>Profesor:</strong> {course.Profesor}</p>
+                                    <p className='mb-2'><strong>Programa:</strong> {course.codigo_programa}</p>
+                                    <p className='mb-2'><strong>Créditos:</strong> {course.creditos}</p>
+                                    <p className='mb-2'><strong>Grupo:</strong> {course.grupo}</p>
+                                    <p className='mb-2'><strong>Jornada:</strong> {course.jornada}</p>
+                                    <p className='mb-2'><strong>Intensidad Horaria:</strong> {course.intensidad_horaria} horas</p>
+                                    <p className='mb-2'><strong>Habilitable:</strong> {course.habilitable}</p>
+                                    <p className='mb-2'><strong>Validable:</strong> {course.validable}</p>
+                                    <p className='mb-2'><strong>Prerrequisitos:</strong> {course.prerrequisitos.join(", ")}</p>
+                                </div>
+                            </Accordion.Panel>
+                        </Accordion>
+
                     ) : (
                         <p>No se encontraron datos del curso o del usuario.</p>
                     )}
                 </div>
             )}
-             {/* <NavbarUserOptions />  */}
+            <NavbarCourseOptions active={active} setActive={setActive} />
+            <div>
+                {active === 'notas' && <NotesSheet/>}
+            </div>
         </section>
     );
 }
