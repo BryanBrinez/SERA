@@ -6,7 +6,6 @@ import SelectTagCourse from '@/app/atoms/input/SelectTagCourse.jsx';
 export const ResultApModal = ({ open, handleClose, onConfirm }) => {
     const [formValue, setFormValue] = useState({
         nombre_resultado: '',
-        codigo: '',
         descripcion: '',
         codigo_curso: ''
     });
@@ -22,7 +21,6 @@ export const ResultApModal = ({ open, handleClose, onConfirm }) => {
             setLoading(false);
             setFormValue({
                 nombre_resultado: '',
-                codigo: '',
                 descripcion: '',
                 codigo_curso: ''
             });
@@ -48,10 +46,10 @@ export const ResultApModal = ({ open, handleClose, onConfirm }) => {
                         <Form.ControlLabel>Nombre del Resultado *</Form.ControlLabel>
                         <Form.Control name="nombre_resultado" />
                     </Form.Group>
-                    <Form.Group controlId="codigo">
+                    {/* <Form.Group controlId="codigo">
                         <Form.ControlLabel>Código del Resultado *</Form.ControlLabel>
                         <Form.Control name="codigo" />
-                    </Form.Group>
+                    </Form.Group> */}
                     <Form.Group controlId="descripcion">
                         <Form.ControlLabel>Descripción *</Form.ControlLabel>
                         <Form.Control name="descripcion" />

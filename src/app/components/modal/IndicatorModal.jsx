@@ -4,10 +4,8 @@ import { Modal, Button, Form } from 'rsuite';
 
 export const IndicatorModal = ({ open, handleClose, onConfirm }) => {
     const [formValue, setFormValue] = useState({
-        id: '',
         id_resultado_aprendizaje: '',
         descripcion: '',
-        codigo: '',
         nombre_indicador: ''
     });
 
@@ -21,10 +19,8 @@ export const IndicatorModal = ({ open, handleClose, onConfirm }) => {
             await onConfirm(formValue);
             setLoading(false);
             setFormValue({
-                id: '',
                 id_resultado_aprendizaje: '',
                 descripcion: '',
-                codigo: '',
                 nombre_indicador: ''
             });
             handleClose();
@@ -49,10 +45,10 @@ export const IndicatorModal = ({ open, handleClose, onConfirm }) => {
                         <Form.ControlLabel>Nombre del Indicador *</Form.ControlLabel>
                         <Form.Control name="nombre_indicador" />
                     </Form.Group>
-                    <Form.Group controlId="codigo">
+                    {/* <Form.Group controlId="codigo">
                         <Form.ControlLabel>Código del Indicador *</Form.ControlLabel>
                         <Form.Control name="codigo" />
-                    </Form.Group>
+                    </Form.Group> */}
                     <Form.Group controlId="descripcion">
                         <Form.ControlLabel>Descripción *</Form.ControlLabel>
                         <Form.Control name="descripcion" />
