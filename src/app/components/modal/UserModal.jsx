@@ -15,7 +15,6 @@ const estado = ['Activo', 'Inactivo'].map(item => ({
 
 export const UserModal = ({ open, handleClose, onConfirm }) => {
     const [formValue, setFormValue] = useState({
-        codigo: '',
         cedula: '',
         primerNombre: '',
         segundoNombre: '',
@@ -23,7 +22,6 @@ export const UserModal = ({ open, handleClose, onConfirm }) => {
         segundoApellido: '',
         celular: '',
         correo: '',
-        password: '',
         rol: [],
         estado: '',
         programa_asignado: [],
@@ -39,7 +37,6 @@ export const UserModal = ({ open, handleClose, onConfirm }) => {
             await onConfirm(formValue);
             setLoading(false);
             setFormValue({
-                codigo: '',
                 cedula: '',
                 primerNombre: '',
                 segundoNombre: '',
@@ -47,7 +44,6 @@ export const UserModal = ({ open, handleClose, onConfirm }) => {
                 segundoApellido: '',
                 celular: '',
                 correo: '',
-                password: '',
                 rol: [],
                 estado: '',
                 programa_asignado: [],
@@ -78,16 +74,16 @@ export const UserModal = ({ open, handleClose, onConfirm }) => {
             </Modal.Header>
             <Modal.Body className='flex-grow w-[600px]'>
                 <Form fluid onChange={setFormValue} formValue={formValue}>
-                    <div className='flex gap-2'>
-                        <Form.Group className='w-1/2' controlId="codigo">
+                    
+                        {/* <Form.Group className='w-1/2' controlId="codigo">
                             <Form.ControlLabel>Codigo *</Form.ControlLabel>
                             <Form.Control name="codigo" />
-                        </Form.Group>
-                        <Form.Group className='w-1/2' controlId="cedula">
+                        </Form.Group> */}
+                        <Form.Group className='' controlId="cedula">
                             <Form.ControlLabel>Cedula *</Form.ControlLabel>
                             <Form.Control name="cedula" />
                         </Form.Group>
-                    </div>
+                    
                     <div className='flex gap-2'>
                         <Form.Group className='w-1/2' controlId="primerNombre">
                             <Form.ControlLabel>Primer nombre *</Form.ControlLabel>
@@ -115,14 +111,14 @@ export const UserModal = ({ open, handleClose, onConfirm }) => {
                         </Form.Group>
                         <Form.Group className='w-1/3' controlId="celular">
                             <Form.ControlLabel>Celular *</Form.ControlLabel>
-                            <Form.Control name="celular" />
+                            <Form.Control name="celular"  type='number'/>
                         </Form.Group>
                     </div>
 
-                    <Form.Group controlId="password">
+                    {/* <Form.Group controlId="password">
                         <Form.ControlLabel>Contraseña *</Form.ControlLabel>
                         <Form.Control name="password" type="password" />
-                    </Form.Group>
+                    </Form.Group> */}
                     <div className='flex gap-2' >
                         <Form.Group className='w-2/3' controlId="rol">
                             <Form.ControlLabel>Rol *</Form.ControlLabel>

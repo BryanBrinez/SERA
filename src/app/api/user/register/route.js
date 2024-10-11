@@ -59,7 +59,7 @@ export async function POST(request) {
 
     // Guardar los datos adicionales en Firestore
     await setDoc(doc(db, "users", user.uid), {
-      codigo: userData.codigo,
+      //codigo: userData.codigo,
       cedula: userData.cedula,
       primerNombre: userData.primerNombre,
       segundoNombre: userData.segundoNombre,
