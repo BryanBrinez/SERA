@@ -10,7 +10,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
-  const [error, setError] = useState(false);
+  const [inputError, setInputError] = useState(false); // Estado para manejar ambos campos
   const toaster = useToaster();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -19,14 +19,44 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
 
+    if (!email || !password) {
+      setInputError(true); // Marca los campos con borde rojo si están vacíos
+      toaster.push(
+        <Notification type="error" header="Error de inicio de sesión">
+          <p>Por favor, rellene todos los campos.</p>
+        </Notification>,
+        { placement: "topEnd" }
+      );
+      setLoading(false);
+      return;
+    }
+
     const res = await signIn("credentials", {
       email: email,
       password: password,
       redirect: false,
     });
-    if (res?.ok) return router.push("/home/area-personal");
-    if (res?.error) return setError(res.error);
-    
+
+    if (res?.ok) {
+      return router.push("/home/area-personal");
+    }
+
+    if (res?.error) {
+      toaster.push(
+        <Notification type="error" header="Error de inicio de sesión">
+          <p>{res.error}</p>
+        </Notification>,
+        { placement: "topEnd" }
+      );
+    }
+
+    setLoading(false);
+  };
+
+  // Restablecer el borde cuando el usuario escriba en cualquiera de los campos
+  const handleInputChange = (setter) => (value) => {
+    setter(value);
+    if (inputError) setInputError(false); // Quitar el borde rojo en ambos campos
   };
 
   return (
@@ -38,11 +68,23 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">
           <div className="flex flex-col gap-1">
             <label>Correo</label>
-            <Input value={email} onChange={(value) => setEmail(value)} />
+            <Input
+              value={email}
+              onChange={handleInputChange(setEmail)}
+              style={{
+                borderColor: inputError ? "red" : "", // Marca el borde rojo si hay error
+              }}
+            />
           </div>
           <div className="flex flex-col gap-1">
             <label>Contraseña</label>
-            <PasswordInput value={password} onChange={setPassword} />
+            <PasswordInput
+              value={password}
+              onChange={handleInputChange(setPassword)}
+              style={{
+                borderColor: inputError ? "red" : "", // Marca el borde rojo si hay error
+              }}
+            />
           </div>
           <Button
             style={styles}
@@ -82,10 +124,9 @@ export default function Login() {
   );
 }
 
-
 const styles = {
-  backgroundColor: '#c62120',
-  color: 'white',
-  transition: 'width 0.1s ease-in-out',
-  fontWeight: 'bold',
+  backgroundColor: "#c62120",
+  color: "white",
+  transition: "width 0.1s ease-in-out",
+  fontWeight: "bold",
 };

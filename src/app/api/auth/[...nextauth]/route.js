@@ -39,7 +39,7 @@ export const authOptions = {
           }
         } catch (error) {
           console.error('Error authenticating with Firebase:', error);
-          return null;
+          throw new Error("Verifique sus credenciales");;
         }
       },
     }),

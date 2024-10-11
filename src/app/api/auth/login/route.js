@@ -11,6 +11,6 @@ export async function POST(request) {
     const user = userCredential.user;
     return NextResponse.json({ uid: user.uid, email: user.email });
   } catch (error) {
-    return NextResponse.json({ message: error.message }, { status: 400 });
+    return NextResponse.json({ message: "Error al iniciar sesión, verifique sus credenciales" }, { status: 400 });
   }
 }

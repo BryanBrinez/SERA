@@ -68,6 +68,8 @@ export const UserModal = ({ open, handleClose, onConfirm }) => {
         setFormValue(prev => ({ ...prev, sede: value }));
     };
 
+    
+
     return (
         <Modal open={open} onClose={handleClose} style={{ display: 'flex', flexDirection: 'center', alignItems: 'center' }} >
 

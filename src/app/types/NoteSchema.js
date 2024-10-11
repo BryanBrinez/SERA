@@ -11,6 +11,7 @@ export const NotaSchema = z.object({
           nombre_nota: z.string(), // Nombre de la evaluación
           codigos_indicadores: z.array(z.string()), // Array de códigos de indicadores
           calificacion: z.number(), // Nota del estudiante
+          porcentaje: z.number(),
         })
       )
     })

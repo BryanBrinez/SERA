@@ -19,8 +19,25 @@ export default function HandsontableSheet({ course, group }) {
   const [importedData, setImportedData] = useState([]);
   const [selects, setSelects] = useState({}); // Almacena los selects por columna
   const [percentageSelects, setPercentageSelects] = useState({}); // Almacena los porcentajes seleccionados
+  const [mappedData, setMappedData] = useState({
+    curso:'',
+    grupo:'',
+    estudiantes:[{
+      nombres:'',
+      notas:[{
+        nombre_nota:'',
+        codigos_indicadores:[],
+        calificacion: 0,
+        porcentaje: 0
+      }]
+    }
+    ]
 
-  console.log(course);
+
+  });
+
+
+ 
   
 
   const fetchNotesData = () => {
@@ -115,33 +132,109 @@ export default function HandsontableSheet({ course, group }) {
   const saveData = () => {
     let jsonData;
     if (importedData.length > 0) {
-      const headers = importedData[0].map(header => header.toLowerCase().replace(/ /g, '_'));
-      jsonData = importedData.slice(1).map((row) => {
-        return headers.reduce((acc, header, index) => {
-          acc[header] = isNaN(row[index]) ? row[index] : parseFloat(row[index]);
-          return acc;
-        }, {});
-      });
+        const headers = importedData[0].map(header => header.toLowerCase().replace(/ /g, '_'));
+        jsonData = importedData.slice(1).map((row) => {
+            return headers.reduce((acc, header, index) => {
+                acc[header] = isNaN(row[index]) ? row[index] : parseFloat(row[index]);
+                return acc;
+            }, {});
+        });
     } else if (data.length > 0) {
-      const headers = data[0].map(cell => cell.value);
-      jsonData = data.slice(1).map((row) => {
-        const filteredRow = row.filter(cell => cell.value !== '');
-        return headers.reduce((acc, header, index) => {
-          if (filteredRow[index]) {
-            acc[header.toLowerCase().replace(/ /g, '_')] = filteredRow[index].value;
-          }
-          return acc;
-        }, {});
-      });
+        const headers = data[0].map(cell => cell.value);
+        jsonData = data.slice(1).map((row) => {
+            const filteredRow = row.filter(cell => cell.value !== '');
+            return headers.reduce((acc, header, index) => {
+                if (filteredRow[index]) {
+                    acc[header.toLowerCase().replace(/ /g, '_')] = filteredRow[index].value;
+                }
+                return acc;
+            }, {});
+        });
     }
-
-    if (jsonData && jsonData.length > 0) {
-      localStorage.setItem('notesData', JSON.stringify(jsonData));
-      console.log("Datos guardados en caché:", JSON.stringify(jsonData, null, 2));
-    } else {
-      console.log("No hay datos para guardar.");
-    }
+    console.log(jsonData)
+    // Ahora, mapear jsonData al esquema de NotaSchema
+    const mappedData = {
+      curso: course, // Aquí podrías extraer el curso de jsonData si está presente
+      grupo: group,  // Lo mismo con el grupo
+      estudiantes: jsonData.map(item => {
+          const notas = Object.keys(item)
+              .filter(key => key !== 'codigo' && key !== 'nombres') // Filtrar las propiedades que no son notas
+              .map(key => ({
+                  nombre_nota: key, // Usar el nombre de la propiedad como nombre de la evaluación
+                  codigos_indicadores: [], // Aquí puedes agregar lógica si necesitas códigos específicos
+                  calificacion: parseFloat(item[key]) || 0, // Nota del estudiante
+                  porcentaje: 0 // Puedes asignar un porcentaje específico si es necesario
+              }));
+          
+          return {
+              nombre: item.nombres, // Asumiendo que hay una columna 'nombres'
+              notas: notas
+          };
+      })
   };
+
+    console.log(mappedData)
+};
+
+
+const handleResultChange = (studentIndex, noteIndex, value) => {
+  setMappedData(prev => {
+    const estudiantes = [...prev.estudiantes];
+    
+    // Obtiene el estudiante actual y su lista de notas
+    const estudiante = estudiantes[studentIndex];
+    const notas = [...estudiante.notas];
+    
+    // Actualiza los codigos_indicadores para la nota en el índice correcto
+    notas[noteIndex] = {
+      ...notas[noteIndex],
+      codigos_indicadores: value,  // Asignamos el valor seleccionado como los códigos de indicadores
+    };
+    
+    // Actualiza el estudiante con las nuevas notas
+    estudiantes[studentIndex] = { ...estudiante, notas };
+    
+    // Retorna el nuevo estado actualizado
+    return { ...prev, estudiantes };
+  });
+};
+
+// Renderizado de los SelectTagResultsAp
+{data[0].map((_, colIndex) => {
+  if (colIndex > 1 && data.some(row => row[colIndex] !== '')) {
+    return (
+      <div key={colIndex} className="flex flex-col items-center gap-1 mr-2">
+        <label>{String.fromCharCode(65 + colIndex)}</label>
+        <div className="flex items-center gap-1">
+          <div style={{ minWidth: '140px', maxWidth: '200px', overflowY: 'auto' }}>
+            {mappedData.estudiantes.map((estudiante, studentIndex) => (
+              estudiante.notas.map((nota, noteIndex) => (
+                <SelectTagResultsAp
+                  key={`${studentIndex}-${noteIndex}`}
+                  course={course}
+                  onChange={(value) => handleResultChange(studentIndex, noteIndex, value)} // Pasa los índices y el valor al manejador
+                  style={{ zIndex: 1000 }}
+                />
+              ))
+            ))}
+          </div>
+          <select
+            value={percentageSelects[colIndex] || ''}
+            onChange={(e) => handlePercentageChange(colIndex, e.target.value)}
+            className="border border-gray-300 w-[60px] h-[35px] text-xs rounded-md"
+          >
+            <option value="" disabled></option>
+            {percentageOptions.map(percentage => (
+              <option key={percentage} value={percentage}>{percentage}%</option>
+            ))}
+          </select>
+        </div>
+      </div>
+    );
+  }
+  return null;
+})}
+
 
   // Generar un array de porcentajes de 0 a 100 en incrementos de 5
   const percentageOptions = Array.from({ length: 21 }, (_, i) => i * 5);
