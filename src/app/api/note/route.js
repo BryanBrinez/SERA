@@ -1,21 +1,33 @@
 import { NextResponse } from "next/server";
 import { db } from "../firebase/config";
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, query, where  } from "firebase/firestore";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { NotaSchema } from "../../types/NoteSchema"; 
 
-export async function GET() {
+export async function GET(req) {
   const session = await getServerSession(authOptions);
 
-  // Comprobar si la sesión es válida y si el usuario tiene rol de Admin
-  /*if (!session || !session.user || !session.user.rol.includes("Admin")) {
-    return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }*/
-
   try {
+    const { searchParams } = new URL(req.url);
+    const curso = searchParams.get("curso");
+    const grupo = searchParams.get("grupo");
+
     const notasCollection = collection(db, "notas");
-    const notasSnapshot = await getDocs(notasCollection);
+    let notasQuery = notasCollection;
+
+    const queries = [];
+    if (curso) {
+      queries.push(where("curso", "==", curso));
+    }
+    if (grupo) {
+      queries.push(where("grupo", "==", parseInt(grupo))); // Asegúrate de que grupo sea un número
+    }
+    if (queries.length > 0) {
+      notasQuery = query(notasCollection, ...queries);
+    }
+
+    const notasSnapshot = await getDocs(notasQuery);
     if (notasSnapshot.empty) {
       return new Response(JSON.stringify({ message: "No se encontraron notas" }), {
         status: 404,
@@ -32,6 +44,7 @@ export async function GET() {
       }
     });
   } catch (error) {
+    console.error('Error fetching notes:', error);
     return new Response(JSON.stringify({ message: error.message }), {
       status: 400,
       headers: {
@@ -41,6 +54,8 @@ export async function GET() {
   }
 }
 
+
+
 export async function POST(request) {
   const notaData = await request.json();
   const session = await getServerSession(authOptions);
@@ -48,19 +63,27 @@ export async function POST(request) {
   // Comprobar si la sesión es válida y si el usuario tiene rol de Admin
   /*if (!session || !session.user || !session.user.rol.includes("Admin")) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }
-*/
+  }*/
+
   try {
-    // Validar los datos de las notas usando Zod
-    NotaSchema.parse(notaData);
+    // Verificar si notaData es un array o un solo objeto
+    const notasArray = Array.isArray(notaData) ? notaData : [notaData];
 
-    // Crear el documento en Firestore
-    const notaRef = await addDoc(collection(db, "notas"), notaData);
+    // Validar cada objeto en el array usando Zod
+    notasArray.forEach((nota) => {
+      NotaSchema.parse(nota);
+    });
 
-    // Devolver la respuesta para la nueva nota
+    // Crear los documentos en Firestore para cada nota
+    const createdNotes = await Promise.all(notasArray.map(async (nota) => {
+      const notaRef = await addDoc(collection(db, "notas"), nota);
+      return { id: notaRef.id };
+    }));
+
+    // Devolver la respuesta para las nuevas notas
     return NextResponse.json({
       message: "Notas creadas con éxito",
-      id: notaRef.id,
+      createdNotes,
     });
   } catch (error) {
     if (error.errors) {
@@ -72,3 +95,4 @@ export async function POST(request) {
     }
   }
 }
+

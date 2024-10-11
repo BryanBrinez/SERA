@@ -3,48 +3,128 @@ import { HotTable } from "@handsontable/react";
 import { registerAllModules } from "handsontable/registry";
 import { useEffect, useState } from 'react';
 import "handsontable/dist/handsontable.full.min.css";
+import { Notification, useToaster } from 'rsuite';
 import { Button } from "rsuite";
 import Papa from 'papaparse';
+import axios from 'axios';
 import { SelectTagResultsAp } from "@/app/atoms/input/SelectTagResultsAp";
 
 // Register Handsontable's modules
 registerAllModules();
 
 export default function HandsontableSheet({ course, group }) {
-
+  const toaster = useToaster();
   const [loading, setLoading] = useState(false);
   const alphabet = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i));
   const initialData = Array.from({ length: 20 }, () => alphabet.map(() => ''));
+  const [bdDta, setBdDta] = useState([]);
   const [data, setData] = useState(initialData);
   const [importedData, setImportedData] = useState([]);
   const [selects, setSelects] = useState({}); // Almacena los selects por columna
   const [percentageSelects, setPercentageSelects] = useState({}); // Almacena los porcentajes seleccionados
   const [mappedData, setMappedData] = useState({
-    curso:'',
-    grupo:'',
-    estudiantes:[{
-      nombres:'',
-      notas:[{
-        nombre_nota:'',
-        codigos_indicadores:[],
+    curso: '',
+    grupo: '',
+    estudiantes: [{
+      nombres: '',
+      notas: [{
+        nombre_nota: '',
+        codigos_indicadores: [],
         calificacion: 0,
         porcentaje: 0
       }]
-    }
-    ]
-
+    }]
   });
 
+  const fetchNotesData = async () => {
+    console.log("Fetching notes...");
+    console.log("Curso:", course, "Grupo:", group); // Verifica que estos valores sean correctos
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/note?curso=${course}&grupo=${group}`);
 
-  const fetchNotesData = () => {
-console.log(mappedData)
+      setBdDta(response.data);
+      console.log(response.data);
+
+      // Llama al método parser y pasa la response.data
+      parser(response.data);
+
+    } catch (error) {
+      console.error('Error fetching notes:', error.response ? error.response.data : error.message);
+      toaster.push(
+        <Notification type="error" header="Error" closable>
+          No se pudieron cargar las notas. Inténtelo de nuevo más tarde.
+        </Notification>,
+        { placement: 'topEnd' }
+      );
+    }
   };
+
+  const parser = (data) => {
+    console.log('DATA', data);
+    // Transformación de datos
+    const newData = [];
+
+    // Inicializar encabezados
+    const headers = ['CODIGO', 'NOMBRES'];
+
+    // Recorrer el objeto para encontrar todos los nombres de notas (incluyendo duplicados)
+    data.forEach(curso => {
+      curso.estudiantes.forEach(estudiante => {
+        estudiante.notas.forEach(nota => {
+          const header = nota.nombre_nota.toUpperCase().replace(/_/g, ' '); // Convertir a mayúsculas y reemplazar _ por espacio
+          if (!headers.includes(header)) { // Asegurar que el encabezado no se agregue duplicado
+            headers.push(header); // Agregar nombre de nota a los encabezados
+          }
+        });
+      });
+    });
+
+    // Agregar encabezados finales al nuevo array
+    newData.push(headers); // Encabezados finales
+
+    // Recorrer el objeto y extraer los datos necesarios
+    data.forEach(curso => {
+      curso.estudiantes.forEach(estudiante => {
+        const row = [];
+        row.push(estudiante.codigo); // Código del estudiante
+        row.push(estudiante.nombre); // Nombre del estudiante
+
+        // Inicializar las calificaciones de las notas
+        const notasMap = {};
+        estudiante.notas.forEach(nota => {
+          notasMap[nota.nombre_nota] = nota.calificacion; // Mapear nombre de nota a calificación
+        });
+
+        // Agregar las calificaciones en el orden de los encabezados
+        headers.slice(2).forEach(header => {
+          // Usar el nombre original de la nota en notasMap
+          const originalHeader = header.replace(/ /g, '_').toLowerCase(); // Convertir el encabezado a minúsculas y cambiar espacios a _
+          row.push(notasMap[originalHeader] || null); // Si no existe la nota, agregar null
+        });
+
+        newData.push(row); // Agregar la fila al nuevo array
+      });
+    });
+    const minColumns = 26;
+    newData.map(row => {
+      while (row.length < minColumns) {
+        row.push('');  // Asegurarse de que haya 26 columnas
+      }
+      return row;
+    });
+
+    setData(newData);
+    console.log(newData);
+  };
+
+
+
+
+
 
   useEffect(() => {
     fetchNotesData();
   }, []);
-
-
 
   // Función para manejar la carga del archivo
   const handleFileChange = (event) => {
@@ -70,7 +150,9 @@ console.log(mappedData)
           });
 
           setData(newData);
+
           setImportedData(results.data);
+          console.log('Imported data:', results.data);
           updateSelects(newData);
         },
         header: false,
@@ -109,74 +191,98 @@ console.log(mappedData)
     }
   };
 
-  // Función para manejar la pérdida de foco
-  const handleAfterBlur = (event) => {
-    const { row, col, value } = event;
-    if (col > 1) { // Ignorar columnas A (0) y B (1)
-      if (value === '' && col in selects) {
-        // Eliminar el select si la celda está vacía
-        setSelects(prev => {
-          const newSelects = { ...prev };
-          delete newSelects[col];
-          return newSelects;
-        });
-      }
+
+
+
+  const saveNotesData = async (data) => {
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/note`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('Response from server:', response);
+      toaster.push(
+        <Notification type="success" header="Usuario creado" closable>
+          El usuario ha sido creado con éxito.
+        </Notification>,
+        { placement: 'topEnd' }
+      );
+    } catch (error) {
+      console.error('Error creating user:', error.response ? error.response.data : error.message);
+
+      toaster.push(
+        <Notification type="error" header="Error" closable>
+          Hubo un problema al crear el usuario. Por favor, inténtelo de nuevo.
+        </Notification>,
+        { placement: 'topEnd' }
+      );
+
     }
   };
 
+  // Manejar cambios en los selects de indicadores
+  const handleResultChange = (index, value) => {
+    setSelects(prev => ({ ...prev, [index]: value }));
+  };
 
   const saveData = () => {
     let jsonData;
     if (importedData.length > 0) {
-        const headers = importedData[0].map(header => header.toLowerCase().replace(/ /g, '_'));
-        jsonData = importedData.slice(1).map((row) => {
-            return headers.reduce((acc, header, index) => {
-                acc[header] = isNaN(row[index]) ? row[index] : parseFloat(row[index]);
-                return acc;
-            }, {});
-        });
+      const headers = importedData[0].map(header => header.toLowerCase().replace(/ /g, '_'));
+      jsonData = importedData.slice(1).map((row) => {
+        return headers.reduce((acc, header, index) => {
+          acc[header] = isNaN(row[index]) ? row[index] : parseFloat(row[index]);
+          return acc;
+        }, {});
+      });
     } else if (data.length > 0) {
-        const headers = data[0].map(cell => cell.value);
-        jsonData = data.slice(1).map((row) => {
-            const filteredRow = row.filter(cell => cell.value !== '');
-            return headers.reduce((acc, header, index) => {
-                if (filteredRow[index]) {
-                    acc[header.toLowerCase().replace(/ /g, '_')] = filteredRow[index].value;
-                }
-                return acc;
-            }, {});
-        });
+      const headers = data[0].map(cell => cell.value);
+      jsonData = data.slice(1).map((row) => {
+        const filteredRow = row.filter(cell => cell.value !== '');
+        return headers.reduce((acc, header, index) => {
+          if (filteredRow[index]) {
+            acc[header.toLowerCase().replace(/ /g, '_')] = filteredRow[index].value;
+          }
+          return acc;
+        }, {});
+      });
     }
-    console.log(jsonData)
-    // Ahora, mapear jsonData al esquema de NotaSchema
+    console.log("MAPPED DATA", jsonData);
     const mappedData = {
-      curso: course, // Aquí podrías extraer el curso de jsonData si está presente
-      grupo: group,  // Lo mismo con el grupo
+
+      curso: course,
+      grupo: group, // Convertir grupo a string
       estudiantes: jsonData.map(item => {
-          const notas = Object.keys(item)
-              .filter(key => key !== 'codigo' && key !== 'nombres') // Filtrar las propiedades que no son notas
-              .map(key => ({
-                  nombre_nota: key, // Usar el nombre de la propiedad como nombre de la evaluación
-                  codigos_indicadores: [], // Aquí puedes agregar lógica si necesitas códigos específicos
-                  calificacion: parseFloat(item[key]) || 0, // Nota del estudiante
-                  porcentaje: 0 // Puedes asignar un porcentaje específico si es necesario
-              }));
-          
-          return {
-              nombre: item.nombres, // Asumiendo que hay una columna 'nombres'
-              notas: notas
-          };
+        const notas = Object.keys(item)
+          .filter(key => key !== 'codigo' && key !== 'nombres')
+          .map((key, index) => ({
+            nombre_nota: key,
+            codigos_indicadores: selects[index + 2] || [],
+            calificacion: parseFloat(item[key]) || 0,
+            porcentaje: percentageSelects[index + 2]
+              ? parseFloat(percentageSelects[index + 2])
+              : 0 // Convertir porcentaje a número
+          }));
+
+        return {
+          nombre: item.nombres,
+          codigo: String(item.codigo),
+          notas: notas
+        };
       })
+    };
+
+    // Eliminar el último estudiante del JSON
+    if (mappedData.estudiantes.length > 0) {
+      mappedData.estudiantes.pop(); // Elimina el último estudiante
+    }
+
+    saveNotesData(mappedData);
+
+    console.log(mappedData);
   };
 
-    console.log(mappedData)
-};
-
-
-const handleResultChange = (value, index) => {
-  setMappedData(prev => ({ ...prev, codigos_indicadores: value }));
-  console.log(value, index)
-};
 
   // Generar un array de porcentajes de 0 a 100 en incrementos de 5
   const percentageOptions = Array.from({ length: 21 }, (_, i) => i * 5);
@@ -220,56 +326,60 @@ const handleResultChange = (value, index) => {
                   <div key={index} className="flex flex-col items-center gap-1 mr-2">
                     <label>{String.fromCharCode(65 + index)}</label>
 
+
                     <div className="flex items-center gap-1">
                       <div style={{ minWidth: '140px', maxWidth: '200px', overflowY: 'auto' }}>
-                        <SelectTagResultsAp course={course} style={{ zIndex: 1000 }} onChange={handleResultChange} />
+                        <SelectTagResultsAp
+                          value={selects[index] || ''} // El valor del select
+                          onChange={(value) => handleResultChange(index, value)}
+                          course={course}  // Actualizar el select
+                        />
                       </div>
-                      
                       <select
+                        className="border border-gray-300 w-[60px] h-[35px] text-xs rounded-md"
                         value={percentageSelects[index] || ''}
                         onChange={(e) => handlePercentageChange(index, e.target.value)}
-                        className="border border-gray-300 w-[60px] h-[35px] text-xs rounded-md"
                       >
-                        <option value="" disabled></option>
-                        {percentageOptions.map(percentage => (
-                          <option key={percentage} value={percentage}>{percentage}%</option>
+                        <option value="">%</option>
+                        {percentageOptions.map((option) => (
+                          <option key={option} value={option}>{option}%</option>
                         ))}
                       </select>
                     </div>
                   </div>
                 );
               }
-              return null;
             })}
           </div>
         </div>
       )}
       <HotTable
         data={data}
+        colHeaders={alphabet}
+        rowHeaders={true}
+        height={550}
+        licenseKey="non-commercial-and-evaluation"
+        // colWidths={100}
+        // rowHeights={23}
+        // minRows={15}
+        // maxCols={26}
+        maxRows={50}
+        stretchH="all"
+        outsideClickDeselects={false}
         formulas={{
           engine: HyperFormula,
         }}
-        colHeaders={true}
-        rowHeaders={true}
-        stretchH="all"
-        fixedRowsTop={1}
-        height={500}
+        // manualColumnResize={true}
+        // manualRowResize={true}
         contextMenu={true}
-        multiColumnSorting={true}
-        autoWrapRow={true}
-        autoWrapCol={true}
-        licenseKey="non-commercial-and-evaluation"
-        afterChange={handleDataChange} // Escuchar cambios en la tabla
-        afterBlur={handleAfterBlur} // Escuchar pérdida de foco
+        afterChange={handleDataChange}
+        className="handsontable"
         style={{ zIndex: 1 }}
       />
     </div>
   );
-};
+}
 
 const styles = {
-  backgroundColor: "#c62120",
-  color: "white",
-  transition: "width 0.1s ease-in-out",
-  fontWeight: "bold",
+  width: "10%",
 };

@@ -87,7 +87,7 @@ export default function Page() {
     }, [courseID]);
 
     return (
-        <section className='h-full'>
+        <section className='pb-10'>
 
             {loading ? (
                 // Skeleton mientras se cargan los datos

@@ -22,6 +22,7 @@ export const SelectTagResultsAp = ({ onChange, course }) => {
 
         // Filtrar por 'codigo_curso' igual a 'curso' recibido por props
         const filteredResults = results_list.filter(item => item.codigo_curso === course);
+        console.log(filteredResults)
 
         // Formatear los datos para el TagPicker
         const formattedData = filteredResults.map(item => ({
@@ -32,10 +33,11 @@ export const SelectTagResultsAp = ({ onChange, course }) => {
         // Agregar la opción "No aplica" al inicio
         formattedData.unshift({ label: 'No aplica', value: 'N/A' });
 
+        console.log(formattedData);
         setData(formattedData);
       } catch (err) {
-        console.error('Error al cargar los programas:', err.response ? err.response.data : err.message);
-        setError('Error al cargar los programas');
+        console.error('Error al cargar los resultados de aprendizaje:', err.response ? err.response.data : err.message);
+        setError('Error al cargar los resultados de aprendizaje');
       } finally {
         setLoading(false);
       }
@@ -49,14 +51,15 @@ export const SelectTagResultsAp = ({ onChange, course }) => {
     // Verificar si "No aplica" está seleccionado
     const isNoAplicaSelected = values.includes('N/A');
     
-    // Si "No aplica" está seleccionado, sólo seleccionar ese valor
+    // Si "No aplica" está seleccionado, deseleccionar otros valores y sólo seleccionar ese valor
     if (isNoAplicaSelected) {
       setSelectedValues(['N/A']);
+      onChange(['N/A']);
     } else {
       setSelectedValues(values);
+      onChange(values);
     }
 
-    onChange(values);
     setNoAplicaSelected(isNoAplicaSelected); // Actualizar el estado de "No aplica"
   };
 
