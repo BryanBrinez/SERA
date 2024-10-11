@@ -33,15 +33,11 @@ export default function HandsontableSheet({ course, group }) {
     }
     ]
 
-
   });
 
 
- 
-  
-
   const fetchNotesData = () => {
-
+console.log(mappedData)
   };
 
   useEffect(() => {
@@ -177,64 +173,10 @@ export default function HandsontableSheet({ course, group }) {
 };
 
 
-const handleResultChange = (studentIndex, noteIndex, value) => {
-  setMappedData(prev => {
-    const estudiantes = [...prev.estudiantes];
-    
-    // Obtiene el estudiante actual y su lista de notas
-    const estudiante = estudiantes[studentIndex];
-    const notas = [...estudiante.notas];
-    
-    // Actualiza los codigos_indicadores para la nota en el índice correcto
-    notas[noteIndex] = {
-      ...notas[noteIndex],
-      codigos_indicadores: value,  // Asignamos el valor seleccionado como los códigos de indicadores
-    };
-    
-    // Actualiza el estudiante con las nuevas notas
-    estudiantes[studentIndex] = { ...estudiante, notas };
-    
-    // Retorna el nuevo estado actualizado
-    return { ...prev, estudiantes };
-  });
+const handleResultChange = (value, index) => {
+  setMappedData(prev => ({ ...prev, codigos_indicadores: value }));
+  console.log(value, index)
 };
-
-// Renderizado de los SelectTagResultsAp
-{data[0].map((_, colIndex) => {
-  if (colIndex > 1 && data.some(row => row[colIndex] !== '')) {
-    return (
-      <div key={colIndex} className="flex flex-col items-center gap-1 mr-2">
-        <label>{String.fromCharCode(65 + colIndex)}</label>
-        <div className="flex items-center gap-1">
-          <div style={{ minWidth: '140px', maxWidth: '200px', overflowY: 'auto' }}>
-            {mappedData.estudiantes.map((estudiante, studentIndex) => (
-              estudiante.notas.map((nota, noteIndex) => (
-                <SelectTagResultsAp
-                  key={`${studentIndex}-${noteIndex}`}
-                  course={course}
-                  onChange={(value) => handleResultChange(studentIndex, noteIndex, value)} // Pasa los índices y el valor al manejador
-                  style={{ zIndex: 1000 }}
-                />
-              ))
-            ))}
-          </div>
-          <select
-            value={percentageSelects[colIndex] || ''}
-            onChange={(e) => handlePercentageChange(colIndex, e.target.value)}
-            className="border border-gray-300 w-[60px] h-[35px] text-xs rounded-md"
-          >
-            <option value="" disabled></option>
-            {percentageOptions.map(percentage => (
-              <option key={percentage} value={percentage}>{percentage}%</option>
-            ))}
-          </select>
-        </div>
-      </div>
-    );
-  }
-  return null;
-})}
-
 
   // Generar un array de porcentajes de 0 a 100 en incrementos de 5
   const percentageOptions = Array.from({ length: 21 }, (_, i) => i * 5);
@@ -280,7 +222,7 @@ const handleResultChange = (studentIndex, noteIndex, value) => {
 
                     <div className="flex items-center gap-1">
                       <div style={{ minWidth: '140px', maxWidth: '200px', overflowY: 'auto' }}>
-                        <SelectTagResultsAp course={course} style={{ zIndex: 1000 }} />
+                        <SelectTagResultsAp course={course} style={{ zIndex: 1000 }} onChange={handleResultChange} />
                       </div>
                       
                       <select
