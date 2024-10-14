@@ -14,7 +14,11 @@ export const authOptions = {
       },
       async authorize(credentials, req) {
         try {
-          const userCredential = await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
+          const userCredential = await signInWithEmailAndPassword(
+            auth,
+            credentials.email,
+            credentials.password
+          );
 
           if (userCredential.user) {
             const token = await userCredential.user.getIdToken();
@@ -22,24 +26,23 @@ export const authOptions = {
             const userDoc = await getDoc(userRef);
             const userData = userDoc.data();
 
-            
             if (!userData || !userData.rol) {
-              throw new Error('User role not found');
+              throw new Error("User role not found");
             }
 
-            console.log('User Data:', userData.primerNombre); 
+            console.log("User Data:", userData.primerNombre);
 
             return {
               id: userCredential.user.uid,
               email: userCredential.user.email,
-              rol: userData.rol, 
-              primerNombre: userData.primerNombre, 
+              rol: userData.rol,
+              primerNombre: userData.primerNombre,
               token,
             };
           }
         } catch (error) {
-          console.error('Error authenticating with Firebase:', error);
-          throw new Error("Verifique sus credenciales");;
+          console.error("Error authenticating with Firebase:", error);
+          throw new Error("Verifique sus credenciales");
         }
       },
     }),
@@ -48,25 +51,33 @@ export const authOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.user = user;
-        token.rol = user.rol; 
-        token.primerNombre = user.primerNombre; 
+        token.rol = user.rol;
+        token.primerNombre = user.primerNombre;
       }
-      console.log('JWT Token:', token); // Depuración
+      console.log("JWT Token:", token); // Depuración
       return token;
     },
     async session({ session, token }) {
       session.user = token.user;
-      session.user.rol = token.rol;
       session.user.primerNombre = token.primerNombre;
-      console.log('Session:', session); // Depuración
+
+      const userRef = doc(db, "users", session.user.id);
+      const userDoc = await getDoc(userRef);
+
+      const userData = userDoc.data()
+
+      session.user.rol = userData.rol
+
+
+      console.log("Session:", session); // Depuración
       return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/login",
-  }
-}
+  },
+};
 
 const handler = NextAuth(authOptions);
 

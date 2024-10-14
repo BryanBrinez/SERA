@@ -54,6 +54,14 @@ export async function PUT(request, { params }) {
   const { identifier } = params;
   const searchBy = request.nextUrl.searchParams.get('searchBy');
 
+
+  const session = await getServerSession(authOptions);
+
+  if (!session || !session.user || !session.user.rol.includes("Admin")) {
+    
+    return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
+  }
+
   if (!identifier) {
     return new Response(JSON.stringify({ message: "Identificador no proporcionado" }), { status: 400 });
   }
