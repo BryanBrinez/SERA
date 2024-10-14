@@ -82,7 +82,7 @@ export const EvidenceModal = ({ open, handleClose, onConfirm, profesorCode, grou
                             onChange={(newFileList) => setFileList(newFileList)} // Asegúrate de que esto esté correcto
                             accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.png,.jpeg,.gif,.csv" // Tipos de archivos permitidos
                         >
-                            <Button>Select files...</Button>
+                            <Button>Seleccionar archivos</Button>
                         </Uploader>
                     </Form.Group>
                 </Form>
