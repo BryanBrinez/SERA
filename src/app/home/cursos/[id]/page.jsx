@@ -90,19 +90,11 @@ export default function Page() {
         <section className='pb-10'>
 
             {loading ? (
-                // Skeleton mientras se cargan los datos
-                <div className='flex flex-col p-4'>
-                    <div className='animate-pulse flex flex-col gap-3 rounded-lg'>
-                        <div className='h-8 bg-gray-200 rounded w-2/4'></div>
-                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
-                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
-                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
-                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
-                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
-                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
-                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
-                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
-                        <div className='h-6 bg-gray-200 rounded w-1/3'></div>
+                <div className='border  bg-gray-100 rounded-md p-6 animate-pulse'>
+                    <div className="flex items-center gap-2">
+                        <div className='flex flex-col w-full gap-2'>
+                            <div className='bg-gray-200 h-4 w-1/4 animate-pulse'></div>
+                        </div>
                     </div>
                 </div>
             ) : (
