@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import NavbarCourseOptions from '@/app/components/navbar/NavbarCourseOptions';
+import EvidenceList from '@/app/components/box/EvidenceList';
 import axios from 'axios';
 import { Notification, useToaster, Accordion } from 'rsuite';
 import NotesSheet from '@/app/components/table/NotesSheet';
@@ -101,7 +102,7 @@ export default function Page() {
                 <div className='flex-col'>
                     {course && user ? (
                         <Accordion bordered>
-                            <Accordion.Panel header= {course.nombre_curso}>
+                            <Accordion.Panel header= {`CURSO: ${course.nombre_curso}`}>
                                 <div className='course-info'>
                                     <p className='mb-2'><strong>Código:</strong> {course.codigo}</p>
                                     <p className='mb-2'><strong>Estado:</strong> {course.estado}</p>
@@ -126,6 +127,7 @@ export default function Page() {
             <NavbarCourseOptions active={active} setActive={setActive} />
             <div>
                 {active === 'notas' && course && <HandsontableSheet course={course.codigo} group={course.grupo}/>}
+                {active === 'evidencias' && course && <EvidenceList course={course.codigo} group={course.grupo} profesorCode={course.Profesor}/>}
             </div>
         </section>
     );
