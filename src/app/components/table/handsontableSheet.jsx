@@ -21,6 +21,7 @@ export default function HandsontableSheet({ course, group }) {
   const [data, setData] = useState(initialData);
   const [importedData, setImportedData] = useState([]);
   const [selects, setSelects] = useState({}); // Almacena los selects por columna
+  const [results, setResults] = useState([]); // Almacena los resultados de aprendizaje de los selects
   const [percentageSelects, setPercentageSelects] = useState({}); // Almacena los porcentajes seleccionados
   const [mappedData, setMappedData] = useState({
     curso: '',
@@ -40,24 +41,18 @@ export default function HandsontableSheet({ course, group }) {
     console.log("Fetching notes...");
     console.log("Curso:", course, "Grupo:", group); // Verifica que estos valores sean correctos
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/note?curso=${course}&grupo=${group}`);
-
-      setBdDta(response.data);
-      console.log(response.data);
-
-      // Llama al método parser y pasa la response.data
-      parser(response.data);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/note?curso=${course}&grupo=${group}`);
+        
+        setBdDta(response.data);
+        console.log(response.data);
+        setResults(response.data[0]?.codigo_resultados); // Usa el operador de encadenamiento opcional para evitar errores si response.data está vacío
+        parser(response.data);
 
     } catch (error) {
-      console.error('Error fetching notes:', error.response ? error.response.data : error.message);
-      toaster.push(
-        <Notification type="error" header="Error" closable>
-          No se pudieron cargar las notas. Inténtelo de nuevo más tarde.
-        </Notification>,
-        { placement: 'topEnd' }
-      );
+        // Ignorar el error sin hacer nada
+        console.error('Error fetching notes:', error.response ? error.response.data : error.message);
     }
-  };
+};
 
   const parser = (data) => {
     console.log('DATA', data);
@@ -114,13 +109,9 @@ export default function HandsontableSheet({ course, group }) {
     });
 
     setData(newData);
+    setImportedData(newData);
     console.log(newData);
   };
-
-
-
-
-
 
   useEffect(() => {
     fetchNotesData();
@@ -253,6 +244,7 @@ export default function HandsontableSheet({ course, group }) {
 
       curso: course,
       grupo: group, // Convertir grupo a string
+      codigo_resultados: selects,
       estudiantes: jsonData.map(item => {
         const notas = Object.keys(item)
           .filter(key => key !== 'codigo' && key !== 'nombres')
@@ -333,6 +325,7 @@ export default function HandsontableSheet({ course, group }) {
                           value={selects[index] || ''} // El valor del select
                           onChange={(value) => handleResultChange(index, value)}
                           course={course}  // Actualizar el select
+                          resultApCodes={results[index] || []} // Resultados de aprendizaje
                         />
                       </div>
                       <select

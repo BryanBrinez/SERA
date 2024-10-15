@@ -87,7 +87,7 @@ export default function Page() {
         <section className=''>
             {program && user ? (
                 <Accordion bordered>
-                    <Accordion.Panel header={`Programa: ${program.nombre_programa}`}>
+                    <Accordion.Panel header={`PROGRAMA: ${program.nombre_programa}`}>
                         <div className='course-info'>
                             <p className='mb-2'><strong>Facultad:</strong> {program.facultad}</p>
                             <p className='mb-2'><strong>Sede:</strong> {program.sede}</p>
