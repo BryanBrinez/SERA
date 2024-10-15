@@ -22,7 +22,8 @@ export default function HandsontableSheet({ course, group }) {
   const [importedData, setImportedData] = useState([]);
   const [selects, setSelects] = useState({}); // Almacena los selects por columna
   const [results, setResults] = useState([]); // Almacena los resultados de aprendizaje de los selects
-  const [percentageSelects, setPercentageSelects] = useState({}); // Almacena los porcentajes seleccionados
+  const [percentageSelects, setPercentageSelects] = useState({}); 
+  const [dataExits, setDataExits] = useState(false);// Almacena los porcentajes seleccionados
   const [mappedData, setMappedData] = useState({
     curso: '',
     grupo: '',
@@ -47,6 +48,7 @@ export default function HandsontableSheet({ course, group }) {
         console.log(response.data);
         setResults(response.data[0]?.codigo_resultados); // Usa el operador de encadenamiento opcional para evitar errores si response.data está vacío
         parser(response.data);
+        setDataExits(true)
 
     } catch (error) {
         // Ignorar el error sin hacer nada
@@ -183,34 +185,63 @@ export default function HandsontableSheet({ course, group }) {
   };
 
 
-
-
+  
   const saveNotesData = async (data) => {
-    try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/note`, data, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      console.log('Response from server:', response);
-      toaster.push(
-        <Notification type="success" header="Usuario creado" closable>
-          El usuario ha sido creado con éxito.
-        </Notification>,
-        { placement: 'topEnd' }
-      );
-    } catch (error) {
-      console.error('Error creating user:', error.response ? error.response.data : error.message);
 
+
+    console.log(dataExits)
+    try {
+      let response;
+  
+      if (!dataExits) {
+        // Realizar el POST si dataExists es false
+        response = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/note`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        toaster.push(
+          <Notification type="success" header="Usuario creado" closable>
+            El usuario ha sido creado con éxito.
+          </Notification>,
+          { placement: 'topEnd' }
+        );
+      } else {
+        const idFetchData = bdDta[0].id
+        
+        response = await axios.put(
+          `${process.env.NEXT_PUBLIC_URL}api/note/${idFetchData}`,
+          data,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+  
+        toaster.push(
+          <Notification type="success" header="Usuario actualizado" closable>
+            El usuario ha sido actualizado con éxito.
+          </Notification>,
+          { placement: 'topEnd' }
+        );
+      }
+  
+      console.log('Response from server:', response);
+    } catch (error) {
+      console.error('Error processing user:', error.response ? error.response.data : error.message);
+  
       toaster.push(
         <Notification type="error" header="Error" closable>
-          Hubo un problema al crear el usuario. Por favor, inténtelo de nuevo.
+          Hubo un problema al procesar el usuario. Por favor, inténtelo de nuevo.
         </Notification>,
         { placement: 'topEnd' }
       );
-
     }
   };
+  
+
 
   // Manejar cambios en los selects de indicadores
   const handleResultChange = (index, value) => {
