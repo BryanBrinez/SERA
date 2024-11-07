@@ -21,7 +21,7 @@ const SelectProgram = ({ onChange }) => {
         // Formatear los datos para el SelectPicker
         const formattedData = programs_list.map(program => {
           const label = `${program.nombre_programa} - ${program.codigo}`; // Combinar nombre_programa y codigo
-          return { label: label, value: program.program.codigo}; // Usar codigo como 'value'
+          return { label: label, value: program.codigo}; // Usar codigo como 'value'
         });
 
         setData(formattedData);

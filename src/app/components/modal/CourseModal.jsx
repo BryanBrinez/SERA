@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
-import { Modal, Button, Form , InputPicker} from 'rsuite';
-import SelectUser from '../../atoms/input/SelectUser.jsx'; 
+import { Modal, Button, Form, InputPicker } from 'rsuite';
+import SelectUser from '../../atoms/input/SelectUser.jsx';
 import SelectProgram from '@/app/atoms/input/SelectProgram.jsx';
 import SelectTagCourse from '@/app/atoms/input/SelectTagCourse.jsx';
 
@@ -30,11 +30,11 @@ export const CourseModal = ({ open, handleClose, onConfirm }) => {
         codigo: '',
         nombre_curso: '',
         estado: '',
-        Profesor: '',
+        // Profesor: '',
         codigo_programa: '',
         creditos: '',
-        grupo: '',
-        jornada: '',
+        // grupo: '',
+        // jornada: '',
         intensidad_horaria: '',
         habilitable: '',
         validable: '',
@@ -52,7 +52,7 @@ export const CourseModal = ({ open, handleClose, onConfirm }) => {
             const updatedFormValue = {
                 ...formValue,
                 creditos: formValue.creditos ? Number(formValue.creditos) : '',
-                grupo: formValue.grupo ? Number(formValue.grupo) : '',
+                // grupo: formValue.grupo ? Number(formValue.grupo) : '',
                 intensidad_horaria: formValue.intensidad_horaria ? Number(formValue.intensidad_horaria) : ''
             };
 
@@ -62,11 +62,11 @@ export const CourseModal = ({ open, handleClose, onConfirm }) => {
                 codigo: '',
                 nombre_curso: '',
                 estado: '',
-                Profesor: '',
+                // Profesor: '',
                 codigo_programa: '',
                 creditos: '',
-                grupo: '',
-                jornada: '',
+                // grupo: '',
+                // jornada: '',
                 intensidad_horaria: '',
                 habilitable: '',
                 validable: '',
@@ -79,16 +79,17 @@ export const CourseModal = ({ open, handleClose, onConfirm }) => {
         }
     };
 
-    const handleProfesorChange = (value) => {
-        setFormValue(prev => ({ ...prev, Profesor: value }));
-    };
+    // const handleProfesorChange = (value) => {
+    //     setFormValue(prev => ({ ...prev, Profesor: value }));
+    // };
+
     const handleProgramChange = (value) => {
         setFormValue(prev => ({ ...prev, codigo_programa: value }));
     };
     const handleCourseChange = (value) => {
         setFormValue(prev => ({ ...prev, prerrequisitos: value }));
     };
-    
+
 
     return (
         <Modal open={open} onClose={handleClose} style={{ display: 'flex', flexDirection: 'center', alignItems: 'center' }}>
@@ -107,29 +108,18 @@ export const CourseModal = ({ open, handleClose, onConfirm }) => {
                             <Form.Control name="nombre_curso" />
                         </Form.Group>
                     </div>
-                    <div className='flex gap-2'>
-                        <Form.Group className='w-1/2' controlId="estado">
-                            <Form.ControlLabel>Estado *</Form.ControlLabel>
-                            <Form.Control placeholder='Seleccionar' className='min-w-full' name="estado" accepter={InputPicker} data={estado} />
 
-                        </Form.Group>
-                        <Form.Group className='w-1/2' controlId="jornada">
-                            <Form.ControlLabel>Jornada *</Form.ControlLabel>
-                            <Form.Control placeholder='Seleccionar' className='min-w-full' name="jornada" accepter={InputPicker} data={jornada} />
 
-                        </Form.Group>
-                    </div>
-                    <div className='flex gap-2'>
-                        <Form.Group className='w-1/2' controlId="codigo_programa">
-                            <Form.ControlLabel>Programa *</Form.ControlLabel>
-                            {/* <Form.Control name="codigo_programa" /> */}
-                            <SelectProgram onChange={handleProgramChange}/>
-                        </Form.Group>
-                        <Form.Group className='w-1/2' controlId="grupo">
+                    <Form.Group controlId="codigo_programa">
+                        <Form.ControlLabel>Programa *</Form.ControlLabel>
+                        {/* <Form.Control name="codigo_programa" /> */}
+                        <SelectProgram onChange={handleProgramChange} />
+                    </Form.Group>
+                    {/* <Form.Group className='w-1/2' controlId="grupo">
                             <Form.ControlLabel>Grupo *</Form.ControlLabel>
                             <Form.Control name="grupo" type='number' />
-                        </Form.Group>
-                    </div>
+                        </Form.Group> */}
+
                     <div className='flex gap-2'>
                         <Form.Group className='w-1/2' controlId="creditos">
                             <Form.ControlLabel>Créditos *</Form.ControlLabel>
@@ -152,15 +142,27 @@ export const CourseModal = ({ open, handleClose, onConfirm }) => {
 
                         </Form.Group>
                     </div>
+
+                    <Form.Group controlId="estado">
+                        <Form.ControlLabel>Estado *</Form.ControlLabel>
+                        <Form.Control placeholder='Seleccionar' className='min-w-full' name="estado" accepter={InputPicker} data={estado} />
+
+                    </Form.Group>
+                    {/* <Form.Group className='w-1/2' controlId="jornada">
+                            <Form.ControlLabel>Jornada *</Form.ControlLabel>
+                            <Form.Control placeholder='Seleccionar' className='min-w-full' name="jornada" accepter={InputPicker} data={jornada} />
+
+                        </Form.Group> */}
+
                     <Form.Group controlId="prerrequisitos">
                         <Form.ControlLabel>Prerrequisitos</Form.ControlLabel>
-                        <SelectTagCourse onChange={handleCourseChange}/>
+                        <SelectTagCourse onChange={handleCourseChange} />
                     </Form.Group>
 
-                    <Form.Group controlId="Profesor">
+                    {/* <Form.Group controlId="Profesor">
                         <Form.ControlLabel>Profesor *</Form.ControlLabel>
                         <SelectUser onChange={handleProfesorChange} rol='Profesor' />
-                    </Form.Group>
+                    </Form.Group> */}
                 </Form>
                 <br />
                 <Button style={styles} className='w-full' onClick={handleSubmit} appearance="primary" loading={loading}>

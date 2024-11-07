@@ -7,7 +7,7 @@ import { getServerSession } from "next-auth/next";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-
+  console.log("GRUPOOOOOO");
   // Verificación de sesión para rol de Admin
   if (!session || !session.user || !session.user.rol.includes("Admin")) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });

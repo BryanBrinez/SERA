@@ -96,9 +96,9 @@ export default function TableCourse({ courseData, searchText }) {
   }, []);
 
   const openCourse = (rowData) => {
-    const { id } = rowData;
-    if (id) {
-      router.push(`/home/cursos/${id}`);
+    const { codigo } = rowData;
+    if (codigo) {
+      router.push(`/home/cursos/${codigo}`);
     } else {
       console.error("ID del curso es undefined.");
     }
@@ -199,18 +199,18 @@ export default function TableCourse({ courseData, searchText }) {
               <HeaderCell>Codigo</HeaderCell>
               <EditableCell dataKey="codigo" onChange={handleChange} onClick={openCourse} />
             </Column>
-            <Column width={300} resizable>
+            <Column width={300} resizable flexGrow={2}>
               <HeaderCell>Nombre</HeaderCell>
               <EditableCell dataKey="nombre_curso" onChange={handleChange} />
             </Column>
-            <Column width={80} resizable>
+            {/* <Column width={80} resizable>
               <HeaderCell>Grupo</HeaderCell>
               <EditableCell dataKey="grupo" onChange={handleChange} />
-            </Column>
-            <Column width={100} resizable>
+            </Column> */}
+            {/* <Column width={100} resizable>
               <HeaderCell>Jornada</HeaderCell>
               <EditableCell dataKey="jornada" onChange={handleChange} />
-            </Column>
+            </Column> */}
             <Column width={200} resizable>
               <HeaderCell>Programa</HeaderCell>
               <EditableCell dataKey="codigo_programa" onChange={handleChange} />
@@ -232,7 +232,7 @@ export default function TableCourse({ courseData, searchText }) {
               <HeaderCell>Habilitable</HeaderCell>
               <EditableCell dataKey="habilitable" onChange={handleChange} />
             </Column>
-            <Column width={150} resizable>
+            <Column width={200} resizable>
               <HeaderCell>Prerrequisitos</HeaderCell>
               <EditableCell dataKey="prerrequisitos" onChange={handleChange} />
             </Column>
@@ -240,10 +240,10 @@ export default function TableCourse({ courseData, searchText }) {
               <HeaderCell>Estado</HeaderCell>
               <EditableCell dataKey="estado" onChange={handleChange} />
             </Column>
-            <Column width={150} resizable>
+            {/* <Column width={150} resizable>
               <HeaderCell>Profesor</HeaderCell>
               <EditableCell dataKey="Profesor" onChange={handleChange} />
-            </Column>
+            </Column> */}
             <Column width={100} resizable fixed="right">
               <HeaderCell>Acciones</HeaderCell>
               <ActionCell onClick={handleEditState} onCancel={handleCancelEdit} />

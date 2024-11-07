@@ -8,6 +8,7 @@ export const SelectTagProgram = ({ onChange }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    console.log('hola');
     const fetchPrograms = async () => {
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/program`, {
@@ -17,6 +18,7 @@ export const SelectTagProgram = ({ onChange }) => {
         });
 
         let programs_list = response.data;
+        console.log('Programs:', programs_list);
 
         // Formatear los datos para el TagPicker
         const formattedData = programs_list.map(item => ({

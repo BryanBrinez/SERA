@@ -4,6 +4,7 @@ import NavbarCourseOptions from '@/app/components/navbar/NavbarCourseOptions';
 import EvidenceList from '@/app/components/box/EvidenceList';
 import axios from 'axios';
 import { Notification, useToaster, Accordion } from 'rsuite';
+import GroupsByCourse from '@/app/components/cards/GroupsByCourse';
 import NotesSheet from '@/app/components/table/NotesSheet';
 import HandsontableSheet from '@/app/components/table/handsontableSheet';
 
@@ -102,7 +103,7 @@ export default function Page() {
                 <div className='flex-col'>
                     {course && user ? (
                         <Accordion bordered>
-                            <Accordion.Panel header= {`CURSO: ${course.nombre_curso}`}>
+                            <Accordion.Panel header={`CURSO: ${course.nombre_curso}`}>
                                 <div className='course-info'>
                                     <p className='mb-2'><strong>Código:</strong> {course.codigo}</p>
                                     <p className='mb-2'><strong>Estado:</strong> {course.estado}</p>
@@ -124,11 +125,20 @@ export default function Page() {
                     )}
                 </div>
             )}
-            <NavbarCourseOptions active={active} setActive={setActive} />
+
+            {course && user && (
+
+                <div>
+                    <GroupsByCourse courseCode={course.codigo} />
+                </div>
+             )
+            }
+
+            {/* <NavbarCourseOptions active={active} setActive={setActive} />
             <div>
                 {active === 'notas' && course && <HandsontableSheet course={course.codigo} group={course.grupo}/>}
                 {active === 'evidencias' && course && <EvidenceList course={course.codigo} group={course.grupo} profesorCode={course.Profesor}/>}
-            </div>
+            </div> */}
         </section>
     );
 }

@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { db } from "../../firebase/config";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { CourseSchema } from "../../../types/CourseSchema";
 import { authOptions } from "../../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
 
 export async function GET(request, { params }) {
-  const { uid } = params;
+  const { code } = params;
 
   // Obtener la sesión del usuario
   const session = await getServerSession(authOptions);
@@ -15,19 +15,24 @@ export async function GET(request, { params }) {
   }
 
   try {
-    const courseRef = doc(db, "courses", uid);
-    const courseDoc = await getDoc(courseRef);
+    // Crear una referencia de consulta con where
+    const courseRef = collection(db, "courses");
+    const courseQuery = query(courseRef, where("codigo", "==", code));
+    const courseSnapshot = await getDocs(courseQuery);
 
-    if (!courseDoc.exists()) {
+    // Verificar si no se encontraron documentos
+    if (courseSnapshot.empty) {
       return new Response(
         JSON.stringify({ message: "Programa no encontrado" }),
         { status: 404 }
       );
     }
 
-    return new Response(JSON.stringify(courseDoc.data()));
+    // Obtener los datos del primer documento que coincide
+    const courseData = courseSnapshot.docs[0].data();
+    return new Response(JSON.stringify(courseData));
   } catch (error) {
-    return new Response(JSON.stringify({ message: error.message || "Ocurrió un error inesperado"}), {
+    return new Response(JSON.stringify({ message: error.message || "Ocurrió un error inesperado" }), {
       status: 400,
     });
   }
