@@ -27,7 +27,7 @@ export async function POST(request) {
     const codigoSnapshot = await getDocs(codigoQuery);
 
     if (!codigoSnapshot.empty) {
-      return NextResponse.json({ message: "El codigo ya está registrada." }, { status: 400 });
+      return NextResponse.json({ message: "El código ya está registrada." }, { status: 400 });
     }
 
     // Crear curso en Firestore con ID automático
