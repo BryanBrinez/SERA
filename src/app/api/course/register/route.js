@@ -35,15 +35,15 @@ export async function POST(request) {
       codigo: cursoData.codigo,
       nombre_curso: cursoData.nombre_curso,
       estado: cursoData.estado, // Asegúrate de usar el nombre correcto del campo
-      Profesor: cursoData.Profesor,
+      //Profesor: cursoData.Profesor,
       codigo_programa: cursoData.codigo_programa,
       creditos: cursoData.creditos,
       intensidad_horaria: cursoData.intensidad_horaria,
       habilitable: cursoData.habilitable,
       validable: cursoData.validable,
       prerrequisitos: cursoData.prerrequisitos,
-      grupo: cursoData.grupo,
-      jornada: cursoData.jornada,
+      //grupo: cursoData.grupo,
+      //jornada: cursoData.jornada,
 
     });
 
