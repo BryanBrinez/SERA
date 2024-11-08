@@ -6,9 +6,10 @@ import EvidenceModal from '../modal/EvidenceModal';
 import axios from 'axios';
 import { FaFilePdf, FaFileExcel, FaImage, FaFile } from 'react-icons/fa';
 
-export default function EvidenceList({ course, group, profesorCode }) {
+export default function EvidenceList({ course, group, profesorCode, period, year }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [evidences, setEvidences] = useState([]);
+    const [dataID, setDataID] = useState();
     const toaster = useToaster();
 
     const handleOpenModal = () => {
@@ -23,7 +24,7 @@ export default function EvidenceList({ course, group, profesorCode }) {
         console.log("Fetching evidence...");
         console.log("Curso:", course, "Grupo:", group); // Verifica que estos valores sean correctos
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/evidence?curso=${course}&grupo=${group}`);
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/evidence?curso=${course}&grupo=${group}&periodo=${period}&año=${year}`);
             setEvidences(response.data);
             console.log(response.data);
             
@@ -151,6 +152,8 @@ export default function EvidenceList({ course, group, profesorCode }) {
                 course={course}
                 group={group}
                 profesorCode={profesorCode}
+                year={year}
+                period={period}
                 onConfirm={handleConfirm}
             />
         </div>

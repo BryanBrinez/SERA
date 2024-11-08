@@ -12,6 +12,9 @@ export async function GET(req) {
         const { searchParams } = new URL(req.url);
         const curso = searchParams.get("curso");
         const grupo = searchParams.get("grupo");
+        const periodo = searchParams.get("periodo");
+        const año = searchParams.get("año");
+
 
         const evidenceCollection = collection(db, "evidence");
         let evidenceQuery = evidenceCollection;
@@ -22,6 +25,12 @@ export async function GET(req) {
         }
         if (grupo) {
             queries.push(where("grupo", "==", parseInt(grupo))); // Ensure that grupo is a number
+        }
+        if (periodo) {
+            queries.push(where("periodo", "==", periodo)); 
+        }
+        if (año) {
+            queries.push(where("año", "==", año)); 
         }
         if (queries.length > 0) {
             evidenceQuery = query(evidenceCollection, ...queries);
@@ -59,9 +68,9 @@ export async function POST(request) {
     const session = await getServerSession(authOptions);
 
     // Check if the session is valid (optional)
-    /*if (!session || !session.user) {
+    if (!session || !session.user) {
         return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-    }*/
+    }
 
     try {
         // Validate the evidence using Zod

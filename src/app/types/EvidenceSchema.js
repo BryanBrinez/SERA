@@ -3,6 +3,8 @@ import { z } from "zod";
 export const EvidenceSchema = z.object({
   codigo_curso: z.string(),
   grupo: z.number(),
+  periodo: z.enum(["01", "02"]),
+  año: z.string(),
   codigo_profesor: z.string(),
   fecha: z.string().optional(), // Cambiado a string para la fecha en formato "YYYY-MM-DD"
   hora: z.string().optional(),  // Cambiado a string para la hora en formato "00:00:00"

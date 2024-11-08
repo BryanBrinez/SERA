@@ -4,12 +4,14 @@ import { Modal, Button, Form, Uploader } from 'rsuite';
 import { storage } from '../../api/firebase/config'; // Asegúrate de la ruta correcta
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-export const EvidenceModal = ({ open, handleClose, onConfirm, profesorCode, group, course }) => {
+export const EvidenceModal = ({ open, handleClose, onConfirm, profesorCode, group, course, year, period }) => {
     const [formValue, setFormValue] = useState({
         nombre_evidencia: '',
         descripcion: '',
         codigo_curso: course,
         grupo: group,
+        año: year,
+        periodo: period,
         codigo_profesor: profesorCode
     });
 
@@ -47,6 +49,8 @@ export const EvidenceModal = ({ open, handleClose, onConfirm, profesorCode, grou
                 descripcion: '',
                 codigo_curso: course,
                 grupo: group,
+                año: year,
+                periodo: period,
                 codigo_profesor: profesorCode,
             });
             setFileList([]);

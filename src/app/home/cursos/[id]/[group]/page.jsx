@@ -136,7 +136,7 @@ export default function Page() {
             <NavbarCourseOptions active={active} setActive={setActive} />
             <div>
                 {active === 'notas' && data && <HandsontableSheet course={data.Curso} group={data.grupo} period={data.periodo} year={data.año}/>}
-                {active === 'evidencias' && data && <EvidenceList course={data.curso} group={data.grupo} profesorCode={data.Profesor} />}
+                {active === 'evidencias' && data && <EvidenceList course={data.Curso} group={data.grupo} period={data.periodo} year={data.año} profesorCode={data.Profesor}  />}
             </div>
         </section>
     );
