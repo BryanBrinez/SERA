@@ -12,7 +12,7 @@ import { SelectTagResultsAp } from "@/app/atoms/input/SelectTagResultsAp";
 // Register Handsontable's modules
 registerAllModules();
 
-export default function HandsontableSheet({ course, group }) {
+export default function HandsontableSheet({ course, group, period, year }) {
   const toaster = useToaster();
   const [loading, setLoading] = useState(false);
   const alphabet = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i));
@@ -27,6 +27,8 @@ export default function HandsontableSheet({ course, group }) {
   const [mappedData, setMappedData] = useState({
     curso: '',
     grupo: '',
+    año: '',
+    periodo: '',
     estudiantes: [{
       nombres: '',
       notas: [{
@@ -42,7 +44,7 @@ export default function HandsontableSheet({ course, group }) {
     console.log("Fetching notes...");
     console.log("Curso:", course, "Grupo:", group); // Verifica que estos valores sean correctos
     try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/note?curso=${course}&grupo=${group}`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/note?curso=${course}&grupo=${group}&año=${year}&periodo=${period}`);
         
         setBdDta(response.data);
         console.log(response.data);
@@ -221,7 +223,7 @@ export default function HandsontableSheet({ course, group }) {
         );
   
         toaster.push(
-          <Notification type="success" header="Usuario actualizado" closable>
+          <Notification type="success" header="Las notas se actualizaron con éxito" closable>
             El usuario ha sido actualizado con éxito.
           </Notification>,
           { placement: 'topEnd' }

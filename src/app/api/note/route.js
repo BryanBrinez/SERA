@@ -12,6 +12,8 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const curso = searchParams.get("curso");
     const grupo = searchParams.get("grupo");
+    const periodo = searchParams.get("periodo");
+    const año = searchParams.get("año");
 
     const notasCollection = collection(db, "notas");
     let notasQuery = notasCollection;
@@ -22,6 +24,12 @@ export async function GET(req) {
     }
     if (grupo) {
       queries.push(where("grupo", "==", parseInt(grupo))); // Asegúrate de que grupo sea un número
+    }
+    if (periodo) {
+      queries.push(where("periodo", "==", periodo)); // Asegúrate de que grupo sea un número
+    }
+    if (año) {
+      queries.push(where("año", "==", año)); // Asegúrate de que grupo sea un número
     }
     if (queries.length > 0) {
       notasQuery = query(notasCollection, ...queries);
@@ -61,9 +69,9 @@ export async function POST(request) {
   const session = await getServerSession(authOptions);
 
   // Comprobar si la sesión es válida y si el usuario tiene rol de Admin
-  /*if (!session || !session.user || !session.user.rol.includes("Admin")) {
+  if (!session || !session.user || !session.user.rol.includes("Admin")) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }*/
+  }
 
   try {
     // Verificar si notaData es un array o un solo objeto

@@ -3,6 +3,8 @@ import { z } from 'zod';
 export const NotaSchema = z.object({
   curso: z.string(),
   grupo: z.number(),
+  año: z.string(),
+  periodo: z.enum(["01", "02"]),
   codigo_resultados: z.record(z.array(z.string())), // Cambia a z.record() para aceptar un objeto dinámico
   estudiantes: z.array(z.object({
     nombre: z.string(),

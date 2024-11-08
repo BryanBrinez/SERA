@@ -48,23 +48,36 @@ export async function POST(request) {
   const session = await getServerSession(authOptions);
 
   // Verificar si el usuario tiene el rol de Admin
-  if (!session || !session.user || !session.user.rol.includes("Admin")) {
+  /*if (!session || !session.user || !session.user.rol.includes("Admin")) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }
+  }*/
 
   try {
     // Validar los datos del grupo usando el esquema de Zod
     GroupSchema.parse(groupData);
 
+    // Verificar si ya existe un grupo con el mismo valor en el campo 'grupo'
+    const groupsCollection = collection(db, "groups");
+    const groupsSnapshot = await getDocs(groupsCollection);
+    const isDuplicate = groupsSnapshot.docs.some(doc => 
+      doc.data().grupo === groupData.grupo && doc.data().periodo === groupData.periodo && doc.data().año === groupData.año
+    );
+
+    
+
+    if (isDuplicate) {
+      return NextResponse.json({ message: "Ya existe este grupo en el curso" }, { status: 400 });
+    }
+
     // Crear grupo en Firestore con ID automático
     const groupRef = await addDoc(collection(db, "groups"), {
-        Curso: groupData.Curso,
-        Profesor: groupData.Profesor,
-        grupo: groupData.grupo,
-        jornada: groupData.jornada,
-        periodo: groupData.periodo,
-        año: groupData.año,
-      });
+      Curso: groupData.Curso,
+      Profesor: groupData.Profesor,
+      grupo: groupData.grupo,
+      jornada: groupData.jornada,
+      periodo: groupData.periodo,
+      año: groupData.año,
+    });
 
     return NextResponse.json({ message: "Grupo creado con éxito", id: groupRef.id });
   } catch (error) {
