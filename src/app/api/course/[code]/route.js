@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "../../firebase/config";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, doc, updateDoc } from "firebase/firestore";
 import { CourseSchema } from "../../../types/CourseSchema";
 import { authOptions } from "../../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
@@ -39,7 +39,7 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-  const { uid } = params;
+  const { code } = params;
   const updateData = await request.json();
 
   // Obtener la sesión del usuario
@@ -53,7 +53,7 @@ export async function PUT(request, { params }) {
     const UpdateCourseSchema = CourseSchema.partial();
     UpdateCourseSchema.parse(updateData);
 
-    const courseRef = doc(db, "courses", uid);
+    const courseRef = doc(db, "courses", code);
     await updateDoc(courseRef, updateData);
 
     return new Response(

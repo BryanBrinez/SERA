@@ -5,7 +5,7 @@ export const CourseSchema = z.object({
   nombre_curso: z.string(),
   estado: z.enum(['Activo', 'Inactivo']),
   //Profesor: z.string(),
-  codigo_programa: z.number(),
+  codigo_programa: z.string(),
   creditos: z.number().int().positive(),
   //grupo: z.number().int(),
   //jornada: z.enum(['Diurna', 'Nocturna']),
