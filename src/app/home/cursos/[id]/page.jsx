@@ -28,7 +28,7 @@ export default function Page() {
 
     // Función para obtener datos del curso
     const fetchCourse = async (id) => {
-        try {
+        try {//El id debe ser el id del programa
             const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/course/${id}?searchBy=cedula`);
             setCourse(response.data);
 
