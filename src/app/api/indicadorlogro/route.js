@@ -26,7 +26,7 @@ const generateNewCode = async () => {
 export async function GET() {
   const session = await getServerSession(authOptions);
 
-  if (!session || !session.user || !session.user.rol.includes("Admin")) {
+  if (!session || !session.user) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
   }
 
@@ -63,9 +63,13 @@ export async function POST(request) {
   const indicadorData = await request.json();
   const session = await getServerSession(authOptions);
 
-  /*if (!session || !session.user || !session.user.rol.includes("Admin")) {
+  if (
+    !session || 
+    !session.user || 
+    !session.user.rol.some(role => ["Admin", "Coordinador", "Auxiliar"].includes(role))
+  ) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }*/
+  }
 
   try {
     // Generar un nuevo código único para el indicador

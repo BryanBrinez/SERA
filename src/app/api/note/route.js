@@ -7,6 +7,13 @@ import { NotaSchema } from "../../types/NoteSchema";
 
 export async function GET(req) {
   const session = await getServerSession(authOptions);
+  if (
+    !session || 
+    !session.user || 
+    !session.user.rol.some(role => ["Admin", "Coordinador", "Auxiliar", "Profesor"].includes(role))
+  ) {
+    return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
+  }
 
   try {
     const { searchParams } = new URL(req.url);
@@ -69,7 +76,11 @@ export async function POST(request) {
   const session = await getServerSession(authOptions);
 
   // Comprobar si la sesión es válida y si el usuario tiene rol de Admin
-  if (!session || !session.user || !session.user.rol.includes("Admin")) {
+  if (
+    !session || 
+    !session.user || 
+    !session.user.rol.some(role => ["Admin", "Coordinador", "Profesor"].includes(role))
+  ) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
   }
 

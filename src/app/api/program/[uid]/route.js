@@ -13,7 +13,11 @@ export async function GET(request, { params }) {
   }
 
   const session = await getServerSession(authOptions);
-  if (!session) {
+  if (
+    !session || 
+    !session.user || 
+    !session.user.rol.some(role => ["Admin", "Coordinador", "Auxiliar", "Profesor"].includes(role))
+  ) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
   }
 

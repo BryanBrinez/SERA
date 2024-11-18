@@ -23,7 +23,7 @@ export const SelectTagProgram = ({ onChange }) => {
         // Formatear los datos para el TagPicker
         const formattedData = programs_list.map(item => ({
           label: `${item.nombre_programa} - ${item.codigo}`,
-          value: item.nombre_programa
+          value: item.codigo
         }));
 
         setData(formattedData);

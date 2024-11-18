@@ -24,8 +24,11 @@ export async function POST(request) {
 
   
 
-  if (!session || !session.user || !session.user.rol.includes("Admin")) {
-    console.log("MANDA EL ERROR")
+  if (
+    !session || 
+    !session.user || 
+    !session.user.rol.some(role => ["Admin"].includes(role))
+  ) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
   }
 

@@ -12,8 +12,12 @@ export async function POST(request) {
   const session = await getServerSession(authOptions);
 
   // Verificar si el usuario tiene el rol de Admin (descomentado si se necesita)
-  if (!session || !session.user || !session.user.rol.includes("Admin")) {
-     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
+  if (
+    !session || 
+    !session.user || 
+    !session.user.rol.some(role => ["Admin", "Coordinador"].includes(role))
+  ) {
+    return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
   }
 
   try {
