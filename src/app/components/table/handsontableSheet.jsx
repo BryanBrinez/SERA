@@ -183,6 +183,7 @@ export default function HandsontableSheet({ course, group, period, year }) {
           }
         }
       });
+      setData(currentData => [...currentData]); // Actualizar el estado con los datos de la tabla
     }
   };
 
@@ -317,6 +318,15 @@ export default function HandsontableSheet({ course, group, period, year }) {
     setPercentageSelects(prev => ({ ...prev, [index]: value }));
   };
 
+  
+
+  const handleBlur = () => {
+    // Aquí actualizas el estado cuando se pierde el foco de cualquier celda
+    setData(currentData => {
+      return [...currentData]; // Copia los datos y actualiza el estado
+    });
+  };
+
   return (
     <div>
       <div className="mb-4">
@@ -392,6 +402,7 @@ export default function HandsontableSheet({ course, group, period, year }) {
         maxRows={50}
         stretchH="all"
         outsideClickDeselects={false}
+        onBlur={handleBlur} 
         formulas={{
           engine: HyperFormula,
         }}
