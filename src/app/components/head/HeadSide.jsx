@@ -137,7 +137,7 @@ export default function HeadSide() {
       </header>
       <div className="w-full mb-4 flex items-center h-4">
         <Breadcrumb separator={<IoChevronForwardSharp />} className="w-full mb-4 flex items-center">
-          <Breadcrumb.Item href="/home">
+          <Breadcrumb.Item href="/home/">
             <IoHomeSharp />
           </Breadcrumb.Item>
           {breadcrumbItems}

@@ -318,8 +318,6 @@ export default function HandsontableSheet({ course, group, period, year }) {
     setPercentageSelects(prev => ({ ...prev, [index]: value }));
   };
 
-  
-
   const handleBlur = () => {
     // Aquí actualizas el estado cuando se pierde el foco de cualquier celda
     setData(currentData => {
