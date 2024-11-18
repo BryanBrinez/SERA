@@ -7,8 +7,11 @@ import { getServerSession } from "next-auth/next";
 export async function GET() {
   const session = await getServerSession(authOptions);
 
-  if (!session || !session.user || !session.user.rol.includes("Admin")) {
-    
+  if (
+    !session || 
+    !session.user || 
+    !session.user.rol.some(role => ["Admin","Coordinador","Auxiliar"].includes(role))
+  ) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
   }
   

@@ -9,7 +9,7 @@ export async function GET() {
   const session = await getServerSession(authOptions);
 
   // Puedes descomentar la verificación de sesión si es necesario
-  if (!session || !session.user || !session.user.rol.includes("Admin")) {
+  if (!session || !session.user) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
   }
 

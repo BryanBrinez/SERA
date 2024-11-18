@@ -5,8 +5,18 @@ import { authOptions } from "../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
 
 export async function GET() {
+
   try {
     const session = await getServerSession(authOptions);
+
+    // Verificar si el usuario tiene el rol de Admin (descomentado si se necesita)
+    if (
+      !session || 
+      !session.user || 
+      !session.user.rol.some(role => ["Admin", "Coordinador", "Auxiliar"].includes(role))
+    ) {
+      return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
+    }
 
     if (!session || !session.user) {
       return NextResponse.json(
@@ -15,7 +25,7 @@ export async function GET() {
       );
     }
 
-    const { rol, id: userId, email} = session.user;
+    const { rol, id: userId, email } = session.user;
 
     const userRef = collection(db, "users");
     const userQuery = query(userRef, where("correo", "==", email));
@@ -31,12 +41,12 @@ export async function GET() {
 
     if (!userSnapshot.empty) {
       const userData = userSnapshot.docs[0].data();
-      
+
       console.log(userData);
 
       const programaAsignado = userData.programa_asignado;
-      console.log(programaAsignado); 
-      
+      console.log(programaAsignado);
+
     } else {
       console.log("No se encontró el usuario con ese ID");
     }
@@ -59,7 +69,7 @@ export async function GET() {
 
       console.log(" CODIGO PROGRAMMA", programData.codigo)
 
-      console.log("TIPO CODIGO PROGRAMA",typeof(programData.codigo))
+      console.log("TIPO CODIGO PROGRAMA", typeof (programData.codigo))
 
       courseQuery = query(
         courseCollection,

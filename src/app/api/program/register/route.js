@@ -11,10 +11,13 @@ export async function POST(request) {
   // Obtener la sesión del usuario
   const session = await getServerSession(authOptions);
 
-  // Verificar si el usuario tiene el rol de Admin
-  /*if (!session || !session.user || !session.user.rol.includes("Admin")) {
+  if (
+    !session || 
+    !session.user || 
+    !session.user.rol.some(role => ["Admin"].includes(role))
+  ) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-  }*/
+  }
 
   try {
     // Validar los datos del programa usando el esquema de Zod
