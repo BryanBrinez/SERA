@@ -21,7 +21,7 @@ export async function GET(request, { params }) {
   try {
     // Crear una referencia de consulta con where
     const courseRef = collection(db, "courses");
-    const courseQuery = query(courseRef, where("codigo_programa", "==", code));
+    const courseQuery = query(courseRef, where("codigo", "==", code));
     const courseSnapshot = await getDocs(courseQuery);
 
     // Verificar si no se encontraron documentos
