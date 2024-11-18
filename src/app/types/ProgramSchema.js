@@ -3,7 +3,7 @@ import { z } from "zod";
 export const ProgramSchema = z.object({
   ID_coordinador: z.string(),
   nombre_programa: z.string(),
-  codigo: z.number(),
+  codigo: z.string(),
   facultad: z.string(),
   duracion: z.number(),
   periodicidad_de_admisiones: z.string(),

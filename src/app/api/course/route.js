@@ -15,11 +15,14 @@ export async function GET() {
       );
     }
 
-    const { rol, id: userId } = session.user;
+    const { rol, id: userId, email} = session.user;
 
     const userRef = collection(db, "users");
-    const userQuery = query(userRef, where("id", "==", userId));
+    const userQuery = query(userRef, where("correo", "==", email));
     const userSnapshot = await getDocs(userQuery);
+
+    console.log("USER ID", userId);
+
 
 
     // const programRef = collection(db, "programs");
@@ -28,9 +31,12 @@ export async function GET() {
 
     if (!userSnapshot.empty) {
       const userData = userSnapshot.docs[0].data();
+      
+      console.log(userData);
 
       const programaAsignado = userData.programa_asignado;
       console.log(programaAsignado); 
+      
     } else {
       console.log("No se encontró el usuario con ese ID");
     }
@@ -51,10 +57,13 @@ export async function GET() {
 
       const programData = programSnapshot.docs[0].data();
 
-      console.log(programData.codigo)
+      console.log(" CODIGO PROGRAMMA", programData.codigo)
+
+      console.log("TIPO CODIGO PROGRAMA",typeof(programData.codigo))
+
       courseQuery = query(
         courseCollection,
-        where("codigo_programa", "==", `${programData.codigo}`)
+        where("codigo_programa", "==", programData.codigo)
       );
     } else {
       return NextResponse.json(

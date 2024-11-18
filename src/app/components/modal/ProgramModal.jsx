@@ -82,7 +82,7 @@ export const ProgramModal = ({ open, handleClose, onConfirm }) => {
                         </Form.Group>
                         <Form.Group className='w-1/3' controlId="codigo">
                             <Form.ControlLabel>Codigo*</Form.ControlLabel>
-                            <Form.Control name="codigo" />
+                            <Form.Control name="codigo"  type='text' />
                         </Form.Group>
                         
                     </div>
