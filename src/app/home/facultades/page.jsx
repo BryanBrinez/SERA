@@ -7,7 +7,7 @@ import TableFaculties from '../../components/table/TableFaculties';
 
 import axios from 'axios';
 
-export default function page() {
+export default function Page() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [faculties, setFaculties] = useState([]);
