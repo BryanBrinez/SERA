@@ -22,6 +22,7 @@ export default function Page() {
             const currentPath = window.location.pathname;
             const pathSegments = currentPath.split('/');
             const courseValue = pathSegments[pathSegments.length - 1];
+            console.log('Course ID:', courseValue);
             setCourseID(courseValue);
         }
     };
@@ -29,7 +30,7 @@ export default function Page() {
     // Función para obtener datos del curso
     const fetchCourse = async (id) => {
         try {//El id debe ser el id del programa
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/course/${id}?searchBy=cedula`);
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/course/${id}`);
             setCourse(response.data);
 
             // Llamar a fetchUser una vez que los datos del curso estén disponibles
