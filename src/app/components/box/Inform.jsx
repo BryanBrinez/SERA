@@ -32,9 +32,8 @@ export default function Inform({ course, group, profesorCode, period, year }) {
     const fetchReport = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(
-                'http://localhost:3000/api/report?a%C3%B1o=2024&periodo=01&grupo=51'
-            );
+
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/report?a%C3%B1o=2024&periodo=01&grupo=51`);
             setReportData(response.data);
 
             // Extraer los resultados de aprendizaje y calcular promedios
