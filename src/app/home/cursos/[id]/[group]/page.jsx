@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import NavbarCourseOptions from '@/app/components/navbar/NavbarCourseOptions';
 import EvidenceList from '@/app/components/box/EvidenceList';
+import Inform from '@/app/components/box/Inform';
 import axios from 'axios';
 import { Notification, useToaster, Accordion } from 'rsuite';
 import HandsontableSheet from '@/app/components/table/handsontableSheet';
@@ -137,6 +138,7 @@ export default function Page() {
             <div>
                 {active === 'notas' && data && <HandsontableSheet course={data.Curso} group={data.grupo} period={data.periodo} year={data.año}/>}
                 {active === 'evidencias' && data && <EvidenceList course={data.Curso} group={data.grupo} period={data.periodo} year={data.año} profesorCode={data.Profesor}  />}
+                {active === 'informes' && data && <Inform course={data.Curso} group={data.grupo} period={data.periodo} year={data.año} profesorCode={data.Profesor}  />}
             </div>
         </section>
     );
