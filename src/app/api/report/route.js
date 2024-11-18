@@ -48,24 +48,33 @@ export async function GET(request) {
    // Recorrer el array de estudiantes
    noteData.estudiantes.forEach((estudiante) => {
      estudiante.notas.forEach((nota) => {
-       const nombreNota = nota.nombre_nota; // "primer_parcial", "taller_1", etc.
-       const calificacion = nota.calificacion || 0; // Agregar calificación (o 0 si no está definida)
+       const nombreNota = nota.nombre_nota; 
+       const calificacion = nota.calificacion || 0; 
 
        // Si el nombre de la nota no existe en el objeto, crear un objeto vacío con la estructura inicial
        if (!notasPorNombre[nombreNota]) {
          notasPorNombre[nombreNota] = {
            codigos_indicadores: nota.codigos_indicadores || [],
            porcentaje: nota.porcentaje || 0,
-           notas: []
+           notas: [], 
+           
+           promedio: 0 
+
          };
        }
-
        // Agregar la calificación al array correspondiente bajo la propiedad 'notas'
        notasPorNombre[nombreNota].notas.push(calificacion);
      });
    });
 
    console.log("Notas agrupadas por nombre de nota:", notasPorNombre);
+   for (const nombreNota in notasPorNombre) {
+    const notas = notasPorNombre[nombreNota].notas;
+    const promedio = notas.reduce((acc, calificacion) => acc + calificacion, 0) / notas.length;
+    notasPorNombre[nombreNota].promedio = parseFloat(promedio.toFixed(2)); 
+  }
+
+  console.log("Notas agrupadas por nombre de nota con promedio:", notasPorNombre);
 
    return new Response(JSON.stringify(notasPorNombre));
 
