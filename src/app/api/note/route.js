@@ -15,12 +15,16 @@ export async function GET(req) {
     return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
   }
 
+  console.log("ES AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII")
   try {
     const { searchParams } = new URL(req.url);
     const curso = searchParams.get("curso");
     const grupo = searchParams.get("grupo");
     const periodo = searchParams.get("periodo");
     const año = searchParams.get("año");
+
+
+  
 
     const notasCollection = collection(db, "notas");
     let notasQuery = notasCollection;
@@ -87,6 +91,8 @@ export async function POST(request) {
   try {
     // Verificar si notaData es un array o un solo objeto
     const notasArray = Array.isArray(notaData) ? notaData : [notaData];
+    console.log("ESTA AQUIIIIIIIIIIIIIIIIIIIII")
+    console.log(notasArray)
 
     // Validar cada objeto en el array usando Zod
     notasArray.forEach((nota) => {

@@ -191,12 +191,11 @@ export default function HandsontableSheet({ course, group, period, year }) {
   
   const saveNotesData = async (data) => {
 
-
-    console.log(dataExits)
+    console.log("la data",data)
     try {
       let response;
-  
       if (!dataExits) {
+        console.log("la data",data)
         // Realizar el POST si dataExists es false
         response = await axios.post(`${process.env.NEXT_PUBLIC_URL}api/note`, data, {
           headers: {
@@ -237,7 +236,7 @@ export default function HandsontableSheet({ course, group, period, year }) {
   
       toaster.push(
         <Notification type="error" header="Error" closable>
-          Hubo un problema al procesar el usuario. Por favor, inténtelo de nuevo.
+          Hubo un problema al procesar las notas. Por favor, inténtelo de nuevo.
         </Notification>,
         { placement: 'topEnd' }
       );
@@ -275,7 +274,8 @@ export default function HandsontableSheet({ course, group, period, year }) {
     }
     console.log("MAPPED DATA", jsonData);
     const mappedData = {
-
+      año: year,
+      periodo: period,
       curso: course,
       grupo: group, // Convertir grupo a string
       codigo_resultados: selects,
