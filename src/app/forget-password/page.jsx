@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import { Button, Input, Notification, useToaster } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
-export default function RecoverPassword() {
+export default function Page() {
   const [email, setEmail] = useState("");
   const [inputError, setInputError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -28,35 +29,22 @@ export default function RecoverPassword() {
     }
 
     try {
-      const response = await fetch("/api/auth/recover-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        toaster.push(
-          <Notification type="success" header="Correo enviado">
-            <p>
-              Si el correo está registrado, se ha enviado un enlace de recuperación.
-            </p>
-          </Notification>,
-          { placement: "topEnd" }
-        );
-        router.push("/login");
-      } else {
-        toaster.push(
-          <Notification type="error" header="Error">
-            <p>{data.error || "Ocurrió un error. Inténtelo más tarde."}</p>
-          </Notification>,
-          { placement: "topEnd" }
-        );
-      }
+      const response = await axios.post("/api/auth/forget-password", { email });
+    
+      toaster.push(
+        <Notification type="success" header="Correo enviado">
+          <p>
+            Si el correo está registrado, se ha enviado un enlace de recuperación.
+          </p>
+        </Notification>,
+        { placement: "topEnd" }
+      );
+    
+      router.push("/login");
     } catch (error) {
       toaster.push(
-        <Notification type="error" header="Error de red">
-          <p>No se pudo conectar al servidor. Inténtelo más tarde.</p>
+        <Notification type="error" header="Error">
+          <p>{error.response?.data?.error || "Ocurrió un error. Inténtelo más tarde."}</p>
         </Notification>,
         { placement: "topEnd" }
       );
