@@ -155,11 +155,11 @@ export default function Inform({ course, group, profesorCode, period, year }) {
                                     {getRecommendation(value.promedio, value.codigos_indicadores)}
                                 </span>
                             </div>
-                            {/* Gráfico circular o más contenido adicional */}
                         </div>
                     ))}
 
                     <ResultsAp codigosResultadosProps={resultadosPromedio} />
+                    
                 </div>
             )}
         </div>
