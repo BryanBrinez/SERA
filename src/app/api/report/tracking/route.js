@@ -76,11 +76,14 @@ export async function GET(request) {
         (row.estudiantes_no_presentaron / totalEstudiantes) * 100;
       const porcentajeER =
         (row.estudiantes_reprobaron / totalEstudiantes) * 100;
+        const porcentajeEA =
+        (row.estudiantes_aprobaron / totalEstudiantes) * 100;
 
       return {
         ...row,
         porcentaje_ENP: parseFloat(porcentajeENP.toFixed(2)), // % ENP
         porcentaje_ER: parseFloat(porcentajeER.toFixed(2)), // % ER
+        porcentaje_EA: parseFloat(porcentajeEA.toFixed(2)),
       };
     });
 
