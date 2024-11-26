@@ -84,6 +84,7 @@ export async function GET(request) {
         porcentaje_ENP: parseFloat(porcentajeENP.toFixed(2)), // % ENP
         porcentaje_ER: parseFloat(porcentajeER.toFixed(2)), // % ER
         porcentaje_EA: parseFloat(porcentajeEA.toFixed(2)),
+        totalEstudiantes,
       };
     });
 
