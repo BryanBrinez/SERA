@@ -11,10 +11,10 @@ export async function GET(request, { params }) {
     // Obtener la sesión del usuario
     const session = await getServerSession(authOptions);
   
-    // Verificar si el usuario tiene el rol de Admin
+    /*// Verificar si el usuario tiene el rol de Admin
     if (!session || !session.user || !session.user.rol.includes("Admin")) {
       return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-    }
+    }*/
   
     try {
       const notasRef = doc(db, "notas", uid);
@@ -43,10 +43,10 @@ export async function PUT(request, { params }) {
     // Obtener la sesión del usuario
     const session = await getServerSession(authOptions);
   
-    // Verificar si el usuario tiene el rol de Admin
+   /* // Verificar si el usuario tiene el rol de Admin
     if (!session || !session.user || !session.user.rol.includes("Admin")) {
       return NextResponse.json({ message: "Acceso no autorizado" }, { status: 403 });
-    }
+    }*/
   
     try {
       // Validar los datos de la sede usando Zod

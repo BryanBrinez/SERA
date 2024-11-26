@@ -5,6 +5,7 @@ import "rsuite/dist/rsuite.min.css";
 import PasswordInput from "../atoms/input/PasswordInput";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from 'next/link'
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -103,7 +104,8 @@ export default function Login() {
             >
               Recordar contraseña
             </Checkbox>
-            <a href="#">¿Has olvidado tu contraseña?</a>
+            <Link href="/forgot-password">¿Has olvidado tu contraseña?</Link>
+            
           </div>
         </form>
       </section>

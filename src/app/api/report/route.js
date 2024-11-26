@@ -11,7 +11,7 @@ export async function GET(request) {
   const año = url.searchParams.get('año');  // Año pasado como parámetro
   const periodo = url.searchParams.get('periodo');
   const grupo = url.searchParams.get('grupo');
-
+  const curso = url.searchParams.get('curso');
   /*if (
     !session || 
     !session.user || 
@@ -26,7 +26,8 @@ export async function GET(request) {
         noteRef,
         where("año", "==", año),
         where("periodo", "==", periodo),
-        where("grupo", "==", parseInt(grupo))
+        where("grupo", "==", parseInt(grupo)),
+        where("curso", "==", curso),
       );
     
       const noteSnapshot = await getDocs(noteQuery);

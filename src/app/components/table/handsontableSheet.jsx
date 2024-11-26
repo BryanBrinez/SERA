@@ -261,12 +261,12 @@ export default function HandsontableSheet({ course, group, period, year }) {
         }, {});
       });
     } else if (data.length > 0) {
-      const headers = data[0].map(cell => cell.value);
+      const headers = data[0].map(cell => cell.valueOf);
       jsonData = data.slice(1).map((row) => {
-        const filteredRow = row.filter(cell => cell.value !== '');
+        const filteredRow = row.filter(cell => cell.valueOf !== '');
         return headers.reduce((acc, header, index) => {
           if (filteredRow[index]) {
-            acc[header.toLowerCase().replace(/ /g, '_')] = filteredRow[index].value;
+            acc[header.toLowerCase().replace(/ /g, '_')] = filteredRow[index].valueOf;
           }
           return acc;
         }, {});
