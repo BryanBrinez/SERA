@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Table } from 'rsuite';
 import ResultsAp from '@/app/components/cards/ResultsAp';
+import TableResults from '../table/TableResults';
 
 // Función para formatear los nombres de las evaluaciones
 const formatEvaluationName = (name) => {
@@ -13,6 +14,7 @@ const formatEvaluationName = (name) => {
 export default function Inform({ course, group, profesorCode, period, year }) {
     const [resultadosAprendizaje, setResultadosAprendizaje] = useState([]);
     const [reportData, setReportData] = useState(null);
+    const [followUp, SetFollowUp] = useState([]);
     const [generalInfo, setGeneralInfo] = useState({
         curso: course,
         grupo: group,
@@ -27,6 +29,7 @@ export default function Inform({ course, group, profesorCode, period, year }) {
 
     useEffect(() => {
         fetchReport();
+        fetchFollowUp();
     }, []);
 
     const fetchReport = async () => {
@@ -55,6 +58,15 @@ export default function Inform({ course, group, profesorCode, period, year }) {
             console.error('Error fetching report data:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchFollowUp = async () => {
+        try {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/report/tracking?año=${year}&periodo=${period}&grupo=${group}&curso=${course}`);
+            SetFollowUp(response.data);
+        } catch (error) {
+            console.error('Error fetching follow-up data:', error);
         }
     };
 
@@ -159,7 +171,15 @@ export default function Inform({ course, group, profesorCode, period, year }) {
                     ))}
 
                     <ResultsAp codigosResultadosProps={resultadosPromedio} />
-                    
+                    {
+                        followUp.length > 0 && (
+                            <div className="mt-6">
+                                <h2 className="font-semibold text-xl mb-8">Seguimiento</h2>
+                                <TableResults data={followUp} />
+                            </div>
+                        )
+                    }
+             
                 </div>
             )}
         </div>

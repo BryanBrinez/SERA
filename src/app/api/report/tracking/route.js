@@ -31,7 +31,7 @@ export async function GET(request) {
 
     const noteData = noteSnapshot.docs[0].data();
 
-    const totalEstudiantes = noteData.estudiantes.length; // Cantidad total de estudiantes
+    const total_estudiantes = noteData.estudiantes.length; // Cantidad total de estudiantes
 
     // Estructura para almacenar las notas procesadas
     const tabla = {};
@@ -73,18 +73,18 @@ export async function GET(request) {
     // Convertir la tabla en un arreglo y calcular los porcentajes
     const resultadoTabla = Object.values(tabla).map((row) => {
       const porcentajeENP =
-        (row.estudiantes_no_presentaron / totalEstudiantes) * 100;
+        (row.estudiantes_no_presentaron / total_estudiantes) * 100;
       const porcentajeER =
-        (row.estudiantes_reprobaron / totalEstudiantes) * 100;
+        (row.estudiantes_reprobaron / total_estudiantes) * 100;
         const porcentajeEA =
-        (row.estudiantes_aprobaron / totalEstudiantes) * 100;
+        (row.estudiantes_aprobaron / total_estudiantes) * 100;
 
       return {
         ...row,
         porcentaje_ENP: parseFloat(porcentajeENP.toFixed(2)), // % ENP
         porcentaje_ER: parseFloat(porcentajeER.toFixed(2)), // % ER
         porcentaje_EA: parseFloat(porcentajeEA.toFixed(2)),
-        totalEstudiantes,
+        total_estudiantes,
       };
     });
 
