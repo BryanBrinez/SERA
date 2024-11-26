@@ -7,6 +7,8 @@ export default function ResultsAp({ codigosResultadosProps }) {
     const [resultadosAprendizaje, setResultadosAprendizaje] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    
+
     const fetchResults = async () => {
         setLoading(true);
         try {

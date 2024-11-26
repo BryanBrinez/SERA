@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Table } from 'rsuite';
 import ResultsAp from '@/app/components/cards/ResultsAp';
+import DownloadPDF from '@/app/components/pdf/downloadPdf';
 import TableResults from '../table/TableResults';
 
 // Función para formatear los nombres de las evaluaciones
@@ -122,8 +123,23 @@ export default function Inform({ course, group, profesorCode, period, year }) {
                     Generar Informe Grupal
                 </Button>
                 <Button>Generar Informe Individual</Button>
-            </div>
+                <Button >
 
+
+                {
+                    followUp.length > 0 && (
+                        <DownloadPDF
+                            generalInfo={generalInfo}
+                            reportData={reportData}
+                            followUp={followUp}
+                            resultadosAprendizaje={resultadosPromedio}
+                        />
+                    )
+                }
+            </Button>
+
+            </div>
+            
             {/* Encabezado del informe */}
             <h1 className="text-2xl font-bold text-center">
                 Informe Grupal de Notas por Resultados de Aprendizaje
@@ -153,7 +169,7 @@ export default function Inform({ course, group, profesorCode, period, year }) {
                                 </span>
                             </div>
                             <div className="text-sm text-gray-600 mb-3">
-                                <strong>Resultados de Aprendizaje Asociados:</strong> 
+                                <strong>Resultados de Aprendizaje Asociados:</strong>
                                 {value.codigos_indicadores.length > 0
                                     ? value.codigos_indicadores.join(', ')
                                     : <span className="italic text-gray-400">Ninguno</span>}
@@ -162,7 +178,7 @@ export default function Inform({ course, group, profesorCode, period, year }) {
                                 <strong>Porcentaje de Evaluación:</strong> {value.porcentaje}%
                             </div>
                             <div className="text-sm text-gray-600 mb-4">
-                                <strong>Retroalimentación:</strong> 
+                                <strong>Retroalimentación:</strong>
                                 <span className={`font-medium`}>
                                     {getRecommendation(value.promedio, value.codigos_indicadores)}
                                 </span>
@@ -179,7 +195,7 @@ export default function Inform({ course, group, profesorCode, period, year }) {
                             </div>
                         )
                     }
-             
+
                 </div>
             )}
         </div>
