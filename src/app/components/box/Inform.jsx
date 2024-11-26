@@ -174,7 +174,7 @@ export default function Inform({ course, group, profesorCode, period, year }) {
                     {
                         followUp.length > 0 && (
                             <div className="mt-6">
-                                <h2 className="font-semibold text-xl mb-8">Seguimiento</h2>
+                                <h2 className="font-semibold text-xl mb-8">Seguimiento con un total de {followUp[0].total_estudiantes} estudiantes</h2>
                                 <TableResults data={followUp} />
                             </div>
                         )
