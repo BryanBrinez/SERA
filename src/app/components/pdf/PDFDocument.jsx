@@ -24,16 +24,20 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     width: '100%',
     marginVertical: 10,
+    fontSize: '10px'
+
   },
   tableRow: {
     flexDirection: 'row',
     borderBottom: '1px solid #ddd',
     paddingVertical: 4,
+    fontSize: '10px'
   },
   tableCell: {
     flex: 1,
     padding: 5,
     textAlign: 'left',
+    fontSize: '10px'
   },
   bold: {
     fontWeight: 'bold',
@@ -121,11 +125,11 @@ export default function PDFDocument({ generalInfo, reportData, followUp, resulta
             <Text>Recomendación: {value.recomendacion}</Text>
           </View>
         ))}
-
+      </Page>
+      <Page style={styles.page}>
         {/* Tabla de Seguimiento */}
         {followState && followState.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.bold}>Seguimiento de Estudiantes:</Text>
 
             <Text style={styles.bold}>Seguimiento de Estudiantes:</Text>
             <Text style={styles.bold}>Tipo de Evaluación: TE</Text>
@@ -139,6 +143,18 @@ export default function PDFDocument({ generalInfo, reportData, followUp, resulta
 
             {/* Fila con la información de cada evaluación */}
             <View style={styles.table}>
+              {/* Fila de encabezado */}
+              <View style={styles.tableRow}>
+                <Text style={[styles.tableCell, styles.bold]}>TE</Text>
+                <Text style={[styles.tableCell, styles.bold]}>RA</Text>
+                <Text style={[styles.tableCell, styles.bold]}>EP</Text>
+                <Text style={[styles.tableCell, styles.bold]}>ENP</Text>
+                <Text style={[styles.tableCell, styles.bold]}>% ENP</Text>
+                <Text style={[styles.tableCell, styles.bold]}>EA</Text>
+                <Text style={[styles.tableCell, styles.bold]}>% EA</Text>
+                <Text style={[styles.tableCell, styles.bold]}>ER</Text>
+                <Text style={[styles.tableCell, styles.bold]}>% ER</Text>
+              </View>
               {followState.map((evaluation, index) => (
                 <View key={index} style={styles.tableRow}>
                   <Text style={styles.tableCell}>{evaluation.tipo_evaluacion}</Text>
