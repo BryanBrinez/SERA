@@ -4,6 +4,7 @@ import NavbarUserOptions from '@/app/components/navbar/NavbarUserOptions';
 import axios from 'axios';
 import { Notification, useToaster } from 'rsuite';
 import CoursesByProfesor from '@/app/components/cards/CoursesByProfesor';
+import Certificates from '@/app/components/box/Certificates';
 
 export default function Page() {
     const toaster = useToaster();
@@ -106,6 +107,7 @@ export default function Page() {
 
             <div>
                 {active === 'cursos' && <CoursesByProfesor profesorCode={user?.cedula || ''} />}
+                {active === 'certificados' && <Certificates cedula={user?.cedula || ''}/>}
             </div>
         </section>
     );
