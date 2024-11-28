@@ -5,7 +5,7 @@ import ResultsAp from '@/app/components/cards/ResultsAp';
 //import DownloadPDF from '../../components/pdf/DownloadPDF';
 import TableResults from '../table/TableResults';
 //import downloadPDF from '../pdf/downloadPDF';
-import downloadPDF from '../pdf/downloadPDF';
+import DownloadPDF from '../pdf/downloadPDF';
 
 // Función para formatear los nombres de las evaluaciones
 const formatEvaluationName = (name) => {
@@ -149,7 +149,7 @@ export default function Inform({ course, group, profesorCode, period, year }) {
                 {
                     followUp.length > 0 && (
 
-                        <downloadPDF
+                        <DownloadPDF
                         generalInfo={generalInfo}
                         reportData={reportData}
                         followUp={followUp}

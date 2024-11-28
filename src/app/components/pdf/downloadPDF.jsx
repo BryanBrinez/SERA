@@ -5,7 +5,7 @@ import { storage } from '../../api/firebase/config'; // Ajusta la ruta según tu
 import { ref, uploadBytes } from "firebase/storage";
 
 
-export default function downloadPDF  ({ generalInfo, reportData, followUp, resultadosAprendizaje, cantEstudiantes, cursoInfo }) {
+export default function DownloadPDF  ({ generalInfo, reportData, followUp, resultadosAprendizaje, cantEstudiantes, cursoInfo }) {
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [error, setError] = useState(null);
