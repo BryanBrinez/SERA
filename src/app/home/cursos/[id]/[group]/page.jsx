@@ -57,7 +57,7 @@ export default function Page() {
                 },
             });
     
-            console.log(response.data);
+            console.log("LA SUPER DATAAAAAAAAA",response.data);
     
             // Si necesitas hacer algo con los datos recibidos, puedes procesarlos aquí
             setData(response.data);

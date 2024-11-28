@@ -16,6 +16,7 @@ export default function Inform({ course, group, profesorCode, period, year }) {
     const [resultadosAprendizaje, setResultadosAprendizaje] = useState([]);
     const [reportData, setReportData] = useState(null);
     const [followUp, SetFollowUp] = useState([]);
+    const [cursoInfo, setCursoInfo] = useState({});
     const [generalInfo, setGeneralInfo] = useState({
         curso: course,
         grupo: group,
@@ -31,6 +32,7 @@ export default function Inform({ course, group, profesorCode, period, year }) {
     useEffect(() => {
         fetchReport();
         fetchFollowUp();
+        fetchCourse();
     }, []);
 
     const fetchReport = async () => {
@@ -70,6 +72,22 @@ export default function Inform({ course, group, profesorCode, period, year }) {
             console.error('Error fetching follow-up data:', error);
         }
     };
+
+
+    const fetchCourse = async () => {
+        try {
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/course/${course}`);
+          setCursoInfo(response.data);
+          
+    
+          console.log("esta aqui ene l fetch",response.data)
+        } catch (error) {
+          console.log("el errrorrrr",error)
+        }
+    
+        console.log("el cursooooooooooooooo",course , "el codigo del cursoooooooooooooooo", generalInfo.curso)
+        
+      };
 
     // Función para calcular los promedios de los resultados de aprendizaje
     const calculatePromedios = (data) => {
@@ -133,6 +151,8 @@ export default function Inform({ course, group, profesorCode, period, year }) {
                             reportData={reportData}
                             followUp={followUp}
                             resultadosAprendizaje={resultadosPromedio}
+                            cantEstudiantes={followUp[0].total_estudiantes}
+                            cursoInfo={cursoInfo}
                         />
                     )
                 }

@@ -1,10 +1,12 @@
 import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
-export default function PDFDocument({ generalInfo, reportData, followUp, resultadosAprendizaje }) {
+export default function PDFDocument({ generalInfo, reportData, followUp, resultadosAprendizaje, cantEstudiantes, cursoInfo }) {
   const [followState, setFollowState] = useState(followUp);
 
-  console.log("es ek resultados", resultadosAprendizaje)
+
+  console.log("informacion del cursoOOOOOOOOOOOOOOOOOOOOOOOO", cursoInfo)
 
   // Función para obtener el color del círculo de progreso basado en el porcentaje
   const getCircleColor = (porcentaje) => {
@@ -21,7 +23,7 @@ export default function PDFDocument({ generalInfo, reportData, followUp, resulta
     return `${day}/${month}/${year}`;
   };
 
-
+  
   return (
     <Document>
       <Page style={styles.page}>
@@ -35,10 +37,10 @@ export default function PDFDocument({ generalInfo, reportData, followUp, resulta
 
         {/* Título principal */}
         <Text style={styles.subHeader}>Universidad del valle - Sede Tuluá</Text>
-        <Text style={{textAlign: 'center', marginBottom:'12px'}}>{formatDate()}</Text>
+        <Text style={{ textAlign: 'center', marginBottom: '12px' }}>{formatDate()}</Text>
 
         {/* Información General */}
-        <Text style={{ fontSize: '10px', fontWeight: 'bold' , marginTop: '20px'  }}>Seguimiento a los Resultados de aprendizaje</Text>
+        <Text style={{ fontSize: '10px', fontWeight: 'bold', marginTop: '20px' }}>Seguimiento a los Resultados de aprendizaje</Text>
         <View style={styles.table}>
           {/* Fila 1 */}
           <View style={styles.tableRow}>
@@ -58,7 +60,7 @@ export default function PDFDocument({ generalInfo, reportData, followUp, resulta
               <Text style={styles.bold}>N° Estudiantes Matriculados (EM)</Text>
             </View>
             <View style={styles.tableCell}>
-              <Text>31</Text>
+              <Text>{cantEstudiantes}</Text>
             </View>
           </View>
 
@@ -74,7 +76,7 @@ export default function PDFDocument({ generalInfo, reportData, followUp, resulta
               <Text style={styles.bold}>Nombre de la Asignatura</Text>
             </View>
             <View style={styles.tableCell}>
-              <Text>Cálculo 1</Text>
+              <Text>{cursoInfo.nombre_curso}</Text>
             </View>
             <View style={styles.tableCellSpan}>
               <Text style={styles.bold}>Nombre del Docente</Text>
@@ -90,13 +92,13 @@ export default function PDFDocument({ generalInfo, reportData, followUp, resulta
               <Text style={styles.bold}>Código del Programa</Text>
             </View>
             <View style={styles.tableCell}>
-              <Text>3143</Text>
+              <Text>{cursoInfo.codigo_programa}</Text>
             </View>
             <View style={styles.tableCell}>
               <Text style={styles.bold}>Créditos de la Asignatura</Text>
             </View>
             <View style={styles.tableCell}>
-              <Text>3</Text>
+              <Text>{cursoInfo.creditos}</Text>
             </View>
           </View>
 
@@ -122,7 +124,7 @@ export default function PDFDocument({ generalInfo, reportData, followUp, resulta
         {followState && followState.length > 0 && (
 
           <View style={styles.section}>
-            <Text style={{ fontSize: '10px', fontWeight: 'bold', marginTop: '20px'  }}>Conceptos a evaluar</Text>
+            <Text style={{ fontSize: '10px', fontWeight: 'bold', marginTop: '20px' }}>Conceptos a evaluar</Text>
             <View style={styles.table}>
               <View style={styles.tableRow}>
                 <Text style={[styles.tableCell, styles.bold]}>Descripción</Text>
