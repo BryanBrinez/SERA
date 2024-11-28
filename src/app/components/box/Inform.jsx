@@ -4,7 +4,8 @@ import { Button, Table } from 'rsuite';
 import ResultsAp from '@/app/components/cards/ResultsAp';
 //import DownloadPDF from '../../components/pdf/DownloadPDF';
 import TableResults from '../table/TableResults';
-import DownloadPDF from '../pdf/DownloadPDF';
+//import downloadPDF from '../pdf/downloadPDF';
+import downloadPDF from '../pdf/downloadPDF';
 
 // Función para formatear los nombres de las evaluaciones
 const formatEvaluationName = (name) => {
@@ -148,13 +149,14 @@ export default function Inform({ course, group, profesorCode, period, year }) {
                 {
                     followUp.length > 0 && (
 
-                        <DownloadPDF
+                        <downloadPDF
                         generalInfo={generalInfo}
                         reportData={reportData}
                         followUp={followUp}
                         resultadosAprendizaje={resultadosPromedio}
                         cantEstudiantes={followUp[0].total_estudiantes}
                         cursoInfo={cursoInfo}
+                    
                         />
                     )
                 }
