@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Table } from 'rsuite';
 import ResultsAp from '@/app/components/cards/ResultsAp';
-import DownloadPDF from '@/app/components/pdf/DownloadPdf';
+import DownloadPDF from '@/app/components/pdf/DownloadPDF';
 import TableResults from '../table/TableResults';
 
 // Función para formatear los nombres de las evaluaciones
