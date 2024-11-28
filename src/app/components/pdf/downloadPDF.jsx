@@ -4,7 +4,11 @@ import PDFDocument from './PDFDocument';
 import { storage } from '../../api/firebase/config'; // Ajusta la ruta según tu estructura
 import { ref, uploadBytes } from "firebase/storage";
 
-const DownloadPDF = ({ generalInfo, reportData, followUp, resultadosAprendizaje, cantEstudiantes, cursoInfo }) => {
+
+
+
+
+export default function DownloadPDF  ({ generalInfo, reportData, followUp, resultadosAprendizaje, cantEstudiantes, cursoInfo }) {
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [error, setError] = useState(null);
@@ -71,4 +75,3 @@ const DownloadPDF = ({ generalInfo, reportData, followUp, resultadosAprendizaje,
   );
 };
 
-export default DownloadPDF;
