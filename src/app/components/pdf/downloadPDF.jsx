@@ -4,9 +4,6 @@ import PDFDocument from './PDFDocument';
 import { storage } from '../../api/firebase/config'; // Ajusta la ruta según tu estructura
 import { ref, uploadBytes } from "firebase/storage";
 
-import React from 'react'
-
-
 
 export default function downloadPDF  ({ generalInfo, reportData, followUp, resultadosAprendizaje, cantEstudiantes, cursoInfo }) {
   const [uploading, setUploading] = useState(false);
