@@ -6,8 +6,6 @@ import { ref, uploadBytes } from "firebase/storage";
 
 
 
-
-
 export default function DownloadPDF  ({ generalInfo, reportData, followUp, resultadosAprendizaje, cantEstudiantes, cursoInfo }) {
   const [uploading, setUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);

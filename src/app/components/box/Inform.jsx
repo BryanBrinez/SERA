@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Table } from 'rsuite';
 import ResultsAp from '@/app/components/cards/ResultsAp';
-import DownloadPDF from '../../components/pdf/DownloadPDF';
+//import DownloadPDF from '../../components/pdf/DownloadPDF';
 import TableResults from '../table/TableResults';
+import DownloadPDF from '../pdf/DownloadPDF';
 
 // Función para formatear los nombres de las evaluaciones
 const formatEvaluationName = (name) => {
@@ -146,13 +147,14 @@ export default function Inform({ course, group, profesorCode, period, year }) {
 
                 {
                     followUp.length > 0 && (
+
                         <DownloadPDF
-                            generalInfo={generalInfo}
-                            reportData={reportData}
-                            followUp={followUp}
-                            resultadosAprendizaje={resultadosPromedio}
-                            cantEstudiantes={followUp[0].total_estudiantes}
-                            cursoInfo={cursoInfo}
+                        generalInfo={generalInfo}
+                        reportData={reportData}
+                        followUp={followUp}
+                        resultadosAprendizaje={resultadosPromedio}
+                        cantEstudiantes={followUp[0].total_estudiantes}
+                        cursoInfo={cursoInfo}
                         />
                     )
                 }
