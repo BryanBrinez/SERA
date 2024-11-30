@@ -48,7 +48,8 @@ export default function Inform({ course, group, profesorCode, period, year }) {
             console.log('data:', response.data);
 
             // Actualizar el estado con los promedios calculados
-            setResultadosPromedio(promedioResultados);
+
+            fetchResults(promedioResultados);
             console.log('Promedios de resultados:', promedioResultados);
 
             // Extraer los resultados de aprendizaje
@@ -78,18 +79,47 @@ export default function Inform({ course, group, profesorCode, period, year }) {
 
     const fetchCourse = async () => {
         try {
-          const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/course/${course}`);
-          setCursoInfo(response.data);
-          
-    
-          console.log("esta aqui ene l fetch",response.data)
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/course/${course}`);
+            setCursoInfo(response.data);
+
+
+            console.log("esta aqui ene l fetch", response.data)
         } catch (error) {
-          console.log("el errrorrrr",error)
+            console.log("el errrorrrr", error)
         }
-    
-        console.log("el cursooooooooooooooo",course , "el codigo del cursoooooooooooooooo", generalInfo.curso)
-        
-      };
+
+        console.log("el cursooooooooooooooo", course, "el codigo del cursoooooooooooooooo", generalInfo.curso)
+
+    };
+
+    const fetchResults = async (resultadosAprendizaje) => {
+        try {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/resultadoaprendizaje`);
+            console.log('Códigos de resultados en props:', resultadosAprendizaje); // Verifica la estructura de los datos de entrada
+            console.log('Datos de la API:', response.data); // Datos obtenidos de la API
+
+            // Mapeamos los resultados que tenemos en `resultadosAprendizaje` para tener fácil acceso a los códigos y promedios
+            const resultadoMap = resultadosAprendizaje.reduce((acc, item) => {
+                acc[item.resultado] = item.promedio; // Mapeamos el código de resultado al promedio
+                return acc;
+            }, {});
+
+            // Filtrar los resultados de la API para que solo se guarden los que coinciden con los códigos en `resultadoMap`
+            const filteredResults = response.data
+                .filter(result => resultadoMap[result.codigo]) // Filtramos solo los que tienen un código coincidente
+                .map(result => ({
+                    ...result,
+                    promedio: resultadoMap[result.codigo] // Añadimos el promedio correspondiente al resultado
+                }));
+
+            console.log('Resultados filtrados:', filteredResults); // Verifica los resultados filtrados
+            setResultadosPromedio(filteredResults);
+
+        } catch (error) {
+            console.error('Error fetching report data:', error);
+
+        }
+    };
 
     // Función para calcular los promedios de los resultados de aprendizaje
     const calculatePromedios = (data) => {
@@ -146,24 +176,24 @@ export default function Inform({ course, group, profesorCode, period, year }) {
                 <Button >
 
 
-                {
-                    followUp.length > 0 && (
+                    {
+                        followUp.length > 0 && (
 
-                        <DownloadPDF
-                        generalInfo={generalInfo}
-                        reportData={reportData}
-                        followUp={followUp}
-                        resultadosAprendizaje={resultadosPromedio}
-                        cantEstudiantes={followUp[0].total_estudiantes}
-                        cursoInfo={cursoInfo}
-                    
-                        />
-                    )
-                }
-            </Button>
+                            <DownloadPDF
+                                generalInfo={generalInfo}
+                                reportData={reportData}
+                                followUp={followUp}
+                                resultadosAprendizaje={resultadosPromedio}
+                                cantEstudiantes={followUp[0].total_estudiantes}
+                                cursoInfo={cursoInfo}
+
+                            />
+                        )
+                    }
+                </Button>
 
             </div>
-            
+
             {/* Encabezado del informe */}
             <h1 className="text-2xl font-bold text-center">
                 Informe Grupal de Notas por Resultados de Aprendizaje
@@ -210,7 +240,12 @@ export default function Inform({ course, group, profesorCode, period, year }) {
                         </div>
                     ))}
 
-                    <ResultsAp codigosResultadosProps={resultadosPromedio} />
+
+                    {
+                        resultadosPromedio.length > 0 && (
+                            <ResultsAp codigosResultadosProps={resultadosPromedio} />
+                        )
+                    }
                     {
                         followUp.length > 0 && (
                             <div className="mt-6">

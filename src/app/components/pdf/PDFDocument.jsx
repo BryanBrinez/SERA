@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export default function PDFDocument({ generalInfo, reportData, followUp, resultadosAprendizaje, cantEstudiantes, cursoInfo }) {
   const [followState, setFollowState] = useState(followUp);
-
+  const [resultados, setResultados] = useState([]);
 
   console.log("informacion del cursoOOOOOOOOOOOOOOOOOOOOOOOO", cursoInfo)
 
@@ -23,7 +23,42 @@ export default function PDFDocument({ generalInfo, reportData, followUp, resulta
     return `${day}/${month}/${year}`;
   };
 
-  
+  // const fetchResults = async () => {
+  //   try {
+  //     const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/resultadoaprendizaje`);
+  //     console.log('Códigos de resultados en props:', resultadosAprendizaje); // Verifica la estructura de los datos de entrada
+  //     console.log('Datos de la API:', response.data); // Datos obtenidos de la API
+
+  //     // Mapeamos los resultados que tenemos en `resultadosAprendizaje` para tener fácil acceso a los códigos y promedios
+  //     const resultadoMap = resultadosAprendizaje.reduce((acc, item) => {
+  //       acc[item.resultado] = item.promedio; // Mapeamos el código de resultado al promedio
+  //       return acc;
+  //     }, {});
+
+  //     // Filtrar los resultados de la API para que solo se guarden los que coinciden con los códigos en `resultadoMap`
+  //     const filteredResults = response.data
+  //       .filter(result => resultadoMap[result.codigo]) // Filtramos solo los que tienen un código coincidente
+  //       .map(result => ({
+  //         ...result,
+  //         promedio: resultadoMap[result.codigo] // Añadimos el promedio correspondiente al resultado
+  //       }));
+
+  //     // Guardamos los resultados filtrados con el promedio en el estado
+  //     console.log
+  //     setResultados(filteredResults);
+
+  //   } catch (error) {
+  //     console.error('Error fetching report data:', error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchResults();
+  // }, [resultadosAprendizaje]);
+
+
   return (
     <Document>
       <Page style={styles.page}>
@@ -197,47 +232,51 @@ export default function PDFDocument({ generalInfo, reportData, followUp, resulta
       </Page>
       <Page style={styles.page}>
 
-        {/* Resultados de Aprendizaje */}
-        {resultadosAprendizaje && resultadosAprendizaje.length > 0 && (
-          <View style={styles.section}>
+      <View style={styles.resultContainer}>
             <Text style={styles.bold}>Resultados de Aprendizaje Implementados:</Text>
-            {resultadosAprendizaje.map((resultado, index) => {
-              // Calcular el porcentaje basado en el promedio
-              const max = 5.0; // Valor máximo posible
-              const porcentaje = (resultado.promedio / max) * 100;
-              const circleColor = getCircleColor(porcentaje); // Determinar el color del círculo
+            {resultadosAprendizaje && resultadosAprendizaje.length > 0 && resultadosAprendizaje.map((resultado, index) => {
+                // Calcular el porcentaje basado en el promedio
+                const max = 5.0; // Valor máximo posible
+                const porcentaje = (resultado.promedio / max) * 100;
+                const circleColor = getCircleColor(porcentaje); // Determinar el color del círculo
 
-              return (
-                <View key={index} style={{ flexDirection: 'row', marginBottom: 10 }}>
-                  {/* Círculo de progreso */}
-                  <View style={[styles.progressCircle, { backgroundColor: circleColor }]}>
-                    <Text style={{ color: '#fff', textAlign: 'center', marginTop: '20%' }}>
-                      {porcentaje.toFixed(1)}%
-                    </Text>
-                  </View>
+                return (
+                    <View key={index} style={styles.resultBox}>
+                        {/* Círculo de progreso */}
+                        <View style={[styles.progressCircle, { backgroundColor: circleColor }]}>
+                            <Text style={{ color: '#fff'}}>
+                                {porcentaje.toFixed(1)}%
+                            </Text>
+                        </View>
 
-                  {/* Detalles del resultado de aprendizaje */}
-                  <View>
-                    <Text style={styles.resultTitle}>{resultado.resultado}</Text>
-
-                  </View>
-                </View>
-              );
+                        {/* Detalles del resultado de aprendizaje */}
+                        <View style={{display:'flex', flexDirection:'column', flexWrap:'wrap', overflow:'hidden'}}>
+                            <Text style={styles.resultTitle}>{resultado.nombre_resultado}</Text>
+                            <Text>{resultado.descripcion}</Text>
+                            <Text style={''}>Código: {resultado.codigo}</Text>
+                            <Text style={''}>Promedio: {resultado.promedio}</Text>
+                        </View>
+                    </View>
+                );
             })}
-          </View>
-        )}
+        </View>
 
         {/* Resultados del Reporte */}
+        <Text style={{ fontSize: '10px', fontWeight: 'bold', marginTop: '20px' }}>Desglose de evaluaciones</Text>
         {reportData && Object.entries(reportData).map(([key, value]) => (
-          <View key={key} style={styles.section}>
-            <Text style={styles.bold}>
+          <View key={key} style={styles.card}>
+            <Text style={styles.cardTitle}>
               {key.replace(/_/g, ' ')} (Promedio: {value.promedio.toFixed(2)})
             </Text>
-            <Text>
-              Resultados de Aprendizaje Asociados: {value.codigos_indicadores.join(', ') || 'Ninguno'}
+            <Text style={styles.cardContent}>
+              <Text style={styles.label}>Resultados de Aprendizaje Asociados:</Text> {value.codigos_indicadores.join(', ') || 'Ninguno'}
             </Text>
-            <Text>Porcentaje de Evaluación: {value.porcentaje}%</Text>
-            <Text>Recomendación: {value.recomendacion}</Text>
+            <Text style={styles.cardContent}>
+              <Text style={styles.label}>Porcentaje de Evaluación:</Text> {value.porcentaje}%
+            </Text>
+            <Text style={styles.cardContent}>
+              <Text style={styles.label}>Retroalimentación:</Text> {value.recomendacion}
+            </Text>
           </View>
         ))}
       </Page>
@@ -300,14 +339,59 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   progressCircle: {
-    width: 50,
-    height: 50,
-    borderRadius: 25, // Hace que sea perfectamente circular
+    width: 45,
+    height: 45,
+    borderRadius: 10, // Hace que sea perfectamente circular
     backgroundColor: 'lightgray',
-    marginRight: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   resultTitle: {
+    fontSize: 11,
     fontWeight: 'bold',
-    marginBottom: 5,
+  },
+  card: {
+    marginVertical: 5,
+    padding: 5,
+    borderWidth: 1,
+    borderColor: '#cfcfcf',
+    borderRadius: 1,
+    backgroundColor: '#fdfdfd',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
+    elevation: 3, // Para Android
+  },
+  cardTitle: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 6,
+  },
+  cardContent: {
+    fontSize: 10,
+    color: '#555',
+    marginBottom: 4,
+  },
+  label: {
+    fontWeight: '600',
+    color: '#444',
+  },
+  resultContainer: {
+    marginTop: 20,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 10,
+  },
+  resultBox: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f9f9f9',
+    border: '1px solid #eaeaea',
+    gap: 5,
+    padding: 5,
   },
 });

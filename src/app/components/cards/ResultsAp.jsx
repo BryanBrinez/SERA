@@ -4,45 +4,45 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
 export default function ResultsAp({ codigosResultadosProps }) {
-    const [resultadosAprendizaje, setResultadosAprendizaje] = useState([]);
+    const [resultadosAprendizaje, setResultadosAprendizaje] = useState( codigosResultadosProps );
     const [loading, setLoading] = useState(false);
 
     
 
-    const fetchResults = async () => {
-        setLoading(true);
-        try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/resultadoaprendizaje`);
-            console.log('Códigos de resultados en props:', codigosResultadosProps);
-            console.log('Datos de la API:', response.data);
+    // const fetchResults = async () => {
+    //     setLoading(true);
+    //     try {
+    //         const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/resultadoaprendizaje`);
+    //         console.log('Códigos de resultados en props:', codigosResultadosProps);
+    //         console.log('Datos de la API:', response.data);
     
-            // Extraer los códigos de los objetos en codigosResultadosProps y mapearlos a un objeto clave-valor para fácil acceso
-            const promedioMap = codigosResultadosProps.reduce((acc, item) => {
-                acc[item.resultado] = item.promedio; // mapeamos el código de resultado al promedio
-                return acc;
-            }, {});
+    //         // Extraer los códigos de los objetos en codigosResultadosProps y mapearlos a un objeto clave-valor para fácil acceso
+    //         const promedioMap = codigosResultadosProps.reduce((acc, item) => {
+    //             acc[item.resultado] = item.promedio; // mapeamos el código de resultado al promedio
+    //             return acc;
+    //         }, {});
     
-            // Filtrar los resultados de aprendizaje para que solo se guarden los que coinciden con los códigos en resultCodes
-            const filteredResults = response.data
-                .filter(result => promedioMap[result.codigo]) // Solo consideramos los resultados cuyo código existe en las props
-                .map(result => ({
-                    ...result,
-                    promedio: promedioMap[result.codigo] // Añadimos el promedio correspondiente al resultado
-                }));
+    //         // Filtrar los resultados de aprendizaje para que solo se guarden los que coinciden con los códigos en resultCodes
+    //         const filteredResults = response.data
+    //             .filter(result => promedioMap[result.codigo]) // Solo consideramos los resultados cuyo código existe en las props
+    //             .map(result => ({
+    //                 ...result,
+    //                 promedio: promedioMap[result.codigo] // Añadimos el promedio correspondiente al resultado
+    //             }));
     
-            // Guardar los resultados filtrados con el promedio en el estado
-            setResultadosAprendizaje(filteredResults);
+    //         // Guardar los resultados filtrados con el promedio en el estado
+    //         setResultadosAprendizaje(filteredResults);
     
-        } catch (error) {
-            console.error('Error fetching report data:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    //     } catch (error) {
+    //         console.error('Error fetching report data:', error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
-    useEffect(() => {
-        fetchResults();
-    }, [codigosResultadosProps]);
+    // useEffect(() => {
+    //     fetchResults();
+    // }, [codigosResultadosProps]);
 
     // Función para determinar el color según el porcentaje
     const getCircleColor = (porcentaje) => {
