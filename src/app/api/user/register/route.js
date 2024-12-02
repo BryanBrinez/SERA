@@ -84,7 +84,7 @@ export async function POST(request) {
       text: `Hola ${userData.primerNombre},\n\nTu cuenta ha sido creada exitosamente. \n\nCorreo: ${userData.correo}\nContraseña: ${userData.password}\n\nGracias por registrarte.\n\nSaludos, \nEl equipo`,
     };
 
-    await transporter.sendMail(mailOptions);
+    // await transporter.sendMail(mailOptions);
 
     return NextResponse.json({ uid: user.uid, correo: user.correo });
   } catch (error) {
