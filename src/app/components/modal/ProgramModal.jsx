@@ -30,14 +30,14 @@ export const ProgramModal = ({ open, handleClose, onConfirm }) => {
         setLoading(true);
         setError(null);
         try {
-            // Convertir `duracion` y `creditos` a números si no están vacíos
-            const updatedFormValue = {
-                ...formValue,
-                duracion: formValue.duracion ? Number(formValue.duracion) : '',
-                creditos: formValue.creditos ? Number(formValue.creditos) : ''
-            };
+            // // Convertir `duracion` y `creditos` a números si no están vacíos
+            // const updatedFormValue = {
+            //     ...formValue,
+            //     duracion: formValue.duracion ? Number(formValue.duracion) : '',
+            //     creditos: formValue.creditos ? Number(formValue.creditos) : ''
+            // };
 
-            await onConfirm(updatedFormValue);
+            await onConfirm(formValue);
             setLoading(false);
             setFormValue({
                 nombre_programa: '',
@@ -107,11 +107,11 @@ export const ProgramModal = ({ open, handleClose, onConfirm }) => {
                         </Form.Group>
                         <Form.Group className='w-1/3' controlId="creditos">
                             <Form.ControlLabel>Créditos</Form.ControlLabel>
-                            <Form.Control name="creditos" type='number' />
+                            <Form.Control name="creditos" type='text' />
                         </Form.Group>
                         <Form.Group className='w-1/3' controlId="duracion">
                             <Form.ControlLabel>Duración (Semestres) *</Form.ControlLabel>
-                            <Form.Control name="duracion" type='number' />
+                            <Form.Control name="duracion" type='text' />
                         </Form.Group>
                     </div>
                     <div className='flex gap-2'>
