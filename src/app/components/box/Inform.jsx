@@ -35,6 +35,7 @@ export default function Inform({ course, group, profesorCode, period, year }) {
         fetchReport();
         fetchFollowUp();
         fetchCourse();
+        fetchNotes();
     }, []);
 
     const fetchReport = async () => {
@@ -91,6 +92,16 @@ export default function Inform({ course, group, profesorCode, period, year }) {
         console.log("el cursooooooooooooooo", course, "el codigo del cursoooooooooooooooo", generalInfo.curso)
 
     };
+
+    const fetchNotes = async () => {    
+        try {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/note?curso=${course}&grupo=${group}&año=${year}&periodo=${period}`);
+            console.log('Notas:', response.data);
+        } catch (error) {
+            console.error('Error fetching notes:', error);
+        }
+    };
+
 
     const fetchResults = async (resultadosAprendizaje) => {
         try {
@@ -176,6 +187,24 @@ export default function Inform({ course, group, profesorCode, period, year }) {
                 <Button >
 
 
+                    {
+                        followUp.length > 0 && (
+
+                            <DownloadPDF
+                                generalInfo={generalInfo}
+                                reportData={reportData}
+                                followUp={followUp}
+                                resultadosAprendizaje={resultadosPromedio}
+                                cantEstudiantes={followUp[0].total_estudiantes}
+                                cursoInfo={cursoInfo}
+
+                            />
+                        )
+                    }
+                </Button>
+                <Button >
+
+                    
                     {
                         followUp.length > 0 && (
 

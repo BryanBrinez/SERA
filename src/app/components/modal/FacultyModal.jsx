@@ -44,11 +44,11 @@ export const FacultyModal = ({ open, handleClose, onConfirm }) => {
                     
                     <Form.Group controlId="nombre">
                         <Form.ControlLabel>Nombre de la Facultad *</Form.ControlLabel>
-                        <Form.Control name="nombre" />
+                        <Form.Control name="nombre" type='text'/>
                     </Form.Group>
                     <Form.Group controlId="decano">
                         <Form.ControlLabel>Decano *</Form.ControlLabel>
-                        <Form.Control name="decano" />
+                        <Form.Control name="decano" type='text' />
                     </Form.Group>
                     <Form.Group controlId="email">
                         <Form.ControlLabel>Email *</Form.ControlLabel>
@@ -56,11 +56,11 @@ export const FacultyModal = ({ open, handleClose, onConfirm }) => {
                     </Form.Group>
                     <Form.Group controlId="telefono">
                         <Form.ControlLabel>Teléfono *</Form.ControlLabel>
-                        <Form.Control name="telefono" />
+                        <Form.Control name="telefono" type='text'/>
                     </Form.Group>
                     <Form.Group controlId="web">
                         <Form.ControlLabel>Sitio Web *</Form.ControlLabel>
-                        <Form.Control name="web" type="url" />
+                        <Form.Control name="web" type="text" />
                     </Form.Group>
                 </Form>
                 {error && <p className="text-red-500 mt-2">{error}</p>}

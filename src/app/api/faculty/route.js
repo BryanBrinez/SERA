@@ -64,10 +64,6 @@ export async function POST(request) {
         nombre: facultyData.nombre,
         telefono: facultyData.telefono,
         web: facultyData.web,
-        pbx: facultyData.pbx,
-        celular: facultyData.celular,
-        direccion: facultyData.direccion,
-        ubicacion: facultyData.ubicacion
       });
   
       return NextResponse.json({ message: "Facultad creada con éxito", id: facultyRef.id });

@@ -1,19 +1,24 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Notification, useToaster, Accordion } from 'rsuite';
+import { Notification, useToaster, Accordion, Button , ButtonToolbar, IconButton} from 'rsuite';
 import GroupsByCourse from '@/app/components/cards/GroupsByCourse';
+import { useRouter } from 'next/navigation'; // Importa useRouter para la navegación
+import PlusIcon from '@rsuite/icons/Plus';
 
-
+import { GroupModal } from '../../../components/modal/GroupModal';
 
 export default function Page() {
     const toaster = useToaster();
     const [courseID, setCourseID] = useState(null);
     const [course, setCourse] = useState(null);
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true); // Estado para manejar la carga
+    const [loading, setLoading] = useState(true);
     const [active, setActive] = useState('notas');
-    // Función para extraer el ID del curso de la URL
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const router = useRouter(); // Inicializa useRouter
+
+
     const extractCourseIDFromUrl = () => {
         if (typeof window !== 'undefined') {
             const currentPath = window.location.pathname;
@@ -24,13 +29,10 @@ export default function Page() {
         }
     };
 
-    // Función para obtener datos del curso
     const fetchCourse = async (id) => {
-        try {//El id debe ser el id del programa
+        try {
             const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/course/${id}`);
             setCourse(response.data);
-
-            // Llamar a fetchUser una vez que los datos del curso estén disponibles
             fetchUser(response.data.ID_coordinador);
         } catch (error) {
             console.error('Error fetching course:', error);
@@ -43,7 +45,6 @@ export default function Page() {
         }
     };
 
-    // Función para obtener datos del usuario (coordinador)
     const fetchUser = async (id) => {
         try {
             const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/api/user/${id}?searchBy=uid`);
@@ -51,7 +52,6 @@ export default function Page() {
             if (response.data) {
                 setUser(response.data);
             } else {
-                // Si el usuario no se encuentra, establecer valor de "No registrado"
                 setUser({
                     primerNombre: 'No',
                     segundoNombre: '',
@@ -62,8 +62,6 @@ export default function Page() {
             }
         } catch (error) {
             console.error('Error fetching user:', error);
-
-            // Si hay un error al buscar el usuario, establecer valor de "No registrado"
             setUser({
                 primerNombre: '',
                 segundoNombre: '',
@@ -72,8 +70,46 @@ export default function Page() {
                 cedula: ''
             });
         } finally {
-            setLoading(false); // Cambia loading a false al final
+            setLoading(false);
         }
+    };
+
+    const handleConfirm = async (formValue) => {
+        try {
+          console.log('Submitting formValue:', formValue);
+          const response = await axios.post(`${process.env.NEXT_PUBLIC_URL}/api/group`, formValue, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          console.log('Response from server:', response);
+        
+          if (courseID) {
+            fetchCourse(courseID);
+            }
+    
+          toaster.push(
+            <Notification type="success" header="Facultad creada" closable>
+              El grupo ha sido creado con éxito.
+            </Notification>,
+            { placement: 'topEnd' }
+          );
+          handleCloseModal();
+        } catch (error) {
+          console.error('Error creating user:', error.response ? error.response.data : error.message);
+          console.log(error)
+          toaster.push(
+            <Notification type="error" header="Error" closable>
+              Hubo un problema al crear el grupo. Por favor, inténtelo de nuevo.
+            </Notification>,
+            { placement: 'topEnd' }
+          );
+        }
+      }
+
+    const handleCreateGroup = () => {
+        // Redirige a la página de creación de grupo
+        router.push(`/course/${courseID}/create-group`);
     };
 
     useEffect(() => {
@@ -86,11 +122,22 @@ export default function Page() {
         }
     }, [courseID]);
 
+
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    }
+
+    const handleCloseModal = () => {
+        if (courseID) {
+            fetchCourse(courseID);
+        }
+        setIsModalOpen(false);
+    };
+
     return (
         <section className='pb-10'>
-
             {loading ? (
-                <div className='border  bg-gray-100 rounded-md p-6 animate-pulse'>
+                <div className='border bg-gray-100 rounded-md p-6 animate-pulse'>
                     <div className="flex items-center gap-2">
                         <div className='flex flex-col w-full gap-2'>
                             <div className='bg-gray-200 h-4 w-1/4 animate-pulse'></div>
@@ -98,7 +145,7 @@ export default function Page() {
                     </div>
                 </div>
             ) : (
-                <div className='flex-col'>
+                <div className='flex-col mb-3'>
                     {course && user ? (
                         <Accordion bordered>
                             <Accordion.Panel header={`CURSO: ${course.nombre_curso}`}>
@@ -117,7 +164,6 @@ export default function Page() {
                                 </div>
                             </Accordion.Panel>
                         </Accordion>
-
                     ) : (
                         <p>No se encontraron datos del curso o del usuario.</p>
                     )}
@@ -125,18 +171,19 @@ export default function Page() {
             )}
 
             {course && user && (
-
                 <div>
-                    <GroupsByCourse courseCode={course.codigo} />
-                </div>
-             )
-            }
+                    <div className='w-full flex justify-end'>
+                        <ButtonToolbar>
+                            <IconButton className='shadow' icon={<PlusIcon />} onClick={handleOpenModal}>
+                                Añadir Grupo
+                            </IconButton>
+                        </ButtonToolbar>
 
-            {/* <NavbarCourseOptions active={active} setActive={setActive} />
-            <div>
-                {active === 'notas' && course && <HandsontableSheet course={course.codigo} group={course.grupo}/>}
-                {active === 'evidencias' && course && <EvidenceList course={course.codigo} group={course.grupo} profesorCode={course.Profesor}/>}
-            </div> */}
+                    </div>
+                    <GroupsByCourse courseCode={course.codigo} />
+                    <GroupModal open={isModalOpen} handleClose={handleCloseModal} onConfirm={handleConfirm} courseID={courseID} />
+                </div>
+            )}
         </section>
     );
 }

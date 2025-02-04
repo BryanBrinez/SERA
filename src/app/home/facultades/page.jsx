@@ -35,7 +35,7 @@ export default function Page() {
   const handleConfirm = async (formValue) => {
     try {
       console.log('Submitting formValue:', formValue);
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_URL}/api/faculty/register`, formValue, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_URL}/api/faculty`, formValue, {
         headers: {
           'Content-Type': 'application/json'
         }

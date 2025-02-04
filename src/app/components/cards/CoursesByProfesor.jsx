@@ -87,7 +87,7 @@ export default function CoursesByProfesor({ profesorCode }) {
                                             color="red"
                                             appearance="primary"
                                             className="w-full"
-                                            onClick={() => router.push(`/home/cursos/${course.id}`)}
+                                            onClick={() => router.push(`/home/cursos/${course.codigo}`)}
                                         >
                                             Ir al curso
                                         </Button>
