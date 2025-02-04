@@ -104,7 +104,7 @@ export default function Login() {
             >
               Recordar contraseña
             </Checkbox>
-            <Link href="/forgot-password">¿Has olvidado tu contraseña?</Link>
+            <Link href="/forget-password">¿Has olvidado tu contraseña?</Link>
             
           </div>
         </form>
